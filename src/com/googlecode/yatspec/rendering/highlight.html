@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title></title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script type="text/javascript" src="highlight.js"></script>
+    <link rel="stylesheet" href="highlight.css"/>
+</head>
+<body>
+<pre class="highlight specification">
+Given a scenario where we talk to the BT import service
+And a A_VALID_POST_CODE
+When we check number portability
+Then BT number import request has POST_CODE_FIELD set to 2315
+Then BT number import request has MOVE_INDICATOR_FIELD set to &quot;Y&quot;        </pre>
+
+<pre class="highlight xml" >&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;SOAP-ENV:Envelope xmlns:SOAP-ENV=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;
+                   xmlns:SOAP-ENC=&quot;http://schemas.xmlsoap.org/soap/encoding/&quot;
+
+                   xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;
+    &lt;SOAP-ENV:Body&gt;
+        &lt;ns:DS_ManageLineCharacteristicsRequest xmlns:ns=&quot;http://www.openuri.org/&quot;&gt;
+            &lt;CPWSHubServiceMessage xmlns=&quot;http://www.bt.com/eai/hub/or/DialogueServices-v5-0&quot;&gt;
+
+                &lt;or:AddLineCharacteristicsRequest xmlns=&quot;urn:uk.org.telcob2b/tML/BT-Query-v6-0&quot;
+                                                  xmlns:or=&quot;urn:com.openreach.Fulfilment2-v6-0&quot;
+                                                  xmlns:cbc=&quot;urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-1.0&quot;
+                                                  xmlns:cac=&quot;urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-1.0&quot;
+                                                  xmlns:utcc=&quot;urn:uk.org.telcob2b/tML/ukt-CommonComponents-v6-0&quot;
+
+                                                  xmlns:ds=&quot;urn:uk.org.telcob2b/tML/DialogueServices-v6-0&quot;
+                                                  xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+                                                  xsi:schemaLocation=&quot;urn:com.openreach.Fulfilment2-v6-0 ../../Schemas/Application/Fulfilment2-v6-0.xsd
+                                                                      urn:uk.org.telcob2b/tML/BT-Query-v6-0 ../../Schemas/telcoB2Bdoc/BT-Query-v6-0.xsd
+                                                                      urn:uk.org.telcob2b/tML/DialogueServices-v6-0 ../../Schemas/Application/DialogueServices-v6-0.xsd&quot;&gt;
+                    &lt;Query&gt;
+                        &lt;RequestersID&gt;50009999&lt;/RequestersID&gt;
+
+                        &lt;utcc:IssueDateTime&gt;2010-07-28T10:37:25&lt;/utcc:IssueDateTime&gt;
+                        &lt;RequesterParty&gt;
+                            &lt;cac:Party&gt;
+                                &lt;cac:PartyIdentification&gt;
+                                    &lt;cac:ID identificationSchemeAgencyName=&quot;DUNS&quot;&gt;774447114&lt;/cac:ID&gt;
+
+                                &lt;/cac:PartyIdentification&gt;
+                            &lt;/cac:Party&gt;
+                        &lt;/RequesterParty&gt;
+                        &lt;ResponderParty&gt;
+                            &lt;cac:Party&gt;
+                                &lt;cac:PartyIdentification&gt;
+
+                                    &lt;cac:ID identificationSchemeName=&quot;DUNS&quot;&gt;364877501&lt;/cac:ID&gt;
+                                &lt;/cac:PartyIdentification&gt;
+                            &lt;/cac:Party&gt;
+                        &lt;/ResponderParty&gt;
+                        &lt;utcc:QueryLine&gt;
+
+                            &lt;utcc:QueryLineItem&gt;
+                                &lt;utcc:RequestersID&gt;1&lt;/utcc:RequestersID&gt;
+                                &lt;utcc:Features&gt;
+                                    &lt;ds:LineCharacteristicsFeatureSet&gt;
+                                        &lt;ds:InputFeatures&gt;
+
+                                            &lt;utcc:ServiceType&gt;SMPF&lt;/utcc:ServiceType&gt;
+                                            &lt;utcc:InstallationDN&gt;0183382596&lt;/utcc:InstallationDN&gt;
+                                        &lt;/ds:InputFeatures&gt;
+                                    &lt;/ds:LineCharacteristicsFeatureSet&gt;
+                                &lt;/utcc:Features&gt;
+
+                            &lt;/utcc:QueryLineItem&gt;
+                        &lt;/utcc:QueryLine&gt;
+                    &lt;/Query&gt;
+                &lt;/or:AddLineCharacteristicsRequest&gt;
+            &lt;/CPWSHubServiceMessage&gt;
+        &lt;/ns:DS_ManageLineCharacteristicsRequest&gt;
+
+    &lt;/SOAP-ENV:Body&gt;
+&lt;/SOAP-ENV:Envelope&gt;</pre>
+
+
+</body>
+</html>

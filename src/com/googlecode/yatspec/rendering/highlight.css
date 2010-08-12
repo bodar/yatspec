@@ -1,0 +1,22 @@
+.highlight {
+    background-color: #E8EEF7;
+    border: 1px solid #C3D9FF;
+    padding: 5px;
+    font: 10pt sans-serif;
+}
+
+.highlight .literal{
+    color:#066;
+}
+
+.highlight .keyword{
+    color:#008;
+}
+
+.highlight .constant{
+    color:#606;
+}
+
+.highlight .quote {
+    color: #080;
+}

@@ -1,0 +1,107 @@
+pre * {
+    font-family: Arial, serif;
+}
+
+h1, h2, h3, th {
+    text-transform: capitalize;
+}
+
+.highlight.specification .literal,
+.highlight.specification .keyword,
+.highlight.specification .constant,
+.highlight.specification .quote {
+    font-weight:bold;
+}
+
+pre.test-not-run, .test-not-run, .interestingGiven  {
+    background-color: #FFF4CC;
+    border: 2px solid #FFBB66;
+}
+
+.interestingGiven {
+    padding:0 2px;
+}
+
+pre.test-failed, .test-failed {
+    background-color: #FFF6FF;
+    border: 2px solid #FDA8A8;
+}
+
+pre.test-passed, .test-passed {
+    background-color: #F2FFEE;
+    border: 2px solid #A5DDAD;
+}
+
+li.test-not-run, li.test-passed {
+    border: none;
+}
+
+ul.contents a {
+    text-transform: capitalize;
+}
+
+a, table a {
+    color: #660066;
+    text-decoration: none;
+}
+
+a:hover, table a:hover {
+    text-decoration: underline;
+}
+
+table {
+    background-color: #F5F9FD;
+    border: 1px solid #C3D9FF;
+}
+
+th {
+    background-color: #E8EEF7;
+    border: 1px solid #C3D9FF;
+}
+
+td {
+    border: 1px solid #C3D9FF;
+}
+
+.scenario td {
+    padding: 0 20px;
+    text-align: center;
+}
+
+pre, pre.highlight {
+    padding: 5px;
+}
+
+h2 {
+    margin-top: 10px;
+}
+
+pre {
+    margin-bottom: 32px;
+}
+
+div.example {
+    margin-bottom: 64px;
+}
+
+.hide {
+    display: none;
+}
+
+.logKey {
+    cursor: pointer;
+}
+
+.logKey:hover {
+    text-decoration: underline;
+}
+
+.interestingGivens th {
+    text-align: left;
+}
+
+.interestingGivens td {
+    text-align: right;
+    padding: 0 5px;
+    vertical-align: middle;
+}
