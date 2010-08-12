@@ -4,7 +4,7 @@ import org.hamcrest.Matcher;
 
 import static org.junit.Assert.assertThat;
 
-public class TestState  {
+public class TestState implements TestLogger {
     public InterestingGivens interestingGivens = new InterestingGivens();
     public CapturedInputAndOutputs capturedInputAndOutputs = new CapturedInputAndOutputs();
 

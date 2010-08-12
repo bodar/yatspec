@@ -18,7 +18,7 @@ import java.util.List;
 import static jedi.functional.FunctionalPrimitives.select;
 
 public class SpecRunner extends TableRunner {
-    private static final String OUTPUT_DIR = "yatspec.output.dir";
+    public static final String OUTPUT_DIR = "yatspec.output.dir";
     private final Result testResult;
     private Scenario currentScenario;
 
