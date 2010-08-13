@@ -60,10 +60,19 @@
   <component name="FileColors" enabled="true" enabledForTabs="true" />
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="yatspec.st" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="yatspec.st" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/yatspec.st">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="17" selection-start="386" selection-end="386" vertical-scroll-proportion="0.2927928">
+            <state line="13" column="17" selection-start="386" selection-end="386" vertical-scroll-proportion="-7.8">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pom.xml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/build/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="14" selection-start="505" selection-end="505" vertical-scroll-proportion="0.2245509">
               <folding />
             </state>
           </provider>
@@ -90,7 +99,7 @@
       <file leaf-file-name="yatspec.css" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/yatspec.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="22" column="30" selection-start="456" selection-end="456" vertical-scroll-proportion="-165.0">
+            <state line="83" column="31" selection-start="1418" selection-end="1418" vertical-scroll-proportion="-622.5">
               <folding />
             </state>
           </provider>
@@ -153,7 +162,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/test/com/googlecode/yatspec/rendering/TemporaryFile.java" />
         <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/ResultWriter.java" />
         <option value="$PROJECT_DIR$/test/com/googlecode/yatspec/rendering/ResultWriterTest.java" />
         <option value="$PROJECT_DIR$/test/com/googlecode/yatspec/rendering/TemporaryDirectory.java" />
@@ -162,13 +170,14 @@
         <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/highlight.js" />
         <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/prettifier.js" />
         <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/yatspec.js" />
-        <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/yatspec.css" />
         <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/foo.xhtml" />
         <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/EnhancedStringTemplateGroup.java" />
         <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/Resources.java" />
         <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/ResultRenderer.java" />
         <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/foo.html" />
         <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/yatspec.st" />
+        <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/yatspec.css" />
+        <option value="$PROJECT_DIR$/build/pom.xml" />
       </list>
     </option>
   </component>
@@ -885,16 +894,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/yatspec.css">
+    <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/yatspec.st">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="30" selection-start="456" selection-end="456" vertical-scroll-proportion="-165.0">
+        <state line="13" column="17" selection-start="386" selection-end="386" vertical-scroll-proportion="-7.8">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/yatspec.st">
+    <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/yatspec.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="17" selection-start="386" selection-end="386" vertical-scroll-proportion="0.2927928">
+        <state line="83" column="31" selection-start="1418" selection-end="1418" vertical-scroll-proportion="-622.5">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="14" selection-start="505" selection-end="505" vertical-scroll-proportion="0.2245509">
           <folding />
         </state>
       </provider>

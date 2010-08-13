@@ -87,6 +87,8 @@ a:hover, table a:hover {
 table {
     background-color: #F5F9FD;
     border: 1px solid #C3D9FF;
+    border-collapse:collapse;
+    empty-cells:show;
 }
 
 th {
