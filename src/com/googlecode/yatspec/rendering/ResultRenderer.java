@@ -16,7 +16,7 @@ public class ResultRenderer implements Renderer<Result> {
         final EnhancedStringTemplateGroup group = new EnhancedStringTemplateGroup("randomName");
         group.registerDefaultRenderer(new XmlStringRenderer() );
         group.registerRenderer(Document.class, new DocumentRenderer());
-        final StringTemplate template = group.getInstanceOf(getTemplateRelativeTo(TestParser.class, "TestOutput"));
+        final StringTemplate template = group.getInstanceOf(getTemplateRelativeTo(this.getClass(), "TestOutput"));
         template.setAttribute("cssClass", getCssMap());
         template.setAttribute("testSuite", result.getName());
         template.setAttribute("testMethods", result.getTestMethods());
