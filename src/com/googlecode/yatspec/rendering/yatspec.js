@@ -1,12 +1,4 @@
-function yatspec() {}
-
-yatspec.Regex = function() {
-    RegExp.apply(this, arguments);
-}
-
-yatspec.Regex.prototype = new RegExp();
-
-yatspec.Regex.prototype.replace = function(str, replacer, nonMatchedReplacer) {
+RegExp.prototype.replace = function(str, replacer, nonMatchedReplacer) {
     nonMatchedReplacer = nonMatchedReplacer || function(value) {
         return value
     };
@@ -24,6 +16,8 @@ yatspec.Regex.prototype.replace = function(str, replacer, nonMatchedReplacer) {
     return result.join("");
 }
 
+function yatspec() {}
+
 yatspec.highlight = function(element, pairs) {
     if (pairs.length == 0) {
         return;
@@ -35,7 +29,7 @@ yatspec.highlight = function(element, pairs) {
         classes.push(this.cssClass);
     });
     matchGroups.pop();
-    var regex = new yatspec.Regex(matchGroups.join(""), "g");
+    var regex = new RegExp(matchGroups.join(""), "g");
 
     $(element).html(regex.replace($(element).html(), function(match) {
         var matches = match.slice(1);
@@ -77,7 +71,7 @@ $(document).ready(function () {
         ]);
     })
 
-    $('.example').each(function() {
+    $('.scenario').each(function() {
         var interestingGivens = $('.interestingGiven', this).map(function() {
             return { pattern: $(this).text(), cssClass: "interestingGiven" };
         }).get();

@@ -100,9 +100,23 @@ td {
     border: 1px solid #C3D9FF;
 }
 
-.scenario td {
+div.contents, div.testmethod  {
+    margin-bottom:40px;
+}
+
+.scenarios td {
     padding: 0 20px;
     text-align: center;
+}
+
+.scenarios, .scenario {
+    margin-bottom:20px;
+}
+
+.scenario {
+    background-color:#F5F9FD;
+    border:1px solid #C3D9FF;
+    padding:0 10px;
 }
 
 h2 {

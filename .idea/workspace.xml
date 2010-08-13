@@ -63,25 +63,16 @@
       <file leaf-file-name="yatspec.st" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/yatspec.st">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="17" selection-start="386" selection-end="386" vertical-scroll-proportion="-7.8">
+            <state line="36" column="30" selection-start="917" selection-end="927" vertical-scroll-proportion="-2.1923077">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pom.xml" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/build/pom.xml">
+      <file leaf-file-name="xhtml1-transitional.dtd" pinned="false" current="false" current-in-tab="false">
+        <entry file="jar://$APPLICATION_HOME_DIR$/lib/idea.jar!/standardSchemas/xhtml1-transitional.dtd">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="14" selection-start="505" selection-end="505" vertical-scroll-proportion="0.2245509">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Map.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar://$PROJECT_DIR$/../../Applications/Java/jdk1.6.0_21/src.zip!/java/util/Map.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="99" column="17" selection-start="5218" selection-end="5218" vertical-scroll-proportion="-43.5">
+            <state line="424" column="10" selection-start="12488" selection-end="12488" vertical-scroll-proportion="-110.5">
               <folding />
             </state>
           </provider>
@@ -90,7 +81,52 @@
       <file leaf-file-name="yatspec.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/yatspec.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="77" column="6" selection-start="2391" selection-end="2391" vertical-scroll-proportion="-577.5">
+            <state line="73" column="36" selection-start="2307" selection-end="2307" vertical-scroll-proportion="-34.655174">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SpecRunner.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/junit/SpecRunner.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="62" column="0" selection-start="2172" selection-end="2172" vertical-scroll-proportion="-152.5">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TestResult.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/state/TestResult.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="31" column="0" selection-start="837" selection-end="837" vertical-scroll-proportion="-110.5">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Assert.class" pinned="false" current="false" current-in-tab="false">
+        <entry file="jar://$PROJECT_DIR$/lib/jedi-2.10.0.jar!/jedi/assertion/Assert.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="38" column="0" selection-start="2358" selection-end="2358" vertical-scroll-proportion="-20.615385">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ResultWriterTest.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/com/googlecode/yatspec/rendering/ResultWriterTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="17" column="60" selection-start="531" selection-end="531" vertical-scroll-proportion="-60.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pom.xml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/build/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="15" selection-start="0" selection-end="2172" vertical-scroll-proportion="0.2186589">
               <folding />
             </state>
           </provider>
@@ -99,54 +135,7 @@
       <file leaf-file-name="yatspec.css" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/yatspec.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="83" column="31" selection-start="1418" selection-end="1418" vertical-scroll-proportion="-622.5">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ResultWriter.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/ResultWriter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="31" selection-start="746" selection-end="746" vertical-scroll-proportion="-120.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ResultRenderer.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/ResultRenderer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="37" selection-start="978" selection-end="978" vertical-scroll-proportion="-146.5">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EnhancedStringTemplateGroup.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/EnhancedStringTemplateGroup.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="32" column="0" selection-start="1093" selection-end="1093" vertical-scroll-proportion="-232.5">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Resources.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/Resources.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="25" selection-start="93" selection-end="93" vertical-scroll-proportion="-22.5">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="StringTemplate.class" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar://$PROJECT_DIR$/lib/stringtemplate-3.2.1.jar!/org/antlr/stringtemplate/StringTemplate.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="217" column="28" selection-start="10751" selection-end="10751" vertical-scroll-proportion="-8.615385">
+            <state line="105" column="0" selection-start="1714" selection-end="1714" vertical-scroll-proportion="-13.034483">
               <folding />
             </state>
           </provider>
@@ -162,19 +151,19 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/ResultWriter.java" />
-        <option value="$PROJECT_DIR$/test/com/googlecode/yatspec/rendering/ResultWriterTest.java" />
-        <option value="$PROJECT_DIR$/test/com/googlecode/yatspec/rendering/TemporaryDirectory.java" />
-        <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/TestOutput.st" />
-        <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/junit/SpecRunner.java" />
-        <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/highlight.js" />
         <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/prettifier.js" />
-        <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/yatspec.js" />
-        <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/foo.xhtml" />
         <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/EnhancedStringTemplateGroup.java" />
         <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/Resources.java" />
-        <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/ResultRenderer.java" />
         <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/foo.html" />
+        <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/DocumentRenderer.java" />
+        <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/Content.java" />
+        <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/ContentRenderer.java" />
+        <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/ToStringRenderer.java" />
+        <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/ResultRenderer.java" />
+        <option value="$PROJECT_DIR$/test/com/googlecode/yatspec/rendering/ResultWriterTest.java" />
+        <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/foo.xhtml" />
+        <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/yatspec.js" />
+        <option value="$PROJECT_DIR$/test/com/googlecode/yatspec/junit/SpecRunnerTest.java" />
         <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/yatspec.st" />
         <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/yatspec.css" />
         <option value="$PROJECT_DIR$/build/pom.xml" />
@@ -219,7 +208,70 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Favorites" />
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="yatspec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="yatspec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="yatspec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="yatspec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com.googlecode.yatspec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="yatspec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="yatspec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com.googlecode.yatspec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rendering" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="yatspec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="yatspec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com.googlecode.yatspec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="junit" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -373,6 +425,10 @@
               <option name="myItemId" value="yatspec" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="state" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -393,6 +449,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="rendering" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="yatspec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="yatspec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="yatspec" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -482,77 +556,80 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jedi-2.10.0.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="yatspec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="yatspec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jedi-2.10.0.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jedi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="yatspec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="yatspec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jedi-2.10.0.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jedi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="assertion" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="yatspec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="yatspec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="build" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Favorites" />
       <pane id="Scope" />
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="yatspec" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="yatspec" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="yatspec" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="yatspec" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com.googlecode.yatspec" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="yatspec" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="yatspec" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com.googlecode.yatspec" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="rendering" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="yatspec" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="yatspec" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com.googlecode.yatspec" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -565,13 +642,14 @@
     <property name="options.lastSelected" value="project.propCompiler" />
     <property name="MemberChooser.sorted" value="false" />
     <property name="project.structure.side.proportion" value="0.2" />
+    <property name="GoToClass.includeJavaFiles" value="false" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.searchVisible" value="true" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="dynamic.classpath" value="false" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="ExtractSuperBase.RECENT_KEYS">
@@ -600,7 +678,28 @@
     <option name="referencePos" value="0" />
     <option name="showLabels" value="true" />
   </component>
-  <component name="RunManager" selected="JUnit.ResultWriterTest.loadsTemplateOffClassPath">
+  <component name="RunManager" selected="JUnit.ResultWriterTest.writesFileToDirectory">
+    <configuration default="false" name="ResultWriterTest.writesFileToDirectory" type="JUnit" factoryName="JUnit" temporary="true">
+      <module name="yatspec" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.googlecode.yatspec.rendering" />
+      <option name="MAIN_CLASS_NAME" value="com.googlecode.yatspec.rendering.ResultWriterTest" />
+      <option name="METHOD_NAME" value="writesFileToDirectory" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
     <configuration default="false" name="ResultRendererTest.loadsTemplateOffClassPath" type="JUnit" factoryName="JUnit" temporary="true">
       <module name="yatspec" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -622,14 +721,35 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="ResultWriterTest.loadsTemplateOffClassPath" type="JUnit" factoryName="JUnit" temporary="true">
+    <configuration default="false" name="SpecRunnerTest.SupportsTablesAsScenarios" type="JUnit" factoryName="JUnit" temporary="true">
       <module name="yatspec" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="com.googlecode.yatspec.rendering" />
-      <option name="MAIN_CLASS_NAME" value="com.googlecode.yatspec.rendering.ResultWriterTest" />
-      <option name="METHOD_NAME" value="loadsTemplateOffClassPath" />
+      <option name="PACKAGE_NAME" value="com.googlecode.yatspec.junit" />
+      <option name="MAIN_CLASS_NAME" value="com.googlecode.yatspec.junit.SpecRunnerTest" />
+      <option name="METHOD_NAME" value="SupportsTablesAsScenarios" />
       <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="SpecRunnerTest" type="JUnit" factoryName="JUnit" temporary="true">
+      <module name="yatspec" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.googlecode.yatspec.junit" />
+      <option name="MAIN_CLASS_NAME" value="com.googlecode.yatspec.junit.SpecRunnerTest" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -692,6 +812,17 @@
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
+    <configuration default="true" type="JavascriptDebugSession" factoryName="Local">
+      <JSDebuggerConfigurationSettings>
+        <option name="engineId" />
+        <option name="fileUrl" />
+      </JSDebuggerConfigurationSettings>
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
+    </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
       <module name="" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -716,9 +847,11 @@
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
-    <list size="2">
-      <item index="0" class="java.lang.String" itemvalue="JUnit.ResultRendererTest.loadsTemplateOffClassPath" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.ResultWriterTest.loadsTemplateOffClassPath" />
+    <list size="4">
+      <item index="0" class="java.lang.String" itemvalue="JUnit.ResultWriterTest.writesFileToDirectory" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.ResultRendererTest.loadsTemplateOffClassPath" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.SpecRunnerTest.SupportsTablesAsScenarios" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.SpecRunnerTest" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -744,25 +877,25 @@
     <supportedVersion>125</supportedVersion>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1919" y="0" width="1922" height="1205" extended-state="6" />
+    <frame x="1920" y="0" width="1920" height="1200" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32841328" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32841328" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21325494" sideWeight="0.6651291" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2129481" sideWeight="0.66543096" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32841328" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32808155" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Regex" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32841328" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -803,114 +936,107 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/yatspec.iml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="0" selection-start="560" selection-end="560" vertical-scroll-proportion="0.30523255" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/com/googlecode/yatspec/rendering/ResultRendererTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="3" selection-start="328" selection-end="627" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/../../Applications/Java/jdk1.6.0_21/src.zip!/java/io/File.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1784" column="53" selection-start="74616" selection-end="74616" vertical-scroll-proportion="-7.5">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/com/googlecode/yatspec/rendering/TemporaryDirectory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="13" selection-start="212" selection-end="212" vertical-scroll-proportion="-30.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/junit/SpecRunner.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="33" selection-start="1603" selection-end="1603" vertical-scroll-proportion="-111.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/com/googlecode/yatspec/rendering/ResultWriterTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="29" selection-start="585" selection-end="585" vertical-scroll-proportion="-82.5">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/lib/stringtemplate-3.2.1.jar!/org/antlr/stringtemplate/StringTemplate.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="217" column="28" selection-start="10751" selection-end="10751" vertical-scroll-proportion="-8.615385">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/../../Applications/Java/jdk1.6.0_21/src.zip!/java/util/Map.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="99" column="17" selection-start="5218" selection-end="5218" vertical-scroll-proportion="-43.5">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/EnhancedStringTemplateGroup.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="0" selection-start="1093" selection-end="1093" vertical-scroll-proportion="-232.5">
+        <state line="5" column="13" selection-start="161" selection-end="161" vertical-scroll-proportion="-30.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/Renderer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="17" selection-start="105" selection-end="105" vertical-scroll-proportion="-30.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/RendererAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="6" selection-start="101" selection-end="101" vertical-scroll-proportion="-30.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/Resources.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="25" selection-start="93" selection-end="93" vertical-scroll-proportion="-22.5">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/ResultWriter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="31" selection-start="746" selection-end="746" vertical-scroll-proportion="-120.0">
+        <state line="2" column="13" selection-start="56" selection-end="56" vertical-scroll-proportion="-15.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/ResultRenderer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="37" selection-start="978" selection-end="978" vertical-scroll-proportion="-146.5">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state line="24" column="46" selection-start="1099" selection-end="1099" vertical-scroll-proportion="-97.5">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/lib/idea.jar!/standardSchemas/xhtml1-transitional.dtd">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="424" column="10" selection-start="12488" selection-end="12488" vertical-scroll-proportion="-110.5">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/junit/TableRunner.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="13" selection-start="484" selection-end="484" vertical-scroll-proportion="0.09022556">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/lib/jedi-2.10.0.jar!/jedi/assertion/Assert.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="38" column="0" selection-start="2358" selection-end="2358" vertical-scroll-proportion="-20.615385">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/state/TestResult.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="31" column="0" selection-start="837" selection-end="837" vertical-scroll-proportion="-110.5">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/junit/SpecRunner.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="62" column="0" selection-start="2172" selection-end="2172" vertical-scroll-proportion="-152.5">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/yatspec.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="77" column="6" selection-start="2391" selection-end="2391" vertical-scroll-proportion="-577.5">
+        <state line="73" column="36" selection-start="2307" selection-end="2307" vertical-scroll-proportion="-34.655174">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/com/googlecode/yatspec/rendering/ResultWriterTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="60" selection-start="531" selection-end="531" vertical-scroll-proportion="-60.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/yatspec.st">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="17" selection-start="386" selection-end="386" vertical-scroll-proportion="-7.8">
+        <state line="36" column="30" selection-start="917" selection-end="927" vertical-scroll-proportion="-2.1923077">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/yatspec.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="83" column="31" selection-start="1418" selection-end="1418" vertical-scroll-proportion="-622.5">
+        <state line="105" column="0" selection-start="1714" selection-end="1714" vertical-scroll-proportion="-13.034483">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/build/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="14" selection-start="505" selection-end="505" vertical-scroll-proportion="0.2245509">
+        <state line="10" column="15" selection-start="0" selection-end="2172" vertical-scroll-proportion="0.2186589">
           <folding />
         </state>
       </provider>

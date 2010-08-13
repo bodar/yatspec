@@ -13,7 +13,7 @@ import static org.junit.Assert.assertThat;
 
 public class ResultWriterTest {
     @Test
-    public void loadsTemplateOffClassPath() throws Exception {
+    public void writesFileToDirectory() throws Exception {
         // setup
         TestResult result = new TestResult(this.getClass());
 
