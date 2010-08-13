@@ -30,10 +30,5 @@ public class EnhancedStringTemplateGroup extends StringTemplateGroup {
         }
         return attributeRenderer;
     }
-
-    public static String getTemplateRelativeTo(Class aClass, String template) {
-        return aClass.getPackage().getName().replace('.', '/') + "/" + template;
-    }
-
 }
 

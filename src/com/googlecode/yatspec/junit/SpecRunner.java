@@ -43,7 +43,7 @@ public class SpecRunner extends TableRunner {
         super.run(notifier);
         notifier.removeListener(listener);
         try {
-            new ResultWriter(getOuputDirectory()).render(testResult);
+            new ResultWriter(getOuputDirectory()).write(testResult);
         } catch (Exception e) {
             System.out.println("Error while writing HTML " + e);
         }

@@ -16,7 +16,7 @@ public class ResultWriter {
         this.outputDirectory = outputDirectory;
     }
 
-    public void render(Result result) throws Exception {
+    public File write(Result result) throws Exception {
         final File htmlOutput = getHtmlOutputFile(result.getTestClass());
         htmlOutput.delete();
         createAllDirectoriesNeededFor(htmlOutput);
@@ -25,6 +25,7 @@ public class ResultWriter {
         writer.write(html);
         writer.flush();
         System.out.println("Html output:\n" + htmlOutput);
+        return htmlOutput;
     }
 
     private File getHtmlOutputFile(Class testClass) {
