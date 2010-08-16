@@ -8,7 +8,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.googlecode.yatspec</groupId>
     <artifactId>yatspec</artifactId>
-    <version>12</version>
+    <version>13</version>
     <name>Yatspec</name>
 
     <dependencies>
@@ -16,7 +16,6 @@
             <groupId>pmd</groupId>
             <artifactId>pmd</artifactId>
             <version>4.2.5</version>
-            <scope>test</scope>
             <exclusions>
                <exclusion>
                    <groupId>asm</groupId>
