@@ -14,7 +14,9 @@
 
     $stylesheet:{
         <style type="text/css">
+            /* <![CDATA[ */
             $it$
+            /* ]]> */
         </style>
     }$
 </head>
@@ -27,7 +29,7 @@
 
     <ul class="contents">
         $testMethods:{ testMethod |
-            <li class='$cssClass.(testMethod.status)$'><a href="yatspec.st#$testMethod.name$">$testMethod.name$</a></li>
+            <li class='$cssClass.(testMethod.status)$'><a href="#$testMethod.name$">$testMethod.name$</a></li>
         }$
     </ul>
 
