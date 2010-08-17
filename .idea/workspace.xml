@@ -63,7 +63,7 @@
       <file leaf-file-name="pom.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/build/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="40" selection-start="658" selection-end="658" vertical-scroll-proportion="-88.0">
+            <state line="10" column="14" selection-start="505" selection-end="505" vertical-scroll-proportion="-43.0">
               <folding />
             </state>
           </provider>
@@ -90,7 +90,7 @@
       <file leaf-file-name="build.xml" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/build.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="64" selection-start="538" selection-end="538" vertical-scroll-proportion="0.22624435">
+            <state line="55" column="23" selection-start="2465" selection-end="2465" vertical-scroll-proportion="0.7692308">
               <folding />
             </state>
           </provider>
@@ -128,8 +128,8 @@
         <option value="$PROJECT_DIR$/test/com/googlecode/yatspec/junit/SpecRunnerTest.java" />
         <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/yatspec.css" />
         <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/yatspec.st" />
-        <option value="$PROJECT_DIR$/build/pom.xml" />
         <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/junit/SpecRunner.java" />
+        <option value="$PROJECT_DIR$/build/pom.xml" />
         <option value="$PROJECT_DIR$/build.xml" />
       </list>
     </option>
@@ -867,13 +867,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="40" selection-start="658" selection-end="658" vertical-scroll-proportion="-88.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/ResultWriter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="14" column="17" selection-start="357" selection-end="357" vertical-scroll-proportion="-52.5">
@@ -895,9 +888,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/build/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="14" selection-start="505" selection-end="505" vertical-scroll-proportion="-43.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/build.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="64" selection-start="538" selection-end="538" vertical-scroll-proportion="0.22624435">
+        <state line="55" column="23" selection-start="2465" selection-end="2465" vertical-scroll-proportion="0.7692308">
           <folding />
         </state>
       </provider>

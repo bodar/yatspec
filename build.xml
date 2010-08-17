@@ -30,7 +30,8 @@
     </target>
 
     <target name="compile">
-        <compile.and.jar src="${src}" jar="${release.jar.path}" classpathref="all.dependancies" version="${release.version}"/>
+        <compile.and.jar src="${src}" jar="${release.jar.path}" classpathref="all.dependancies"
+                         version="${release.version}"/>
         <compile.and.jar src="${test}" jar="${test.jar.path}" classpathref="all.jars" version="${release.version}"/>
     </target>
 
@@ -45,11 +46,20 @@
 
         <propertyfile file="${artifacts}/release.properties">
             <entry key="release.version" value="${release.version}"/>
+            <entry key="project.name" value="${ant.project.name}"/>
             <entry key="release.name" value="${release.name}"/>
-            <entry key="release.files" value="${release.jar}"/>
+            <entry key="release.files" value="${release.jar},pom.xml"/>
             <entry key="${release.jar}.description" value="Yatspec for Java build:${build.number}"/>
             <entry key="${release.jar}.labels" value="Featured"/>
+            <entry key="pom.xml.description" value="Maven POM file build:${build.number}"/>
+            <entry key="pom.xml.labels" value="Featured"/>
         </propertyfile>
+
+        <copy file="${build}/pom.xml" todir="${artifacts}/">
+            <filterset>
+                <filter token="VERSION" value="${build.number}"/>
+            </filterset>
+        </copy>
     </target>
 
     <target name="build" depends="clean, compile, test, package" description="build all"/>
