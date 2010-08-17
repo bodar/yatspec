@@ -78,10 +78,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SpecRunner.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="SpecRunner.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/junit/SpecRunner.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="55" column="0" selection-start="1894" selection-end="1894" vertical-scroll-proportion="0.39795917">
+            <state line="47" column="64" selection-start="1735" selection-end="1735" vertical-scroll-proportion="-76.5">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="build.xml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/build.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="64" selection-start="538" selection-end="538" vertical-scroll-proportion="0.22624435">
               <folding />
             </state>
           </provider>
@@ -106,7 +115,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/EnhancedStringTemplateGroup.java" />
         <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/Resources.java" />
         <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/foo.html" />
         <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/DocumentRenderer.java" />
@@ -122,6 +130,7 @@
         <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/yatspec.st" />
         <option value="$PROJECT_DIR$/build/pom.xml" />
         <option value="$PROJECT_DIR$/src/com/googlecode/yatspec/junit/SpecRunner.java" />
+        <option value="$PROJECT_DIR$/build.xml" />
       </list>
     </option>
   </component>
@@ -722,7 +731,7 @@
     <supportedVersion>125</supportedVersion>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1920" y="0" width="1920" height="1200" extended-state="1" />
+    <frame x="1920" y="0" width="1920" height="1200" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -781,13 +790,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/RendererAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="6" selection-start="101" selection-end="101" vertical-scroll-proportion="-30.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/rendering/Resources.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="2" column="13" selection-start="56" selection-end="56" vertical-scroll-proportion="-15.0">
@@ -888,7 +890,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/googlecode/yatspec/junit/SpecRunner.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="55" column="0" selection-start="1894" selection-end="1894" vertical-scroll-proportion="0.39795917">
+        <state line="47" column="64" selection-start="1735" selection-end="1735" vertical-scroll-proportion="-76.5">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="64" selection-start="538" selection-end="538" vertical-scroll-proportion="0.22624435">
           <folding />
         </state>
       </provider>
