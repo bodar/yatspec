@@ -51,7 +51,7 @@ public class SpecRunner extends TableRunner {
     }
 
     private File getOuputDirectory() {
-        return new File(System.getProperty(OUTPUT_DIR, System.getProperty("user.dir")));
+        return new File(System.getProperty(OUTPUT_DIR, System.getProperty("java.io.tmpdir")));
     }
 
     @Override
