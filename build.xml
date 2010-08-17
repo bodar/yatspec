@@ -56,7 +56,7 @@
             <entry key="${release.pom}.labels" value="Featured"/>
         </propertyfile>
 
-        <copy file="${build}/pom.xml" tofile="${artifacts}/">
+        <copy file="${build}/pom.xml" tofile="${artifacts}/${release.pom}">
             <filterset>
                 <filter token="VERSION" value="${build.number}"/>
             </filterset>
