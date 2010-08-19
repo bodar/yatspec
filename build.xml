@@ -10,7 +10,7 @@
     <property name="release.version" value="${build.number}"/>
     <property name="release.name" value="${ant.project.name}-${release.version}"/>
     <property name="release.jar" value="${release.name}.jar"/>
-    <property name="release.pom" value="pom-${release.version}.xml"/>
+    <property name="release.pom" value="${release.name}.pom"/>
     <property name="release.jar.path" value="${artifacts}/${release.jar}"/>
     <property name="test.jar.path" value="${artifacts}/${release.name}.test.jar"/>
 
