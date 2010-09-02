@@ -2,7 +2,7 @@ package com.googlecode.yatspec.state.givenwhenthen;
 
 import org.hamcrest.Matcher;
 
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TestState implements TestLogger {
     public InterestingGivens interestingGivens = new InterestingGivens();
@@ -36,6 +36,4 @@ public class TestState implements TestLogger {
         }
         capturedInputAndOutputs.put(keyName, value);
     }
-
-
 }

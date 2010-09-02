@@ -3,8 +3,9 @@ package com.googlecode.yatspec.junit;
 import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.junit.Assert.*;
-import static org.junit.matchers.JUnitMatchers.containsString;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(TableRunner.class)
 public class TableExampleTest {
