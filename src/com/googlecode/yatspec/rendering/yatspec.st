@@ -54,7 +54,7 @@
                     <tbody>
                     $testMethod.scenarios, testMethod.scenarioTable.rows: { scenario, row |
                         <tr>
-                            $row: { value | <td class='$cssClass.(scenario.status)$'><a href="yatspec.st#$scenario.name$">$value$</a></td> }$
+                            $row: { value | <td class='$cssClass.(scenario.status)$'><a href="#$scenario.name$">$value$</a></td> }$
                         </tr>
                      }$
                     </tbody>
