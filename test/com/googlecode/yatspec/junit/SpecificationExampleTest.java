@@ -12,18 +12,19 @@ public class SpecificationExampleTest extends TestState {
     private static final String RESULT = "Result";
 
     @Test
-    public void simpleMathsTest() throws Exception {
-        given(theNumber(9));
+    @Table({@Row({"9", "3.0"}),
+            @Row({"16", "4.0"})})
+    public void takeTheSquareRoot(String radicand, String result) throws Exception {
+        given(theRadicand(radicand));
         when(weTakeTheSquareRoot());
-        then(theResult(), is(3));
+        then(theResult(), is(result));
     }
 
 
-    private GivensBuilder theNumber(final int number) {
+    private GivensBuilder theRadicand(final String number) {
         return new GivensBuilder() {
             public InterestingGivens build(InterestingGivens interestingGivens) throws Exception {
-                interestingGivens.add(RADICAND, number);
-                return interestingGivens;
+                return interestingGivens.add(RADICAND, number);
             }
         };
     }
@@ -31,17 +32,16 @@ public class SpecificationExampleTest extends TestState {
     private ActionUnderTest weTakeTheSquareRoot() {
         return new ActionUnderTest() {
             public CapturedInputAndOutputs execute(InterestingGivens interestingGivens, CapturedInputAndOutputs capturedInputAndOutputs) {
-                int number = interestingGivens.getType(RADICAND, Integer.class);
-                capturedInputAndOutputs.add(RESULT, (int)Math.sqrt(number));
-                return capturedInputAndOutputs;
+                int number = Integer.valueOf(interestingGivens.getType(RADICAND, String.class));
+                return capturedInputAndOutputs.add(RESULT, String.valueOf(Math.sqrt(number)));
             }
         };
     }
 
-    private StateExtractor<Integer> theResult() {
-        return new StateExtractor<Integer>() {
-            public Integer execute(CapturedInputAndOutputs capturedInputAndOutputs) throws Exception {
-                return capturedInputAndOutputs.getType(RESULT, Integer.class);
+    private StateExtractor<String> theResult() {
+        return new StateExtractor<String>() {
+            public String execute(CapturedInputAndOutputs capturedInputAndOutputs) throws Exception {
+                return capturedInputAndOutputs.getType(RESULT, String.class);
             }
         };
     }

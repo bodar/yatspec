@@ -29,7 +29,7 @@
 
     <ul class="contents">
         $testMethods:{ testMethod |
-            <li class='$cssClass.(testMethod.status)$'><a href="#$testMethod.name$">$testMethod.name$</a></li>
+            <li class='$cssClass.(testMethod.status)$'><a href="#$testMethod.name$">$testMethod.displayName$</a></li>
         }$
     </ul>
 
@@ -39,7 +39,7 @@
         <div class="testmethod">
 
         <a id="$testMethod.name$"></a>
-        <h2>$testMethod.name$</h2>
+        <h2>$testMethod.displayName$</h2>
 
 
             $if(!testMethod.scenarioTable.empty)$

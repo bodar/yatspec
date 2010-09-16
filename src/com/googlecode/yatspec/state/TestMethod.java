@@ -9,9 +9,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.googlecode.yatspec.state.Scenario.buildName;
 import static jedi.functional.FunctionalPrimitives.collect;
 import static com.googlecode.yatspec.state.Scenario.buildDisplayName;
-import static com.googlecode.yatspec.state.Scenario.buildName;
 
 
 public class TestMethod {
@@ -32,7 +32,7 @@ public class TestMethod {
             scenarioResults.put(methodName, new Scenario("", collect(specification, wordify())));
         } else {
             for (List<String> row : scenarioTable.getRows()) {
-                scenarioResults.put(buildName(methodName, row), new Scenario(buildDisplayName(scenarioTable.getHeaders(), row), replaceScenarioData(scenarioTable.getHeaders(), row)));
+                scenarioResults.put(buildName(methodName, row), new Scenario(buildDisplayName(methodName, scenarioTable.getHeaders(), row), replaceScenarioData(scenarioTable.getHeaders(), row)));
             }
         }
     }
@@ -69,6 +69,10 @@ public class TestMethod {
     }
 
     public String getName() {
+        return methodName;
+    }
+
+    public String getDisplayName() {
         return Text.wordify(methodName);
     }
 

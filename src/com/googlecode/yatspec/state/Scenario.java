@@ -9,7 +9,7 @@ import static org.apache.commons.lang.StringUtils.join;
 
 public class Scenario {
     private TestState testState = new TestState();
-    public static final String WITH_SCENARIO_DATA = " With Scenario Data:";
+    public static final String WITH_SCENARIO_DATA = "(";
     private final String name;
     private final List<String> specification;
     private Throwable exception;
@@ -83,18 +83,18 @@ public class Scenario {
     }
 
     public static String buildName(String methodName, List<String> scenarioData) {
-        return methodName + WITH_SCENARIO_DATA + join(scenarioData, ", ");
+        return methodName + WITH_SCENARIO_DATA + join(scenarioData, ", ") + ")";
     }
 
-    public static String buildDisplayName(List<String> headers, List<String> row) {
+    public static String buildDisplayName(String methodName, List<String> headers, List<String> row) {
         StringBuilder builder = new StringBuilder();
-        builder.append(" for (");
+        builder.append(methodName).append("(");
         for (int i = 0, headersSize = headers.size(); i < headersSize; i++) {
             if(i > 0){
                 builder.append(", ");
             }
             String header = headers.get(i);
-            builder.append(header).append(" = ").append(row.get(i));
+            builder.append(header).append(":").append(row.get(i));
         }
         builder.append(")");
         return builder.toString();
