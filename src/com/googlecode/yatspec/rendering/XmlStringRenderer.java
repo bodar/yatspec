@@ -1,11 +1,13 @@
 package com.googlecode.yatspec.rendering;
 
 import org.antlr.stringtemplate.AttributeRenderer;
-import org.apache.commons.lang.StringEscapeUtils;
+
+import static org.apache.commons.lang.StringEscapeUtils.escapeXml;
+import static org.apache.commons.lang.StringUtils.defaultString;
 
 public class XmlStringRenderer implements AttributeRenderer {
     public String toString(Object o) {
-        return StringEscapeUtils.escapeXml(o.toString());
+        return defaultString(escapeXml(o.toString()));
     }
 
     public String toString(Object o, String formatName) {
