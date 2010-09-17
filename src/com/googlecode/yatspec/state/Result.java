@@ -11,4 +11,6 @@ public interface Result {
     Scenario getScenario(String name) throws Exception;
 
     String getName();
+
+    String getNotes();
 }

@@ -1,26 +1,30 @@
 package com.googlecode.yatspec.state;
 
+import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.parsing.TestParser;
 import com.googlecode.yatspec.parsing.Text;
 import jedi.functional.Functor;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.googlecode.yatspec.state.Scenario.buildName;
+import static com.googlecode.yatspec.state.TestResult.getNotesValue;
 import static jedi.functional.FunctionalPrimitives.collect;
-import static com.googlecode.yatspec.state.Scenario.buildDisplayName;
+import static org.apache.commons.lang.StringUtils.join;
 
 
 public class TestMethod {
+    private final Method method;
     private final String methodName;
     private final ScenarioTable scenarioTable;
     private final List<String> specification;
     private Map<String, Scenario> scenarioResults = new LinkedHashMap<String, Scenario>();
 
-    public TestMethod(String methodName, List<String> methodBody, ScenarioTable scenarioTable) {
+    public TestMethod(Method method, String methodName, List<String> methodBody, ScenarioTable scenarioTable) {
+        this.method = method;
         this.methodName = methodName;
         this.scenarioTable = scenarioTable;
         this.specification = methodBody;
@@ -32,7 +36,7 @@ public class TestMethod {
             scenarioResults.put(methodName, new Scenario("", collect(specification, wordify())));
         } else {
             for (List<String> row : scenarioTable.getRows()) {
-                scenarioResults.put(buildName(methodName, row), new Scenario(buildDisplayName(methodName, scenarioTable.getHeaders(), row), replaceScenarioData(scenarioTable.getHeaders(), row)));
+                scenarioResults.put(buildName(methodName, row), new Scenario(buildName(methodName, row), replaceScenarioData(scenarioTable.getHeaders(), row)));
             }
         }
     }
@@ -114,6 +118,14 @@ public class TestMethod {
 
     public boolean hasScenario(String name) {
         return scenarioResults.get(name) != null;
+    }
+
+    public String getNotes() {
+        return getNotesValue(method.getAnnotation(Notes.class));
+    }
+
+    public static String buildName(String methodName, List<String> scenarioData) {
+        return methodName + "(" + join(scenarioData, ", ") + ")";
     }
 
 }

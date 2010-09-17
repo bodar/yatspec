@@ -22,26 +22,33 @@
 </head>
 <body>
 
-<h1>$testSuite$</h1>
+<h1>$testResult.name$</h1>
+
+$if(testResult.notes)$
+    <pre class="notes">$testResult.notes$</pre>
+$endif$
 
 <div class="contents">
     <h2>Contents</h2>
 
     <ul class="contents">
-        $testMethods:{ testMethod |
+        $testResult.testMethods:{ testMethod |
             <li class='$cssClass.(testMethod.status)$'><a href="#$testMethod.name$">$testMethod.displayName$</a></li>
         }$
     </ul>
 
 </div>
 
-    $testMethods:{ testMethod |
+    $testResult.testMethods:{ testMethod |
         <div class="testmethod">
 
         <a id="$testMethod.name$"></a>
         <h2>$testMethod.displayName$</h2>
 
-
+            $if(testMethod.notes)$
+                <pre class="notes">$testMethod.notes$</pre>
+            $endif$
+            
             $if(!testMethod.scenarioTable.empty)$
                 <h3>Scenarios</h3>
 
@@ -69,6 +76,7 @@
                         $scenario.specification;separator="\n"$</pre>
 
                     <h2>Test results:</h2>
+
 
                     <pre class='highlight results $cssClass.(scenario.status)$'>
                         $scenario.message$</pre>

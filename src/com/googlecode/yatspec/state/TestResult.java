@@ -1,5 +1,6 @@
 package com.googlecode.yatspec.state;
 
+import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.parsing.TestParser;
 import com.googlecode.yatspec.parsing.Text;
 import jedi.functional.Filter;
@@ -56,5 +57,12 @@ public class TestResult implements Result {
     }
 
 
+    public String getNotes() {
+        final Notes annotation = getTestClass().getAnnotation(Notes.class);
+        return getNotesValue(annotation);
+    }
 
+    public static String getNotesValue(Notes annotation) {
+        return annotation == null ? null : annotation.value();
+    }
 }

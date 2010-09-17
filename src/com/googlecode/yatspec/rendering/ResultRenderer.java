@@ -24,8 +24,7 @@ public class ResultRenderer implements Renderer<Result> {
         template.setAttribute("script", loadContent("yatspec.js"));
         template.setAttribute("stylesheet", loadContent("yatspec.css"));
         template.setAttribute("cssClass", getCssMap());
-        template.setAttribute("testSuite", result.getName());
-        template.setAttribute("testMethods", result.getTestMethods());
+        template.setAttribute("testResult", result);
         StringWriter writer = new StringWriter();
         template.write(new NoIndentWriter(writer));
         return writer.toString();

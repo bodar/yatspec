@@ -7,6 +7,7 @@ import net.sourceforge.pmd.ast.*;
 import org.jaxen.JaxenException;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import static jedi.functional.FunctionalPrimitives.collect;
 import static jedi.functional.FunctionalPrimitives.first;
 import static jedi.functional.FunctionalPrimitives.last;
 
-public class TestMethodExtractor implements Functor<ASTMethodDeclaration, TestMethod> {
+public class TestMethodExtractor implements Functor<List, TestMethod> {
     public static TestMethodExtractor extractTestMethod(String wholeFile) throws IOException {
         final String[] lines = wholeFile.split(TestParser.LINE_SEPARATOR);
         return new TestMethodExtractor(lines);
@@ -26,16 +27,18 @@ public class TestMethodExtractor implements Functor<ASTMethodDeclaration, TestMe
         this.lines = lines;
     }
 
-    public TestMethod execute(ASTMethodDeclaration method) {
-        final List<ASTBlockStatement> blocks = method.findChildrenOfType(ASTBlockStatement.class);
+    public TestMethod execute(List pair) {
+        ASTMethodDeclaration methodAST = (ASTMethodDeclaration) pair.get(0);
+        Method method = (Method) pair.get(1);
+        final List<ASTBlockStatement> blocks = methodAST.findChildrenOfType(ASTBlockStatement.class);
         if (blocks.isEmpty()) {
             return null;
         }
 
-        final String name = method.getMethodName();
+        final String name = methodAST.getMethodName();
         final List<String> source = getSourceForBlock(blocks);
-        final ScenarioTable scenarioTable = getScenarioTable(method);
-        return new TestMethod(name, source, scenarioTable);
+        final ScenarioTable scenarioTable = getScenarioTable(methodAST);
+        return new TestMethod(method, name, source, scenarioTable);
     }
 
     private List<String> getSourceForBlock(List<ASTBlockStatement> blocks) {
