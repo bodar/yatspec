@@ -22,7 +22,7 @@ public class TestState implements TestLogger {
         return this;
     }
 
-    public <ItemOfInterest> TestState then(StateExtractor<String> extractor, Matcher<? super String> matcher) throws Exception {
+    public <ItemOfInterest> TestState then(StateExtractor<ItemOfInterest> extractor, Matcher<? super ItemOfInterest> matcher) throws Exception {
         assertThat(extractor.execute(capturedInputAndOutputs), matcher);
         return this;
     }
