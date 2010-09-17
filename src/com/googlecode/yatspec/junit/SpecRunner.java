@@ -45,9 +45,9 @@ public class SpecRunner extends TableRunner {
         try {
             new ResultWriter(getOuputDirectory()).write(testResult);
         } catch (Exception e) {
-            System.out.println("Error while writing HTML " + e);
+            System.out.println("Error while writing HTML");
+            e.printStackTrace(System.out);
         }
-
     }
 
     private File getOuputDirectory() {
