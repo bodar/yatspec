@@ -14,7 +14,12 @@ public abstract class NiceMap<T extends NiceMap> extends LinkedHashMap<String, O
     }
 
     public <T> T getType(String key, Class<T> aClass) {
-        return (T) get(key);
+        Object value = get(key);
+        try {
+            return (T) value;
+        } catch (ClassCastException e) {
+            throw new ClassCastException("You requested a " + aClass.getSimpleName() + " but got a " + value.getClass() + " (" + value + ")");
+        }
     }
 
     public <T> T getType(Class<T> aClass) {
