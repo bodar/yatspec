@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 
 import static jedi.option.Options.option;
 
-public abstract class NiceMap<T extends NiceMap> extends LinkedHashMap<String, Object> {
+public class NiceMap<T extends NiceMap> extends LinkedHashMap<String, Object> {
     public NiceMap(Object... instances) {
         for (Object instance : instances) {
             add(instance);
@@ -15,11 +15,13 @@ public abstract class NiceMap<T extends NiceMap> extends LinkedHashMap<String, O
 
     public <T> T getType(String key, Class<T> aClass) {
         Object value = get(key);
-        try {
-            return (T) value;
-        } catch (ClassCastException e) {
+        if(value == null) {
+            return null;
+        }
+        if(!aClass.isAssignableFrom(value.getClass())){
             throw new ClassCastException("You requested a " + aClass.getSimpleName() + " but got a " + value.getClass() + " (" + value + ")");
         }
+        return (T) value;
     }
 
     public <T> T getType(Class<T> aClass) {
