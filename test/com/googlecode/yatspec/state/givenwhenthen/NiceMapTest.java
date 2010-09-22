@@ -17,6 +17,4 @@ public class NiceMapTest {
             assertThat(e.getMessage(), containsString("Moomin"));
         }
     }
-
 }
-
