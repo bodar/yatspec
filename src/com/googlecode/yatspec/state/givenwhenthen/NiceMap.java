@@ -13,7 +13,7 @@ public class NiceMap<T extends NiceMap> extends LinkedHashMap<String, Object> {
         }
     }
 
-    public <T> T getType(String key, Class<T> aClass) {
+    public <R> R getType(String key, Class<R> aClass) {
         Object value = get(key);
         if(value == null) {
             return null;
@@ -21,18 +21,18 @@ public class NiceMap<T extends NiceMap> extends LinkedHashMap<String, Object> {
         if(!aClass.isAssignableFrom(value.getClass())){
             throw new ClassCastException("You requested a " + aClass.getSimpleName() + " but got a " + value.getClass() + " (" + value + ")");
         }
-        return (T) value;
+        return (R) value;
     }
 
-    public <T> T getType(Class<T> aClass) {
+    public <R> R getType(Class<R> aClass) {
         return getType(aClass.getSimpleName(),aClass);
     }
 
-    public <T> Option<T> getOption(String key, Class<T> aClass) {
+    public <R> Option<R> getOption(String key, Class<R> aClass) {
         return option(getType(key, aClass));
     }
 
-    public <T> Option<T> getOption(Class<T> aClass) {
+    public <R> Option<R> getOption(Class<R> aClass) {
         return option(getType(aClass));
     }
 
