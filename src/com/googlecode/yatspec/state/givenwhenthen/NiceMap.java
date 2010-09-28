@@ -1,10 +1,10 @@
 package com.googlecode.yatspec.state.givenwhenthen;
 
-import jedi.option.Option;
+import com.googlecode.totallylazy.Option;
 
 import java.util.LinkedHashMap;
 
-import static jedi.option.Options.option;
+import static com.googlecode.totallylazy.Option.option;
 
 public class NiceMap<T extends NiceMap> extends LinkedHashMap<String, Object> {
     public NiceMap(Object... instances) {

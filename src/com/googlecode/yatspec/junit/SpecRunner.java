@@ -1,11 +1,11 @@
 package com.googlecode.yatspec.junit;
 
+import com.googlecode.totallylazy.Predicate;
 import com.googlecode.yatspec.rendering.ResultWriter;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.Scenario;
 import com.googlecode.yatspec.state.TestResult;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
-import jedi.functional.Filter;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
@@ -15,7 +15,8 @@ import org.junit.runners.model.Statement;
 import java.io.File;
 import java.util.List;
 
-import static jedi.functional.FunctionalPrimitives.select;
+import static com.googlecode.totallylazy.Sequences.sequence;
+
 
 public class SpecRunner extends TableRunner {
     public static final String OUTPUT_DIR = "yatspec.output.dir";
@@ -29,11 +30,11 @@ public class SpecRunner extends TableRunner {
 
     @Override
     protected List<FrameworkMethod> computeTestMethods() {
-        return select(super.computeTestMethods(), new Filter<FrameworkMethod>() {
-            public Boolean execute(FrameworkMethod method) {
+        return sequence(super.computeTestMethods()).filter(new Predicate<FrameworkMethod>() {
+            public boolean matches(FrameworkMethod method) {
                 return !method.getName().equals("evaluate"); 
             }
-        });
+        }).toList();
     }
 
     @Override

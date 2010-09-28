@@ -1,7 +1,7 @@
 package com.googlecode.yatspec.junit;
 
-import jedi.functional.Filter;
-import jedi.functional.Functor;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Predicate;
 import org.junit.runner.manipulation.NoTestsRemainException;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
@@ -10,8 +10,8 @@ import org.junit.runners.model.InitializationError;
 import java.lang.annotation.Annotation;
 import java.util.List;
 
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static java.util.Arrays.asList;
-import static jedi.functional.FunctionalPrimitives.*;
 
 public class TableRunner extends BlockJUnit4ClassRunner {
     private org.junit.runner.manipulation.Filter  filter;
@@ -27,20 +27,24 @@ public class TableRunner extends BlockJUnit4ClassRunner {
 
     @Override
     protected List<FrameworkMethod> getChildren() {
-        return flatten(computeTestMethods(), new Functor<FrameworkMethod, Iterable<FrameworkMethod>>() {
-            public Iterable<FrameworkMethod> execute(final FrameworkMethod frameworkMethod) {
+        return sequence(computeTestMethods()).flatMap(new Callable1<FrameworkMethod, Iterable<FrameworkMethod>>() {
+            public Iterable<FrameworkMethod> call(final FrameworkMethod frameworkMethod) {
                 final Table annotation = frameworkMethod.getAnnotation(Table.class);
                 if (annotation == null) {
-                    return asList(frameworkMethod);
+                    return sequence(frameworkMethod);
                 } else {
-                    return collect(annotation.value(), new Functor<Row, FrameworkMethod>() {
-                        public FrameworkMethod execute(Row row) {
-                            return new DecoratingFrameworkMethod(frameworkMethod, row);
-                        }
-                    });
+                    return sequence(annotation.value()).map(decorateTestMethod(frameworkMethod));
                 }
             }
-        });
+        }).toList();
+    }
+
+    private Callable1<Row, FrameworkMethod> decorateTestMethod(final FrameworkMethod frameworkMethod) {
+        return new Callable1<Row, FrameworkMethod>() {
+            public FrameworkMethod call(Row row) {
+                return new DecoratingFrameworkMethod(frameworkMethod, row);
+            }
+        };
     }
 
     @Override
@@ -49,11 +53,11 @@ public class TableRunner extends BlockJUnit4ClassRunner {
             return super.computeTestMethods();
         }
         
-        return select(super.computeTestMethods(), new Filter<FrameworkMethod>() {
-            public Boolean execute(FrameworkMethod frameworkMethod) {
+        return sequence(super.computeTestMethods()).filter(new Predicate<FrameworkMethod>() {
+            public boolean matches(FrameworkMethod frameworkMethod) {
                 return filter.shouldRun(describeChild(frameworkMethod));
             }
-        });
+        }).toList();
     }
 
     @Override

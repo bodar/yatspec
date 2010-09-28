@@ -12,6 +12,13 @@
     <name>Yatspec</name>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.googlecode.totallylazy</groupId>
+            <artifactId>totallylazy</artifactId>
+            <version>42</version>
+        </dependency>
+        
         <dependency>
             <groupId>pmd</groupId>
             <artifactId>pmd</artifactId>

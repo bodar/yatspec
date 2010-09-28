@@ -1,10 +1,12 @@
 package com.googlecode.yatspec.regex;
 
-import jedi.functional.Functor;
+import com.googlecode.totallylazy.Callable1;
 
 import java.util.Iterator;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
+
+import static com.googlecode.totallylazy.Callables.call;
 
 public class Matches implements Iterable<MatchResult> {
     private final Pattern pattern;
@@ -23,29 +25,29 @@ public class Matches implements Iterable<MatchResult> {
         return new MatchIterator(pattern.matcher(text));
     }
 
-    public String replace(Functor<MatchResult, String> matched) {
+    public String replace(Callable1<MatchResult, String> matched) {
         return replace(doNothing(), matched);
     }
 
-    public static Functor<String, String> doNothing() {
-        return new Functor<String, String>() {
-            public String execute(String value) {
+    public static Callable1<String, String> doNothing() {
+        return new Callable1<String, String>() {
+            public String call(String value) {
                 return value;
             }
         };
     }
 
-    public String replace(Functor<String, String> notMatched, Functor<MatchResult, String> matched) {
+    public String replace(Callable1<String, String> notMatched, Callable1<MatchResult, String> matched) {
         StringBuilder builder = new StringBuilder();
         int position = 0;
         for (MatchResult matchResult : this) {
             String before = text.substring(position, matchResult.start());
-            if (before.length() > 0) builder.append(filterNull(notMatched.execute(before)));
-            builder.append(filterNull(matched.execute(matchResult)));
+            if (before.length() > 0) builder.append(filterNull(call(notMatched, (before))));
+            builder.append(filterNull(call(matched,(matchResult))));
             position = matchResult.end();
         }
         String after = text.substring(position);
-        if (after.length() > 0) builder.append(filterNull(notMatched.execute(after)));
+        if (after.length() > 0) builder.append(filterNull(call(notMatched,after)));
         return builder.toString();
     }
 

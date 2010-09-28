@@ -1,12 +1,13 @@
 package com.googlecode.yatspec.state;
 
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.yatspec.parsing.Text;
-import jedi.functional.Functor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static jedi.functional.FunctionalPrimitives.collect;
+import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.yatspec.state.TestMethod.wordify;
 
 public class ScenarioTable {
     private List<String> headers = new ArrayList<String>();
@@ -17,11 +18,7 @@ public class ScenarioTable {
     }
 
     public List<String> getDisplayHeaders() {
-        return collect(headers, new Functor<String, String>(){
-            public String execute(String header) {
-                return Text.wordify(header);
-            }
-        });
+        return sequence(headers).map(wordify()).toList();
     }
 
     public void setHeaders(List<String> headers) {

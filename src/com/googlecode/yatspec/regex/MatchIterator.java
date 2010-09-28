@@ -1,8 +1,5 @@
 package com.googlecode.yatspec.regex;
 
-import jedi.option.None;
-import jedi.option.Option;
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.regex.MatchResult;

@@ -1,14 +1,13 @@
 package com.googlecode.yatspec.state;
 
+import com.googlecode.totallylazy.Predicate;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.parsing.TestParser;
 import com.googlecode.yatspec.parsing.Text;
-import jedi.functional.Filter;
 
 import java.util.List;
 
-import static jedi.functional.FunctionalPrimitives.first;
-import static jedi.functional.FunctionalPrimitives.select;
+import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class TestResult implements Result {
     private final Class<?> klass;
@@ -49,13 +48,16 @@ public class TestResult implements Result {
     }
 
     private Scenario findScenario(final String name) throws Exception {
-        return first(select(getTestMethods(), new Filter<TestMethod>() {
-            public Boolean execute(TestMethod testMethod) {
-                return testMethod.hasScenario(name);
-            }
-        })).getScenario(name);
+        return sequence(getTestMethods()).filter(hasScenario(name)).head().getScenario(name);
     }
 
+    private Predicate<TestMethod> hasScenario(final String name) {
+        return new Predicate<TestMethod>() {
+            public boolean matches(TestMethod testMethod) {
+                return testMethod.hasScenario(name);
+            }
+        };
+    }
 
     public String getNotes() {
         final Notes annotation = getTestClass().getAnnotation(Notes.class);

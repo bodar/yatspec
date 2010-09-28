@@ -1,7 +1,6 @@
 package com.googlecode.yatspec.state;
 
 import com.googlecode.yatspec.junit.Notes;
-import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
