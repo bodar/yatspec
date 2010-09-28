@@ -45,22 +45,26 @@
     <target name="package">
         <mkdir dir="${artifacts}"/>
 
-        <zip destfile="${artifacts}/${release.name}.src.zip" basedir="src"/>
+        <zip destfile="${artifacts}/${release.src}" basedir="src"/>
+
+        <exec command='hg log -l 1' output="${artifacts}/hg.properties"/>
+        <property file="${artifacts}/hg.properties" prefix="hg"/>
 
         <propertyfile file="${artifacts}/release.properties">
             <entry key="release.version" value="${release.version}"/>
             <entry key="project.name" value="${ant.project.name}"/>
             <entry key="release.name" value="${release.name}"/>
             <entry key="release.path" value="com/googlecode/${ant.project.name}/${ant.project.name}/${release.version}/"/>
-            <entry key="release.files" value="${release.jar},${release.pom},${release.example}"/>
-            <entry key="${release.jar}.description" value="Yatspec for Java build:${build.number}"/>
+            <entry key="release.files" value="${release.jar},${release.pom},${release.src}"/>
+            <entry key="${release.jar}.description" value="${hg.summary} build:${build.number} "/>
             <entry key="${release.jar}.labels" value="Featured"/>
             <entry key="${release.pom}.description" value="Maven POM file build:${build.number}"/>
             <entry key="${release.pom}.labels" value="POM"/>
-            <entry key="${release.example}.description" value="Example of the generated output created just by running a JUnit test"/>
-            <entry key="${release.example}.labels" value="Featured"/>
             <entry key="${release.src}.description" value="Source file build:${build.number}"/>
             <entry key="${release.src}.labels" value="Source"/>
+
+            <entry key="${release.example}.description" value="Example of the generated output created just by running a JUnit test"/>
+            <entry key="${release.example}.labels" value="Featured"/>
         </propertyfile>
 
         <copy file="${build}/pom.xml" tofile="${artifacts}/${release.pom}">
@@ -68,9 +72,6 @@
                 <filter token="VERSION" value="${build.number}"/>
             </filterset>
         </copy>
-
-        <copy file="${reports}/com/googlecode/yatspec/junit/SpecificationExampleTest.html" tofile="${artifacts}/${release.example}"/>
-
     </target>
 
     <target name="build" depends="clean, compile, test, package" description="build all"/>
