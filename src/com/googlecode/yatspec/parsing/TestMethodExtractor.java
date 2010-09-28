@@ -1,8 +1,10 @@
 package com.googlecode.yatspec.parsing;
 
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.yatspec.state.ScenarioTable;
 import com.googlecode.yatspec.state.TestMethod;
-import jedi.functional.Functor;
 import net.sourceforge.pmd.ast.*;
 import org.jaxen.JaxenException;
 
@@ -11,11 +13,9 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
-import static jedi.functional.FunctionalPrimitives.collect;
-import static jedi.functional.FunctionalPrimitives.first;
-import static jedi.functional.FunctionalPrimitives.last;
+import static com.googlecode.totallylazy.Sequences.sequence;
 
-public class TestMethodExtractor implements Functor<List, TestMethod> {
+public class TestMethodExtractor implements Callable1<Pair<ASTMethodDeclaration,Method>, TestMethod> {
     public static TestMethodExtractor extractTestMethod(String wholeFile) throws IOException {
         final String[] lines = wholeFile.split(TestParser.LINE_SEPARATOR);
         return new TestMethodExtractor(lines);
@@ -27,9 +27,9 @@ public class TestMethodExtractor implements Functor<List, TestMethod> {
         this.lines = lines;
     }
 
-    public TestMethod execute(List pair) {
-        ASTMethodDeclaration methodAST = (ASTMethodDeclaration) pair.get(0);
-        Method method = (Method) pair.get(1);
+    public TestMethod call(Pair<ASTMethodDeclaration,Method> pair) {
+        ASTMethodDeclaration methodAST = pair.first();
+        Method method = pair.second();
         final List<ASTBlockStatement> blocks = methodAST.findChildrenOfType(ASTBlockStatement.class);
         if (blocks.isEmpty()) {
             return null;
@@ -42,8 +42,8 @@ public class TestMethodExtractor implements Functor<List, TestMethod> {
     }
 
     private List<String> getSourceForBlock(List<ASTBlockStatement> blocks) {
-        ASTBlockStatement firstBlock = first(blocks);
-        ASTBlockStatement lastBlock = last(blocks);
+        ASTBlockStatement firstBlock = blocks.get(0);
+        ASTBlockStatement lastBlock = blocks.get(blocks.size() - 1);
         return Arrays.asList(lines).subList(firstBlock.getBeginLine() - 1, lastBlock.getEndLine());
     }
 
@@ -67,12 +67,16 @@ public class TestMethodExtractor implements Functor<List, TestMethod> {
         return table;
     }
 
-    private <T extends SimpleNode>List<String> getValues(List<T> astLiterals) {
-        return collect(astLiterals, new Functor<T, String>() {
-            public String execute(T simpleNode) {
+    private <T extends SimpleNode> List<String> getValues(List<T> astLiterals) {
+        return sequence(astLiterals).map(extractValue()).toList();
+    }
+
+    private <T extends SimpleNode> Callable1<T, String> extractValue() {
+        return new Callable1<T, String>() {
+            public String call(T simpleNode) {
                 return getValue(simpleNode);
             }
-        });
+        };
     }
 
     private String getValue(SimpleNode parameter) {

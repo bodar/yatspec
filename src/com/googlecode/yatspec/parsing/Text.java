@@ -1,7 +1,7 @@
 package com.googlecode.yatspec.parsing;
 
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.yatspec.regex.Matches;
-import jedi.functional.Functor;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.regex.MatchResult;
@@ -12,21 +12,21 @@ public class Text {
     private static final Pattern spaceRemover = Pattern.compile("\\s*(\\S+\\s)");
     private static final Pattern stringIgnorer = Pattern.compile("\"[^\"]+\"");
 
-    private static final Functor<MatchResult, String> wordDelimiterReplacer = new Functor<MatchResult, String>() {
-        public String execute(MatchResult matchResult) {
+    private static final Callable1<MatchResult, String> wordDelimiterReplacer = new Callable1<MatchResult, String>() {
+        public String call(MatchResult matchResult) {
             // " $1 $2"
             return " " + lowercaseSingleLetters(Matches.filterNull(matchResult.group(1))) + " " + Matches.filterNull(matchResult.group(2)).toLowerCase();
         }
     };
 
-    private static final Functor<String, String> wordifier = new Functor<String, String>() {
-        public String execute(String text) {
+    private static final Callable1<String, String> wordifier = new Callable1<String, String>() {
+        public String call(String text) {
             return Matches.matches(wordDelimiter, text).replace(wordDelimiterReplacer);
         }
     };
 
-    private static final Functor<MatchResult, String> doNothing = new Functor<MatchResult, String>()  {
-        public String execute(MatchResult matchResult) {
+    private static final Callable1<MatchResult, String> doNothing = new Callable1<MatchResult, String>()  {
+        public String call(MatchResult matchResult) {
             return matchResult.group();
         }
     };
