@@ -4,7 +4,7 @@ import org.hamcrest.Matcher;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class TestState implements TestLogger {
+public class TestState implements TestLogger, WithTestState {
     public InterestingGivens interestingGivens = new InterestingGivens();
     public CapturedInputAndOutputs capturedInputAndOutputs = new CapturedInputAndOutputs();
 
@@ -35,5 +35,9 @@ public class TestState implements TestLogger {
             count++;
         }
         capturedInputAndOutputs.put(keyName, value);
+    }
+
+    public TestState testState() {
+        return this;
     }
 }
