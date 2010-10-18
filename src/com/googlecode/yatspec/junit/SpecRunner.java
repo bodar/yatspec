@@ -6,6 +6,7 @@ import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.Scenario;
 import com.googlecode.yatspec.state.TestResult;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
+import com.googlecode.yatspec.state.givenwhenthen.WithTestState;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
@@ -63,8 +64,8 @@ public class SpecRunner extends TableRunner {
             public void evaluate() throws Throwable {
                 currentScenario = testResult.getScenario(method.getName());
 
-                if(test instanceof TestState){
-                    TestState testState = (TestState) test;
+                if(test instanceof WithTestState){
+                    TestState testState = ((WithTestState) test).testState();
                     currentScenario.setTestState(testState);
                 }
                 statement.evaluate();
