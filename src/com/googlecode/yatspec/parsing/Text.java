@@ -28,7 +28,7 @@ public class Text {
 
     private static final Callable1<CharSequence, CharSequence> wordifier = new Callable1<CharSequence, CharSequence>() {
         public CharSequence call(CharSequence text) {
-            return wordDelimiter.matches(text).replace(wordDelimiterReplacer);
+            return wordDelimiter.findMatches(text).replace(wordDelimiterReplacer);
         }
     };
 
@@ -49,7 +49,7 @@ public class Text {
 
 
     public static String wordify(String value) {
-        final String wordified = stringIgnorer.matches(value).replace(wordifier, doNothing);
+        final String wordified = stringIgnorer.findMatches(value).replace(wordifier, doNothing);
         return StringUtils.capitalize(spaceRemover.matcher(wordified).replaceAll(spaceRemoverReplacer));
     }
 }
