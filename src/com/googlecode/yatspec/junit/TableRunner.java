@@ -27,7 +27,7 @@ public class TableRunner extends BlockJUnit4ClassRunner {
 
     @Override
     protected List<FrameworkMethod> getChildren() {
-        return sequence(computeTestMethods()).flatMap(new Callable1<FrameworkMethod, Iterable<FrameworkMethod>>() {
+        return sequence(computeTestMethods()).flatMap(new Callable1<FrameworkMethod, Iterable<? extends FrameworkMethod>>() {
             public Iterable<FrameworkMethod> call(final FrameworkMethod frameworkMethod) {
                 final Table annotation = frameworkMethod.getAnnotation(Table.class);
                 if (annotation == null) {
