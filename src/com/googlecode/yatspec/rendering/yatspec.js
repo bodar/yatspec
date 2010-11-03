@@ -18,10 +18,17 @@ RegExp.prototype.replace = function(str, replacer, nonMatchedReplacer) {
 
 function yatspec() {}
 
+yatspec.processed = 'highlighted';
+
 yatspec.highlight = function(element, pairs) {
     if (pairs.length == 0) {
         return;
     }
+
+    if($(element).hasClass(yatspec.processed)){
+        return;
+    }
+
     var classes = [];
     var matchGroups = [];
     $.each(pairs, function() {
@@ -39,16 +46,11 @@ yatspec.highlight = function(element, pairs) {
             }
         }
     }));
+
+    $(element).addClass(yatspec.processed);
 }
 
 $(document).ready(function () {
-    $('.logKey').click(function() {
-        $(this).next(".logValue").toggleClass("hide");
-    });
-
-    $('.logKey').next(".logValue").toggleClass("hide");
-
-
     $('.highlight.specification').each(function() {
         yatspec.highlight(this, [
             {pattern: '"[^"]*"', cssClass: "quote" },
@@ -76,14 +78,19 @@ $(document).ready(function () {
             return { pattern: $(this).text(), cssClass: "interestingGiven" };
         }).get();
 
-        $('.highlight.xml', this).each(function() {
-            yatspec.highlight(this, interestingGivens.concat([
-                {pattern: '"[^"]*"', cssClass: "quote" },
-                {pattern: "&lt;[^\\s&]+", cssClass: "keyword" },
-                {pattern: "\\??&gt;", cssClass: "keyword" },
-                {pattern: "\\s[\\w:-]+=", cssClass: "constant" }
-            ]));
-        })
+        $('.logKey').click(function() {
+            $(this).next(".logValue").toggleClass("hide");
+            $(this).next('.logValue.highlight.xml').each(function() {
+                yatspec.highlight(this, interestingGivens.concat([
+                    {pattern: '"[^"]*"', cssClass: "quote" },
+                    {pattern: "&lt;[^\\s&]+", cssClass: "keyword" },
+                    {pattern: "\\??&gt;", cssClass: "keyword" },
+                    {pattern: "\\s[\\w:-]+=", cssClass: "constant" }
+                ]));
+            })
+        });
+
+        $('.logKey').next(".logValue").toggleClass("hide");
     })
 
 }, false);
