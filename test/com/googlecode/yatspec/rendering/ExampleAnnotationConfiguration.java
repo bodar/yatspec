@@ -6,10 +6,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 @CustomRenderConfiguration({
-        @RenderMapping(type = ExampleAnnotationTest.CustomType.class, renderer = ExampleAnnotationTest.RendererWhichAlwaysRetunsTheSameString.class),
-        @RenderMapping(type = ExampleAnnotationTest.CustomType.class, renderer = ExampleAnnotationTest.RendererWhichAlwaysRetunsTheSameString.class)
+        @RenderMapping(type = ExampleAnnotationConfiguration.CustomType.class, renderer = ExampleAnnotationConfiguration.RendererWhichAlwaysRetunsTheSameString.class),
+        @RenderMapping(type = ExampleAnnotationConfiguration.CustomType.class, renderer = ExampleAnnotationConfiguration.RendererWhichAlwaysRetunsTheSameString.class)
 })
-public class ExampleAnnotationTest {
+public class ExampleAnnotationConfiguration {
     @Test
     public void passes() {
         assertThat(true, is(true));
