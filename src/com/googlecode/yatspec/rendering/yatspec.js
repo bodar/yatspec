@@ -78,7 +78,7 @@ $(document).ready(function () {
             return { pattern: $(this).text(), cssClass: "interestingGiven" };
         }).get();
 
-        $('.logKey').click(function() {
+        $('.logKey', this).click(function() {
             $(this).next(".logValue").toggleClass("hide");
             $(this).next('.logValue.highlight.xml').each(function() {
                 yatspec.highlight(this, interestingGivens.concat([
