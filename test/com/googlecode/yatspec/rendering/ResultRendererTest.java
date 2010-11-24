@@ -3,7 +3,8 @@ package com.googlecode.yatspec.rendering;
 import com.googlecode.yatspec.state.TestResult;
 import org.junit.Test;
 
-import static com.googlecode.yatspec.rendering.ExampleAnnotationConfiguration.RendererWhichAlwaysRetunsTheSameString.THE_SAME_STRING;
+import java.util.HashMap;
+
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -24,24 +25,18 @@ public class ResultRendererTest {
     }
 
     @Test
-    public void supportsCustomRenderingOfScenarioLogs() throws Exception{
+    public void supportsCustomRenderingOfScenarioLogs() throws Exception {
         // setup
         final String customRenderedText = "some crazy and likely random string that wouldn't appear in the html";
-        CustomRendererRegistry.renderers.put(RenderedType.class, new DefaultReturningRenderer(customRenderedText));
         TestResult result = aTestResultWithCustomRenderTypeAddedToScenarioLogs();
+        result.mergeCustomRenderers(new HashMap<Class, Renderer>() {{
+            put(RenderedType.class, new DefaultReturningRenderer(customRenderedText));
+        }});
         // execute
         String html = new ResultRenderer().render(result);
 
         // verify
         assertThat(html, containsString(customRenderedText));
-    }
-
-    @Test
-    public void supportCustomRendererUsingAnnotations() throws Exception {
-        final TestResult testResult = new TestResult(ExampleAnnotationConfiguration.class);
-        addToTestLogs(testResult, new ExampleAnnotationConfiguration.CustomType());
-        final String html = new ResultRenderer().render(testResult);
-        assertThat(html, containsString(THE_SAME_STRING));
     }
 
     private TestResult aTestResultWithCustomRenderTypeAddedToScenarioLogs() throws Exception {
@@ -54,8 +49,8 @@ public class ResultRendererTest {
         result.getTestMethods().get(0).getScenarios().get(0).getLogs().put("custom rendered thing", thingToBeCustomRendered);
     }
 
-
-    private static class RenderedType{}
+    private static class RenderedType {
+    }
 
     private class DefaultReturningRenderer implements Renderer<RenderedType> {
         private String rendererOutput;
@@ -73,5 +68,4 @@ public class ResultRendererTest {
         }
 
     }
-    
 }

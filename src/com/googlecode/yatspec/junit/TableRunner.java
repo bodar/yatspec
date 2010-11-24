@@ -11,7 +11,6 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static java.util.Arrays.asList;
 
 public class TableRunner extends BlockJUnit4ClassRunner {
     private org.junit.runner.manipulation.Filter  filter;

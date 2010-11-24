@@ -5,8 +5,6 @@ import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import java.util.List;
 import java.util.Map;
 
-import static org.apache.commons.lang.StringUtils.join;
-
 public class Scenario {
     private TestState testState = new TestState();
     private final String name;
@@ -62,7 +60,7 @@ public class Scenario {
 
     public String getMessage() {
         String result = "Test not run";
-        if(wasRun()){
+        if (wasRun()) {
             result = "Test passed";
         }
         if (hasFailed()) {
@@ -75,7 +73,7 @@ public class Scenario {
         if (hasFailed()) {
             return Status.Failed;
         }
-        if(wasRun()){
+        if (wasRun()) {
             return Status.Passed;
         }
         return Status.NotRun;
