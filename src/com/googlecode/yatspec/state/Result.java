@@ -1,6 +1,9 @@
 package com.googlecode.yatspec.state;
 
+import com.googlecode.yatspec.rendering.Renderer;
+
 import java.util.List;
+import java.util.Map;
 
 public interface Result {
 
@@ -13,4 +16,8 @@ public interface Result {
     String getName();
 
     String getNotes();
+
+    void mergeCustomRenderers(Map<Class, Renderer> renderers);
+
+    Map<Class, Renderer> getCustomRenderers();
 }

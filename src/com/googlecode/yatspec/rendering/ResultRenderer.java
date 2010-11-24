@@ -16,14 +16,12 @@ import static com.googlecode.yatspec.rendering.Resources.getResourceRelativeTo;
 
 public class ResultRenderer implements Renderer<Result> {
 
-    private final CustomRendererRegistry customRendererRegistry = new CustomRendererRegistry();
-
     public String render(Result result) throws Exception {
         final EnhancedStringTemplateGroup group = new EnhancedStringTemplateGroup("randomName");
         group.registerDefaultRenderer(new XmlStringRenderer() );
         group.registerRenderer(Document.class, new DocumentRenderer());
         group.registerRenderer(Content.class, new ToStringRenderer<Content>());
-        customRendererRegistry.registerCustomRenderers(group, result);
+        register(group, result.getCustomRenderers());
         final StringTemplate template = group.getInstanceOf(getResourceRelativeTo(this.getClass(), "yatspec"));
         template.setAttribute("script", loadContent("yatspec.js"));
         template.setAttribute("stylesheet", loadContent("yatspec.css"));
@@ -34,6 +32,11 @@ public class ResultRenderer implements Renderer<Result> {
         return writer.toString();
     }
 
+    private void register(EnhancedStringTemplateGroup group, Map<Class, Renderer> renderers) {
+        for (Class rendererType : renderers.keySet()) {
+            group.registerRenderer(rendererType, renderers.get(rendererType));
+        }
+    }
 
     private Content loadContent(final String resource) throws IOException {
         return new Content(getClass().getResource(resource));
@@ -46,5 +49,4 @@ public class ResultRenderer implements Renderer<Result> {
             put(Status.NotRun, "test-not-run" );
         }};
     }
-
 }

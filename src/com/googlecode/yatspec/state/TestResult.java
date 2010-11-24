@@ -4,14 +4,18 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.parsing.TestParser;
 import com.googlecode.yatspec.parsing.Text;
+import com.googlecode.yatspec.rendering.Renderer;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class TestResult implements Result {
     private final Class<?> klass;
     private List<TestMethod> testMethods;
+    private Map<Class, Renderer> customRenderers = new HashMap<Class, Renderer>();
 
     public TestResult(Class<?> klass) {
         this.klass = klass;
@@ -62,6 +66,14 @@ public class TestResult implements Result {
     public String getNotes() {
         final Notes annotation = getTestClass().getAnnotation(Notes.class);
         return getNotesValue(annotation);
+    }
+
+    public void mergeCustomRenderers(Map<Class, Renderer> customRenderers) {
+        this.customRenderers.putAll(customRenderers);
+    }
+
+    public Map<Class, Renderer> getCustomRenderers() {
+        return customRenderers;
     }
 
     public static String getNotesValue(Notes annotation) {
