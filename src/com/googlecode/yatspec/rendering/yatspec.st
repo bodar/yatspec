@@ -97,7 +97,7 @@ $endif$
 
                     $scenario.logs.keys:{ key |
                         <h3 class="logKey">$key$</h3>
-                        <pre class="logValue highlight xml" >$scenario.logs.(key)$</pre>
+                        <div class="logValue highlight xml $scenario.logs.(key).class.simpleName$" >$scenario.logs.(key)$</div>
                     }$
             </div>
             }$

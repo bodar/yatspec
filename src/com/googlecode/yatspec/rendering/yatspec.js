@@ -16,7 +16,8 @@ RegExp.prototype.replace = function(str, replacer, nonMatchedReplacer) {
     return result.join("");
 }
 
-function yatspec() {}
+function yatspec() {
+}
 
 yatspec.processed = 'highlighted';
 
@@ -25,7 +26,7 @@ yatspec.highlight = function(element, pairs) {
         return;
     }
 
-    if($(element).hasClass(yatspec.processed)){
+    if ($(element).hasClass(yatspec.processed)) {
         return;
     }
 
@@ -81,18 +82,19 @@ $(document).ready(function () {
         $('.logKey', this).click(function() {
             $(this).next(".logValue").toggleClass("hide");
             $(this).next('.logValue.highlight.xml').each(function() {
-                yatspec.highlight(this, interestingGivens.concat([
-                    {pattern: '"[^"]*"', cssClass: "quote" },
-                    {pattern: "&lt;[^\\s&]+", cssClass: "keyword" },
-                    {pattern: "\\??&gt;", cssClass: "keyword" },
-                    {pattern: "\\s[\\w:-]+=", cssClass: "constant" }
-                ]));
+                if (this.children.length == 0 || this.children[0].tagName.toLowerCase() != "svg") {
+                    yatspec.highlight(this, interestingGivens.concat([
+                        {pattern: '"[^"]*"', cssClass: "quote" },
+                        {pattern: "&lt;[^\\s&]+", cssClass: "keyword" },
+                        {pattern: "\\??&gt;", cssClass: "keyword" },
+                        {pattern: "\\s[\\w:-]+=", cssClass: "constant" }
+                    ]));
+                }
             })
         });
 
         $('.logKey').next(".logValue").toggleClass("hide");
     })
-
 }, false);
 
 
