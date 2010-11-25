@@ -152,3 +152,8 @@ div.example {
     padding: 0 5px;
     vertical-align: middle;
 }
+
+.xml {
+    white-space: pre-wrap;
+    margin-bottom: 32px;
+}
