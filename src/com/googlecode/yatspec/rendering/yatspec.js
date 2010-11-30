@@ -93,7 +93,7 @@ $(document).ready(function () {
             })
         });
 
-        $('.logKey').next(".logValue").toggleClass("hide");
+        $('.logKey', this).next(".logValue").toggleClass("hide");
     })
 }, false);
 
