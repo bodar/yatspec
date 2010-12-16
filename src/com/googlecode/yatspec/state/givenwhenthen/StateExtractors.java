@@ -18,6 +18,15 @@ public final class StateExtractors {
         };
     }
 
+    @SuppressWarnings("unchecked")
+    public static <I extends Iterable<T>, T> StateExtractor<I> getValues(final String key, final Class<T> klazz) {
+        return new StateExtractor<I>() {
+            public I execute(CapturedInputAndOutputs capturedInputAndOutputs) throws Exception {
+                return (I) capturedInputAndOutputs.get(key);
+            }
+        };
+    }
+
     public static StateExtractor<String> getXpathValue(final String key, final String xpath) {
         return new StateExtractor<String>() {
             public String execute(CapturedInputAndOutputs capturedInputAndOutputs) throws Exception {

@@ -7,10 +7,13 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Arrays;
+import java.util.Collection;
 
 import static com.googlecode.yatspec.state.givenwhenthen.StateExtractors.getXpathValue;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsCollectionContaining.hasItem;
 
 public class StateExtractorsTest {
 
@@ -21,6 +24,12 @@ public class StateExtractorsTest {
     public void shouldExtractValue() throws Exception {
         CapturedInputAndOutputs inputAndOutputs = new CapturedInputAndOutputs().add(KEY, NAME);
         assertThat(StateExtractors.getValue(KEY, String.class).execute(inputAndOutputs), is(NAME));
+    }
+
+    @Test
+    public void shouldExtractValues() throws Exception {
+        CapturedInputAndOutputs inputAndOutputs = new CapturedInputAndOutputs().add(KEY, Arrays.asList(NAME, NAME));
+        assertThat(StateExtractors.<Collection<String>, String>getValues(KEY, String.class).execute(inputAndOutputs), hasItem(NAME));
     }
 
     @Test
