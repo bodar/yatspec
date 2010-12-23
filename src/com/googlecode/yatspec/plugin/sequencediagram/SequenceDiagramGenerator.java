@@ -52,7 +52,6 @@ public class SequenceDiagramGenerator  {
             }
         }
         buffer.append("@enduml\n");
-        System.out.println("arrowNamesCollector = " + arrowNamesCollector);
         SourceStringReader reader = new SourceStringReader(buffer.toString());
         final ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
