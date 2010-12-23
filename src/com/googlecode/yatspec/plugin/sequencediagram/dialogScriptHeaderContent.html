@@ -1,0 +1,72 @@
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/themes/base/jquery-ui.css" type="text/css" media="all"/>
+<link rel="stylesheet" href="http://static.jquery.com/ui/css/demo-docs-theme/ui.theme.css" type="text/css" media="all"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js" type="text/javascript"></script>
+
+<script>
+
+    $(document).ready(function () {
+        count = 0;
+        $(".clickable").each(function() {
+            $(this).attr("id", "clk" + count++);
+        })
+
+        // Find all inputOutput log items which are not on our sequence diagram and show them...
+        $(".scenario").each(function() {
+            scenario = $(this);
+            scenario.children(".logKey").each(function() {
+                textStr = $(this).text();
+                //The logKeys have names like "OrderValidatedNotification to Operator"
+                //Sequence diagram keys are only the first part...
+                firstPart = textStr.split(" ")[0];
+                flag = false;
+                scenario.find(".clickable").each(function() {
+                    clickName = $(this).children("text").text();
+                    if (firstPart == clickName || textStr == clickName) {
+                        flag = true;
+                    }
+                });
+
+                if (flag) {
+                    $(this).toggle()
+                }
+            })
+
+        });
+
+
+        $(".SvgWrapper").toggleClass("hide");
+
+        var allDialogs = {};
+
+        var initRun = false;
+
+        $(".clickable").click(function() {
+
+            if (!initRun) {
+                $(".clickable").each(function() {
+                    capturedInputAndOutputsName = $(this).children("text").text();
+                    clickableId = $(this).attr("id");
+
+                    uniqueParent = $(this).parents(".scenario");
+
+                    dialogContent = uniqueParent.children().filter(function(){
+                        if (this.tagName == "H3") {
+                            if(this.innerText.match("^" + capturedInputAndOutputsName)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }).next("div")
+
+                    allDialogs[clickableId] = dialogContent.dialog({title:capturedInputAndOutputsName,minWidth: 800,stack:false,closeOnEscape:true, autoOpen:false });
+                })
+                initRun = true;
+            }
+
+            clickableId = "" + $(this).attr("id");
+            allDialogs[clickableId].dialog("open")
+        })
+    })
+
+
+</script>

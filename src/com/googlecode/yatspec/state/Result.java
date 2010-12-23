@@ -1,5 +1,6 @@
 package com.googlecode.yatspec.state;
 
+import com.googlecode.yatspec.rendering.Content;
 import com.googlecode.yatspec.rendering.Renderer;
 
 import java.util.List;
@@ -20,4 +21,8 @@ public interface Result {
     void mergeCustomRenderers(Map<Class, Renderer> renderers);
 
     Map<Class, Renderer> getCustomRenderers();
+
+    void mergeCustomHeaderContent(Content customHeaderContent);
+
+    Content getCustomHeaderContent();
 }

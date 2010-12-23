@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.parsing.TestParser;
 import com.googlecode.yatspec.parsing.Text;
+import com.googlecode.yatspec.rendering.Content;
 import com.googlecode.yatspec.rendering.Renderer;
 
 import java.util.HashMap;
@@ -13,9 +14,11 @@ import java.util.Map;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class TestResult implements Result {
+
     private final Class<?> klass;
     private List<TestMethod> testMethods;
     private Map<Class, Renderer> customRenderers = new HashMap<Class, Renderer>();
+    private Content customHeaderContent;
 
     public TestResult(Class<?> klass) {
         this.klass = klass;
@@ -76,7 +79,16 @@ public class TestResult implements Result {
         return customRenderers;
     }
 
+    public void mergeCustomHeaderContent(Content customHeaderContent) {
+        this.customHeaderContent = customHeaderContent;
+    }
+
+    public Content getCustomHeaderContent() {
+        return customHeaderContent;
+    }
     public static String getNotesValue(Notes annotation) {
         return annotation == null ? null : annotation.value();
     }
+
+
 }

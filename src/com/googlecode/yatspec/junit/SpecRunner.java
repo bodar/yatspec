@@ -2,6 +2,7 @@ package com.googlecode.yatspec.junit;
 
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.yatspec.rendering.ResultWriter;
+import com.googlecode.yatspec.rendering.WithCustomHeaderContent;
 import com.googlecode.yatspec.rendering.WithCustomRendering;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.Scenario;
@@ -34,7 +35,10 @@ public class SpecRunner extends TableRunner {
     protected Object createTest() throws Exception {
         final Object test = super.createTest();
         if(test instanceof WithCustomRendering) {
-            testResult.mergeCustomRenderers((((WithCustomRendering)test).getCustomRenderers()));
+            testResult.mergeCustomRenderers((((WithCustomRendering) test).getCustomRenderers()));
+        }
+        if(test instanceof WithCustomHeaderContent) {
+            testResult.mergeCustomHeaderContent((((WithCustomHeaderContent) test).getCustomHeaderContent()));
         }
         return test;
     }

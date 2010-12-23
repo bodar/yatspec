@@ -39,6 +39,20 @@ public class ResultRendererTest {
         assertThat(html, containsString(customRenderedText));
     }
 
+    @Test
+    public void supportsCustomHeaderContent() throws Exception {
+
+        TestResult result = new TestResult(getClass());
+
+        result.mergeCustomHeaderContent(new Content(getClass().getResource("CustomHeaderContent.html")));
+
+
+        String html = new ResultRenderer().render(result);
+
+        assertThat(html, containsString("walrus"));
+
+    }
+
     private TestResult aTestResultWithCustomRenderTypeAddedToScenarioLogs() throws Exception {
         TestResult result = new TestResult(getClass());
         addToTestLogs(result, new RenderedType());
