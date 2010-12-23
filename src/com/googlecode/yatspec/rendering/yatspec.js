@@ -81,6 +81,9 @@ $(document).ready(function () {
 
         $('.logKey', this).click(function() {
             $(this).next(".logValue").toggleClass("hide");
+        });
+
+        $('.logKey', this).each(function() {
             $(this).next('.logValue.highlight.xml').each(function() {
                 if (this.children.length == 0 || this.children[0].tagName.toLowerCase() != "svg") {
                     yatspec.highlight(this, interestingGivens.concat([
@@ -95,6 +98,7 @@ $(document).ready(function () {
 
         $('.logKey', this).next(".logValue").toggleClass("hide");
     })
+
 }, false);
 
 
