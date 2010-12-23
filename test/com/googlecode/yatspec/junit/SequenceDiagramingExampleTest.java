@@ -36,7 +36,7 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
     }
 
     @Test
-    public void orderABurgerAtADriveThrough() throws Exception {
+    public void bambamGetsFoodForHisDad() throws Exception {
         given(aHungryMrFlintstone());
         when(heDemandsFoodFromBambam());
         then(bambam(), placesABurgerOrderWithBarney());

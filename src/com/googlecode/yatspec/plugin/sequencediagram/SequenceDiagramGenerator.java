@@ -1,5 +1,6 @@
 package com.googlecode.yatspec.plugin.sequencediagram;
 
+import com.googlecode.yatspec.rendering.Content;
 import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.SourceStringReader;
@@ -93,6 +94,10 @@ public class SequenceDiagramGenerator  {
         final String who = matcher.group(2).trim();
         arrowNamesCollector.put(what, name.trim());
         return subject + " ->> " + who + ":" + what;
+    }
+
+    public static Content getHeaderContentForModalWindows(){
+        return new Content(SequenceDiagramGenerator.class.getResource("dialogScriptHeaderContent.html"));
     }
 
 }
