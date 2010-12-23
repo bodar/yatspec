@@ -46,7 +46,7 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
     }
 
     public Content getCustomHeaderContent() {
-        return new Content(SvgWrapper.class.getResource("dialogScriptHeaderContent.html"));
+        return SequenceDiagramGenerator.getHeaderContentForModalWindows();
     }
 
     public Map<Class, Renderer> getCustomRenderers() {

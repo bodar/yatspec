@@ -11,30 +11,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class SequenceDiagramGenerator  {
+public class SequenceDiagramGenerator {
+    private final static String FROM = "from";
+    private final static String TO = "to";
+    private final static String DEFAULT_SUBJECT = "Under Test";
+
+    private final String subject;
 
     private CapturedInputAndOutputs capturedInputAndOutputs;
 
-    private final String DEFAULT_FROM = "from";
-    private final String DEFAULT_TO = "to";
-    private final String DEFAULT_SUBJECT = "Halo";
-
-    private String from = DEFAULT_FROM;
-    private String to = DEFAULT_TO;
-    private String subject = DEFAULT_SUBJECT;
-
     public SequenceDiagramGenerator(CapturedInputAndOutputs capturedInputAndOutputs) {
-        this.capturedInputAndOutputs = capturedInputAndOutputs;
+        this(capturedInputAndOutputs, DEFAULT_SUBJECT);
     }
 
     public SequenceDiagramGenerator(CapturedInputAndOutputs capturedInputAndOutputs, String subject) {
-        this.capturedInputAndOutputs = capturedInputAndOutputs;
-        this.subject = subject;
-    }
-
-    public SequenceDiagramGenerator(CapturedInputAndOutputs capturedInputAndOutputs, String from, String to, String subject) {
-        this.from = from;
-        this.to = to;
         this.capturedInputAndOutputs = capturedInputAndOutputs;
         this.subject = subject;
     }
@@ -44,10 +34,10 @@ public class SequenceDiagramGenerator  {
         StringBuffer buffer = new StringBuffer("@startuml\n");
         for (Map.Entry<String, Object> captured : capturedInputAndOutputs.entrySet()) {
             final String name = captured.getKey();
-            if (name.matches("(.*) "+from +" (.*)")) {
+            if (name.matches("(.*) " + FROM + " (.*)")) {
                 buffer.append(printFromStatement(name, arrowNamesCollector) + "\n");
             }
-            if (name.matches("(.*) "+ to + " (.*)")) {
+            if (name.matches("(.*) " + TO + " (.*)")) {
                 buffer.append(printToStatement(name, arrowNamesCollector) + "\n");
             }
         }
@@ -76,17 +66,17 @@ public class SequenceDiagramGenerator  {
     }
 
     private String printFromStatement(String name, Map<String, String> arrowNamesCollector) {
-        final Pattern pattern = Pattern.compile("(.*) "+ from +" (.*)");
+        final Pattern pattern = Pattern.compile("(.*) " + FROM + " (.*)");
         final java.util.regex.Matcher matcher = pattern.matcher(name);
         matcher.matches();
         final String what = matcher.group(1).trim();
         final String who = matcher.group(2).trim();
         arrowNamesCollector.put(what, name.trim());
-        return who + " ->> "+subject+":" + what;
+        return who + " ->> " + subject + ":" + what;
     }
 
     private String printToStatement(String name, Map<String, String> arrowNamesCollector) {
-        final Pattern pattern = Pattern.compile("(.*) "+ to +" (.*)");
+        final Pattern pattern = Pattern.compile("(.*) " + TO + " (.*)");
         final java.util.regex.Matcher matcher = pattern.matcher(name);
         matcher.matches();
         final String what = matcher.group(1).trim();
@@ -95,7 +85,7 @@ public class SequenceDiagramGenerator  {
         return subject + " ->> " + who + ":" + what;
     }
 
-    public static Content getHeaderContentForModalWindows(){
+    public static Content getHeaderContentForModalWindows() {
         return new Content(SequenceDiagramGenerator.class.getResource("dialogScriptHeaderContent.html"));
     }
 
