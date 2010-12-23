@@ -24,6 +24,7 @@ public class ResultRenderer implements Renderer<Result> {
         register(group, result.getCustomRenderers());
         final StringTemplate template = group.getInstanceOf(getResourceRelativeTo(this.getClass(), "yatspec"));
         template.setAttribute("script", loadContent("yatspec.js"));
+        template.setAttribute("customHeaderContent", result.getCustomHeaderContent());
         template.setAttribute("stylesheet", loadContent("yatspec.css"));
         template.setAttribute("cssClass", getCssMap());
         template.setAttribute("testResult", result);
