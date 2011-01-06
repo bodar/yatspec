@@ -5,8 +5,8 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
@@ -55,12 +55,12 @@ public class ResultRendererTest {
 
     private TestResult aTestResultWithCustomRenderTypeAddedToScenarioLogs() throws Exception {
         TestResult result = new TestResult(getClass());
-        addToTestLogs(result, new RenderedType());
+        addToCapturedInputsAndOutputs(result, new RenderedType());
         return result;
     }
 
-    private void addToTestLogs(TestResult result, Object thingToBeCustomRendered) throws Exception {
-        result.getTestMethods().get(0).getScenarios().get(0).getLogs().put("custom rendered thing", thingToBeCustomRendered);
+    private void addToCapturedInputsAndOutputs(TestResult result, Object thingToBeCustomRendered) throws Exception {
+        result.getTestMethods().get(0).getScenarios().get(0).getCapturedInputAndOutputs().put("custom rendered thing", thingToBeCustomRendered);
     }
 
     private static class RenderedType {

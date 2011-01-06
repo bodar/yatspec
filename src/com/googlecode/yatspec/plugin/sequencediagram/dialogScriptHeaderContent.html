@@ -4,69 +4,56 @@
 
 <script type="text/javascript">
 
-    $(document).ready(function () {
-        count = 0;
-        $(".clickable").each(function() {
-            $(this).attr("id", "clk" + count++);
-        })
+    var isAssociatedWithASequenceDiagramMessage = function(scenario, logKeyNode) {
+        logKeyId = logKeyNode.getAttribute("logkey")
+        isAssociated = false;
+        scenario.find(".sequence_diagram_clickable").each(function() {
+            if (this.getAttribute("sequence_diagram_message_id") == logKeyId) {
+                isAssociated = true;
+            }
+        });
 
-        // Find all inputOutput log items which are not on our sequence diagram and show them...
+        return isAssociated;
+    }
+
+    $(document).ready(function () {
         $(".scenario").each(function() {
             scenario = $(this);
             scenario.children(".logKey").each(function() {
-                textStr = $(this).text();
-                //The logKeys have names like "OrderValidatedNotification to Operator"
-                //Sequence diagram keys are only the first part...
-                firstPart = textStr.split(" ")[0];
-                flag = false;
-                scenario.find(".clickable").each(function() {
-                    clickName = $(this).children("text").text();
-                    if (firstPart == clickName || textStr == clickName) {
-                        flag = true;
-                    }
-                });
-
-                if (flag) {
+                if (isAssociatedWithASequenceDiagramMessage(scenario, this)) {
                     $(this).toggle()
                 }
             })
-
         });
 
 
         $(".SvgWrapper").toggleClass("hide");
 
-        var allDialogs = {};
+        var messagePayloadDialogs = {};
 
         var initRun = false;
 
-        $(".clickable").click(function() {
+        $(".sequence_diagram_clickable").click(function() {
 
             if (!initRun) {
-                $(".clickable").each(function() {
+                $(".sequence_diagram_clickable").each(function() {
                     capturedInputAndOutputsName = $(this).children("text").text();
-                    clickableId = $(this).attr("id");
+                    sequenceDiagramMessageId = $(this).attr("sequence_diagram_message_id");
 
-                    uniqueParent = $(this).parents(".scenario");
+                    myScenario = $(this).parents(".scenario");
 
-                    dialogContent = uniqueParent.children().filter(function(){
-                        if (this.tagName == "H3") {
-                            if(this.innerText.match("^" + capturedInputAndOutputsName)) {
-                                return true;
-                            }
-                        }
-                        return false;
+                    dialogContent = myScenario.children().filter(function() {
+                        return this.tagName == "H3" && sequenceDiagramMessageId == $(this).attr("logkey");
+
                     }).next("div")
 
-                    allDialogs[clickableId] = dialogContent.dialog({title:capturedInputAndOutputsName,minWidth: 800,stack:false,closeOnEscape:true, autoOpen:false });
+                    messagePayloadDialogs[sequenceDiagramMessageId] = dialogContent.dialog({title:capturedInputAndOutputsName,minWidth: 800,stack:false,closeOnEscape:true, autoOpen:false });
                 })
                 initRun = true;
             }
 
-            clickableId = "" + $(this).attr("id");
-            allDialogs[clickableId].dialog("open")
+            sequenceDiagramMessageId = "" + $(this).attr("sequence_diagram_message_id");
+            messagePayloadDialogs[sequenceDiagramMessageId].dialog("open")
         })
     })
-
-
 </script>
