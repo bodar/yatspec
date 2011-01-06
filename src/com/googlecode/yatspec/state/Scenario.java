@@ -2,6 +2,7 @@ package com.googlecode.yatspec.state;
 
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +27,15 @@ public class Scenario {
         this.testState = testState;
     }
 
-    public Map<String, Object> getLogs() {
+    public Map<LogKey, Object> getLogs() {
+        Map<LogKey, Object> result = new LinkedHashMap<LogKey, Object>();
+        for (Map.Entry<String, Object> entry : testState.capturedInputAndOutputs.entrySet()) {
+            result.put(new LogKey(entry.getKey()), entry.getValue());       
+        }
+        return result;
+    }
+
+    public Map<String, Object> getCapturedInputAndOutputs() {
         return testState.capturedInputAndOutputs;
     }
 

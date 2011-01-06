@@ -98,7 +98,7 @@ $endif$
 
 
                     $scenario.logs.keys:{ key |
-                        <h3 class="logKey">$key$</h3>
+                        <h3 class="logKey" logkey="$key.valueWithSpacesReplacedByUnderscore$">$key.value$</h3>
                         <div class="logValue highlight xml $scenario.logs.(key).class.simpleName$" >$scenario.logs.(key)$</div>
                     }$
             </div>

@@ -43,6 +43,8 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
 
         when(barney(), givesTheBurgerToBambam());
         then(bambam(), givesFoodToMrFlintstone());
+
+        then(mrFlintstone(), sharesHisFoodWithBarneyBecauseHeLikesHim());
     }
 
     public Content getCustomHeaderContent() {
@@ -58,6 +60,11 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
     @After
     public void generateSequenceDiagram() {
         sequenceDiagramGenerator.generateSequenceDiagram();
+    }
+
+    private Matcher<? super Object> sharesHisFoodWithBarneyBecauseHeLikesHim() {
+        capturedInputAndOutputs.add("food from mrflintstone to barney", "have some of my burger because I like you");
+        return dummyMatcher();
     }
 
     private Matcher<? super Object> givesFoodToMrFlintstone() {
@@ -87,6 +94,14 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
 
 
     private StateExtractor<Object> bambam() {
+        return new StateExtractor<Object>() {
+            public Object execute(CapturedInputAndOutputs inputAndOutputs) throws Exception {
+                return ANY_THING_FOR_THE_PURPOSES_OF_THIS_TEST;
+            }
+        };
+    }
+
+    private StateExtractor<Object> mrFlintstone() {
         return new StateExtractor<Object>() {
             public Object execute(CapturedInputAndOutputs inputAndOutputs) throws Exception {
                 return ANY_THING_FOR_THE_PURPOSES_OF_THIS_TEST;

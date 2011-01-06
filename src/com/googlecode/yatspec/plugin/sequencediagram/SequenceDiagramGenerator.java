@@ -7,7 +7,8 @@ import net.sourceforge.plantuml.SourceStringReader;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -19,6 +20,9 @@ public class SequenceDiagramGenerator {
     private final String subject;
 
     private CapturedInputAndOutputs capturedInputAndOutputs;
+    private String FULLY_QUALIFIED_MESSAGE_SEND_REGEXP = "(.*) " + FROM + " (.*) " + TO + " (.*)";
+    private String MESSAGE_SEND_WITH_DEFAULT_RECEIVER_REGEXP = "(.*) " + FROM + " (.*)";
+    private String MESSAGE_SEND_WITH_DEFAULT_SENDER_REGEXP = "(.*) " + TO + " (.*)";
 
     public SequenceDiagramGenerator(CapturedInputAndOutputs capturedInputAndOutputs) {
         this(capturedInputAndOutputs, DEFAULT_SUBJECT);
@@ -30,15 +34,19 @@ public class SequenceDiagramGenerator {
     }
 
     public void generateSequenceDiagram() {
-        Map<String, String> arrowNamesCollector = new HashMap<String, String>();
+        List<SequenceDiagramMessage> messagesCollector = new ArrayList<SequenceDiagramMessage>();
         StringBuffer buffer = new StringBuffer("@startuml\n");
         for (Map.Entry<String, Object> captured : capturedInputAndOutputs.entrySet()) {
             final String name = captured.getKey();
-            if (name.matches("(.*) " + FROM + " (.*)")) {
-                buffer.append(printFromStatement(name, arrowNamesCollector) + "\n");
-            }
-            if (name.matches("(.*) " + TO + " (.*)")) {
-                buffer.append(printToStatement(name, arrowNamesCollector) + "\n");
+            if (name.matches(FULLY_QUALIFIED_MESSAGE_SEND_REGEXP)) {
+                buffer.append(fromToStatement(name, messagesCollector) + "\n");
+            } else {
+                if (name.matches(MESSAGE_SEND_WITH_DEFAULT_RECEIVER_REGEXP)) {
+                    buffer.append(fromStatement(name, messagesCollector) + "\n");
+                }
+                if (name.matches(MESSAGE_SEND_WITH_DEFAULT_SENDER_REGEXP)) {
+                    buffer.append(toStatement(name, messagesCollector) + "\n");
+                }
             }
         }
         buffer.append("@enduml\n");
@@ -54,40 +62,53 @@ public class SequenceDiagramGenerator {
         String svg = new String(os.toByteArray());
         svg = svg.replaceFirst("<\\?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"\\?>", "");
         svg = svg.replaceFirst("position:absolute;top:0;left:0;", "");
-        for (Map.Entry<String, String> arrowName : arrowNamesCollector.entrySet()) {
-
-            final String regexp = ".*(<text .*?>" + arrowName.getKey() + "</text>).*";
-            final Pattern pattern = Pattern.compile(regexp);
-            final java.util.regex.Matcher matcher = pattern.matcher(svg);
-            matcher.matches();
-            svg = svg.replaceFirst("(.*)(<text .*?>" + arrowName.getKey() + "</text>)(.*)", "$1<a class=\"clickable\" href=\"#\">$2</a>$3");
-        }
+        svg = new SequenceDiagramHyperlinker().hyperlinkSequenceDiagram(messagesCollector, svg);
         capturedInputAndOutputs.put("Sequence diagram", new SvgWrapper(svg));
     }
 
-    private String printFromStatement(String name, Map<String, String> arrowNamesCollector) {
-        final Pattern pattern = Pattern.compile("(.*) " + FROM + " (.*)");
-        final java.util.regex.Matcher matcher = pattern.matcher(name);
+    public String hyperlinkSequenceDiagram(List<SequenceDiagramMessage> messagesCollector, String svg) {
+        for (SequenceDiagramMessage sequenceDiagramMessage : messagesCollector) {
+            final String regexp = ".*(<text .*?>" + sequenceDiagramMessage.getVisibleName() + "</text>).*";
+            final Pattern pattern = Pattern.compile(regexp);
+            final java.util.regex.Matcher matcher = pattern.matcher(svg);
+            matcher.matches();
+            svg = svg.replaceFirst("(.*)(<text .*?>" + sequenceDiagramMessage.getVisibleName() + "</text>)(.*)", "$1<a class=\"sequence_diagram_clickable\" sequence_diagram_message_id=\""+sequenceDiagramMessage.getFullyQualifiedMessageName().replaceAll(" ", "_")+"\" href=\"#\">$2</a>$3");
+        }
+        return svg;
+    }
+
+    private String fromToStatement(String capturedInputAndOutputName, List<SequenceDiagramMessage> messagesCollector) {
+        final Pattern pattern = Pattern.compile(FULLY_QUALIFIED_MESSAGE_SEND_REGEXP);
+        final java.util.regex.Matcher matcher = pattern.matcher(capturedInputAndOutputName);
+        matcher.matches();
+        final String what = matcher.group(1).trim();
+        final String from = matcher.group(2).trim();
+        final String to = matcher.group(3).trim();
+        messagesCollector.add(new SequenceDiagramMessage(what, capturedInputAndOutputName.trim()));
+        return from + " ->> " + to + ":" + what;
+    }
+
+    private String fromStatement(String capturedInputAndOutputName, List<SequenceDiagramMessage> messagesCollector) {
+        final Pattern pattern = Pattern.compile(MESSAGE_SEND_WITH_DEFAULT_RECEIVER_REGEXP);
+        final java.util.regex.Matcher matcher = pattern.matcher(capturedInputAndOutputName);
         matcher.matches();
         final String what = matcher.group(1).trim();
         final String who = matcher.group(2).trim();
-        arrowNamesCollector.put(what, name.trim());
+        messagesCollector.add(new SequenceDiagramMessage(what, capturedInputAndOutputName.trim()));
         return who + " ->> " + subject + ":" + what;
     }
 
-    private String printToStatement(String name, Map<String, String> arrowNamesCollector) {
+    private String toStatement(String capturedInputAndOutputName, List<SequenceDiagramMessage> messagesCollector) {
         final Pattern pattern = Pattern.compile("(.*) " + TO + " (.*)");
-        final java.util.regex.Matcher matcher = pattern.matcher(name);
+        final java.util.regex.Matcher matcher = pattern.matcher(capturedInputAndOutputName);
         matcher.matches();
         final String what = matcher.group(1).trim();
         final String who = matcher.group(2).trim();
-        arrowNamesCollector.put(what, name.trim());
+        messagesCollector.add(new SequenceDiagramMessage(what, capturedInputAndOutputName.trim()));
         return subject + " ->> " + who + ":" + what;
     }
 
     public static Content getHeaderContentForModalWindows() {
         return new Content(SequenceDiagramGenerator.class.getResource("dialogScriptHeaderContent.html"));
     }
-
 }
-
