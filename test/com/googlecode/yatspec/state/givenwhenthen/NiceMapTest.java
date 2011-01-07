@@ -6,6 +6,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
+@SuppressWarnings("unchecked")
 public class NiceMapTest {
     @Test
     public void shouldGiveAUsefulMessageIfTheWrongClassIsRequested() throws Exception {

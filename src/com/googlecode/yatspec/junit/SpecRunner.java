@@ -16,6 +16,7 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -87,10 +88,17 @@ public class SpecRunner extends TableRunner {
         };
     }
 
-    private class SpecListener extends RunListener {
+    private boolean isInTest() {
+        return currentScenario != null;
+    }
+
+    private final class SpecListener extends RunListener {
+
         @Override
         public void testFailure(Failure failure) throws Exception {
-            currentScenario.setException(failure.getException());
+            if (isInTest()) {
+                currentScenario.setException(failure.getException());
+            }
         }
     }
 }
