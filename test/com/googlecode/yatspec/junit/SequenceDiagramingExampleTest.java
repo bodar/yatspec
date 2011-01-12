@@ -63,7 +63,7 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
 
 
     @Table({
-            @Row({"row_a"}),
+            @Row({"row_a"}), 
             @Row({"row_b"})
     })
     @Test
