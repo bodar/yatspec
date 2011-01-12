@@ -71,7 +71,7 @@ $endif$
             $endif$
 
             $testMethod.scenarios: { scenario |
-                <div class="scenario">
+                <div class="scenario" id="$testMethod.uid$_$scenario.uid$">
                     <a id="$scenario.name$"></a>
                     <h2>Specification</h2>
                     <pre class="highlight specification">

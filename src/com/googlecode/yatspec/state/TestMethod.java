@@ -128,4 +128,7 @@ public class TestMethod {
         return methodName + "(" + join(scenarioData, ", ") + ")";
     }
 
+     public String getUid() {
+        return Integer.toString(hashCode());
+    }
 }

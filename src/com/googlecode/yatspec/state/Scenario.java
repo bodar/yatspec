@@ -87,4 +87,8 @@ public class Scenario {
         }
         return Status.NotRun;
     }
+
+    public String getUid() {
+        return Integer.toString(hashCode());
+    }
 }

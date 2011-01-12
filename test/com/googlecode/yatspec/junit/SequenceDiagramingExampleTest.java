@@ -37,14 +37,46 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
 
     @Test
     public void bambamGetsFoodForHisDad() throws Exception {
+        String testNumber = "test:1";
         given(aHungryMrFlintstone());
         when(heDemandsFoodFromBambam());
-        then(bambam(), placesABurgerOrderWithBarney());
+        then(bambam(), placesABurgerOrderWithBarney(testNumber));
 
-        when(barney(), givesTheBurgerToBambam());
-        then(bambam(), givesFoodToMrFlintstone());
+        when(barney(), givesTheBurgerToBambam(testNumber));
+        then(bambam(), givesFoodToMrFlintstone(testNumber));
 
-        then(mrFlintstone(), sharesHisFoodWithBarneyBecauseHeLikesHim());
+        then(mrFlintstone(), sharesHisFoodWithBarneyBecauseHeLikesHim(testNumber));
+    }
+
+    @Test
+    public void bambamGetsFoodForHisDadRepeatedSoWeCanCheckMultipleSequenceDiagramsOnOnePage() throws Exception {
+        String testNumber = "test:2";
+        given(aHungryMrFlintstone());
+        when(heDemandsFoodFromBambam());
+        then(bambam(), placesABurgerOrderWithBarney(testNumber));
+
+        when(barney(), givesTheBurgerToBambam(testNumber));
+        then(bambam(), givesFoodToMrFlintstone(testNumber));
+
+        then(mrFlintstone(), sharesHisFoodWithBarneyBecauseHeLikesHim(testNumber));
+    }
+
+
+    @Table({
+            @Row({"row_a"}),
+            @Row({"row_b"})
+    })
+    @Test
+    public void bambamGetsFoodForHisDadRepeatedSoWeCanCheckMultipleScenariosPerTestMethod(String scenarioName) throws Exception {
+        String testName = "test:3 scenario: "+scenarioName;
+        given(aHungryMrFlintstone());
+        when(heDemandsFoodFromBambam());
+        then(bambam(), placesABurgerOrderWithBarney(testName));
+
+        when(barney(), givesTheBurgerToBambam(testName));
+        then(bambam(), givesFoodToMrFlintstone(testName));
+
+        then(mrFlintstone(), sharesHisFoodWithBarneyBecauseHeLikesHim(testName));
     }
 
     public Content getCustomHeaderContent() {
@@ -62,23 +94,23 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
         sequenceDiagramGenerator.generateSequenceDiagram();
     }
 
-    private Matcher<? super Object> sharesHisFoodWithBarneyBecauseHeLikesHim() {
-        capturedInputAndOutputs.add("food from mrflintstone to barney", "have some of my burger because I like you");
+    private Matcher<? super Object> sharesHisFoodWithBarneyBecauseHeLikesHim(String testNumber) {
+        capturedInputAndOutputs.add("food from mrflintstone to barney", "have some of my burger because I like you (test:" + testNumber + ")");
         return dummyMatcher();
     }
 
-    private Matcher<? super Object> givesFoodToMrFlintstone() {
-        capturedInputAndOutputs.add("food to mrflintstone", "here is your burger");
+    private Matcher<? super Object> givesFoodToMrFlintstone(String testNumber) {
+        capturedInputAndOutputs.add("food to mrflintstone", "here is your burger (test:" + testNumber +")");
         return dummyMatcher();
     }
 
-    private Object givesTheBurgerToBambam() {
-        capturedInputAndOutputs.add("burger from barney", "1 burger here u go");
+    private Object givesTheBurgerToBambam(String testNumber) {
+        capturedInputAndOutputs.add("burger from barney", "1 burger here u go (test:" + testNumber +")");
         return ANY_THING_FOR_THE_PURPOSES_OF_THIS_TEST;
     }
 
-    private Matcher<? super Object> placesABurgerOrderWithBarney() {
-        capturedInputAndOutputs.add("burger order to barney", "Get me a burger");
+    private Matcher<? super Object> placesABurgerOrderWithBarney(String testNumber) {
+        capturedInputAndOutputs.add("burger order to barney", "Get me a burger (test:" + testNumber +")");
         interestingGivens.add("burger");
         return dummyMatcher();
     }
