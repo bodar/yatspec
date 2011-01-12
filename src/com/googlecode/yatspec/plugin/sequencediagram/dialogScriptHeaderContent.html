@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="http://static.jquery.com/ui/css/demo-docs-theme/ui.theme.css" type="text/css" media="all"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js" type="text/javascript"></script>
 
-¤<script type="text/javascript">
+<script type="text/javascript">
 
     var isAssociatedWithASequenceDiagramMessage = function(scenario, logKeyNode) {
         logKeyId = logKeyNode.getAttribute("logkey")
@@ -30,8 +30,8 @@
             }).next("div")
 
             capturedInputAndOutputsName = $(this).children("text").text();
-            dialogTitle = capturedInputAndOutputsName + " [" + scenarioUid + "]";
-            messagePayloadDialogs[scenarioUid] = dialogContent.dialog({title:dialogTitle,minWidth: 800,stack:false,closeOnEscape:true, autoOpen:false });
+            sequenceDiagramMessageId = "" + $(this).attr("sequence_diagram_message_id") + "_" + scenarioUid;
+            messagePayloadDialogs[sequenceDiagramMessageId] = dialogContent.dialog({title:capturedInputAndOutputsName,minWidth: 800,stack:false,closeOnEscape:true, autoOpen:false });
         })
         return messagePayloadDialogs;
     }
@@ -53,8 +53,8 @@
 
             myScenario = $(this).parents(".scenario");
             scenarioUid = myScenario.attr("id");
-
-            messagePayloadDialogs[scenarioUid].dialog("open")
+            sequenceDiagramMessageId = "" + $(this).attr("sequence_diagram_message_id")  + "_" + scenarioUid;
+            messagePayloadDialogs[sequenceDiagramMessageId].dialog("open")
         })
     })
 
