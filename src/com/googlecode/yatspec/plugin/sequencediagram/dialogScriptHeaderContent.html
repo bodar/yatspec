@@ -56,6 +56,26 @@
             sequenceDiagramMessageId = "" + $(this).attr("sequence_diagram_message_id")  + "_" + scenarioUid;
             messagePayloadDialogs[sequenceDiagramMessageId].dialog("open")
         })
+
+        $(".sequence_diagram_clickable").hover(function() {
+
+            if (!initRun) {
+                messagePayloadDialogs = createDialogsForSequenceDiagramMessages();
+                initRun = true;
+            }
+
+            myScenario = $(this).parents(".scenario");
+            scenarioUid = myScenario.attr("id");
+            sequenceDiagramMessageId = "" + $(this).attr("sequence_diagram_message_id")  + "_" + scenarioUid;
+            messagePayloadDialogs[sequenceDiagramMessageId].dialog("open")
+        }, function(){
+            myScenario = $(this).parents(".scenario");
+            scenarioUid = myScenario.attr("id");
+            sequenceDiagramMessageId = "" + $(this).attr("sequence_diagram_message_id")  + "_" + scenarioUid;
+            messagePayloadDialogs[sequenceDiagramMessageId].dialog("close")
+    })
+
+
     })
 
 </script>
