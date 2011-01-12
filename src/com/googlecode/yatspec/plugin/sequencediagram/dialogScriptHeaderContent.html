@@ -17,15 +17,6 @@
     }
 
     $(document).ready(function () {
-        $(".scenario").each(function() {
-            scenario = $(this);
-            scenario.children(".logKey").each(function() {
-                if (isAssociatedWithASequenceDiagramMessage(scenario, this)) {
-                    $(this).toggle()
-                }
-            })
-        });
-
 
         $(".SvgWrapper").toggleClass("hide");
 
