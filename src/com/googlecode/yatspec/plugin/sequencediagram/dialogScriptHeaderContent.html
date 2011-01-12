@@ -54,7 +54,9 @@
             myScenario = $(this).parents(".scenario");
             scenarioUid = myScenario.attr("id");
             sequenceDiagramMessageId = "" + $(this).attr("sequence_diagram_message_id")  + "_" + scenarioUid;
-            messagePayloadDialogs[sequenceDiagramMessageId].dialog("open")
+            var dialog = messagePayloadDialogs[sequenceDiagramMessageId];
+            dialog.openMethod="click";
+            dialog.dialog("open");
         })
 
         $(".sequence_diagram_clickable").hover(function() {
@@ -67,12 +69,17 @@
             myScenario = $(this).parents(".scenario");
             scenarioUid = myScenario.attr("id");
             sequenceDiagramMessageId = "" + $(this).attr("sequence_diagram_message_id")  + "_" + scenarioUid;
-            messagePayloadDialogs[sequenceDiagramMessageId].dialog("open")
+            var dialog = messagePayloadDialogs[sequenceDiagramMessageId];
+            dialog.openMethod="hover";
+            dialog.dialog("open");
         }, function(){
             myScenario = $(this).parents(".scenario");
             scenarioUid = myScenario.attr("id");
             sequenceDiagramMessageId = "" + $(this).attr("sequence_diagram_message_id")  + "_" + scenarioUid;
-            messagePayloadDialogs[sequenceDiagramMessageId].dialog("close")
+            var dialog = messagePayloadDialogs[sequenceDiagramMessageId];
+            if(dialog.openMethod == "hover" ) {
+                dialog.dialog("close")
+            }
     })
 
 
