@@ -27,7 +27,7 @@
             dialogContent = myScenario.children().filter(function() {
                 return this.tagName == "H3" && sequenceDiagramMessageId == $(this).attr("logkey");
 
-            }).next("div")
+            }).next("div").clone()
 
             capturedInputAndOutputsName = $(this).children("text").text();
             sequenceDiagramMessageId = "" + $(this).attr("sequence_diagram_message_id") + "_" + scenarioUid;
@@ -42,13 +42,13 @@
 
         var messagePayloadDialogs = {};
 
-        var initRun = false;
+        var isInitialised = false;
 
         $(".sequence_diagram_clickable").click(function() {
 
-            if (!initRun) {
+            if (!isInitialised) {
                 messagePayloadDialogs = createDialogsForSequenceDiagramMessages();
-                initRun = true;
+                isInitialised = true;
             }
 
             myScenario = $(this).parents(".scenario");
@@ -61,9 +61,9 @@
 
         $(".sequence_diagram_clickable").hover(function() {
 
-            if (!initRun) {
+            if (!isInitialised) {
                 messagePayloadDialogs = createDialogsForSequenceDiagramMessages();
-                initRun = true;
+                isInitialised = true;
             }
 
             myScenario = $(this).parents(".scenario");
