@@ -1,9 +1,9 @@
 package com.googlecode.yatspec.parsing;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Strings;
 import com.googlecode.totallylazy.regex.Matches;
 import com.googlecode.totallylazy.regex.Regex;
-import org.apache.commons.lang.StringUtils;
 
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
@@ -50,6 +50,6 @@ public class Text {
 
     public static String wordify(String value) {
         final String wordified = stringIgnorer.findMatches(value).replace(wordifier, doNothing);
-        return StringUtils.capitalize(spaceRemover.matcher(wordified).replaceAll(spaceRemoverReplacer));
+        return Strings.capitalise(spaceRemover.matcher(wordified).replaceAll(spaceRemoverReplacer));
     }
 }

@@ -1,13 +1,12 @@
 package com.googlecode.yatspec.rendering;
 
+import com.googlecode.totallylazy.Files;
+import static com.googlecode.yatspec.parsing.TestParser.getPath;
 import com.googlecode.yatspec.state.Result;
-import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-
-import static com.googlecode.yatspec.parsing.TestParser.getPath;
 
 public class ResultWriter {
     private final File outputDirectory;
@@ -34,8 +33,8 @@ public class ResultWriter {
 
     private void createAllDirectoriesNeededFor(File file) throws IOException {
         final File parentFile = file.getParentFile();
-        if(!parentFile.exists()){
-            FileUtils.forceMkdir(parentFile);
+        if (!parentFile.exists()) {
+            Files.ensureDirectoryExists(parentFile);
         }
     }
 }
