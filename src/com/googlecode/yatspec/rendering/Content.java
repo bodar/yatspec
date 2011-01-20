@@ -1,6 +1,6 @@
 package com.googlecode.yatspec.rendering;
 
-import org.apache.commons.io.IOUtils;
+import com.googlecode.totallylazy.Strings;
 
 import java.io.IOException;
 import java.net.URL;
@@ -15,7 +15,7 @@ public class Content {
     @Override
     public String toString() {
         try {
-            return IOUtils.toString(url.openStream());
+            return Strings.toString(url.openStream());
         } catch (IOException e) {
             return e.toString();
         }

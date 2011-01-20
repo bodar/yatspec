@@ -14,7 +14,6 @@ import java.util.Map;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.state.TestResult.getNotesValue;
-import static org.apache.commons.lang.StringUtils.join;
 
 
 public class TestMethod {
@@ -125,7 +124,7 @@ public class TestMethod {
     }
 
     public static String buildName(String methodName, List<String> scenarioData) {
-        return methodName + "(" + join(scenarioData, ", ") + ")";
+        return methodName + "(" + sequence(scenarioData).toString(", ") + ")";
     }
 
      public String getUid() {
