@@ -3,11 +3,11 @@ package com.googlecode.yatspec.parsing;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Strings;
 import com.googlecode.yatspec.state.TestMethod;
 import net.sourceforge.pmd.ast.ASTCompilationUnit;
 import net.sourceforge.pmd.ast.ASTMethodDeclaration;
 import net.sourceforge.pmd.parsers.Java15Parser;
-import org.apache.commons.io.IOUtils;
 import org.jaxen.JaxenException;
 import org.junit.Test;
 
@@ -25,7 +25,7 @@ public class TestParser {
     public static List<TestMethod> parseTestMethods(Class aClass) throws Exception {
         final File javaSource = getJavaSourceFile(aClass);
         final InputStream stream = new FileInputStream(javaSource);
-        final String wholeFile = IOUtils.toString(stream);
+        final String wholeFile = Strings.toString(stream);
 
         final ASTCompilationUnit classAST = getClassAST(wholeFile);
         final Sequence<ASTMethodDeclaration> methodASTs = getMethodAST(classAST);
