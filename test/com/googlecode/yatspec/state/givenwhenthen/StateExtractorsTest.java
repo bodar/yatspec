@@ -46,6 +46,13 @@ public class StateExtractorsTest {
         assertThat(getXpathValue(KEY, "//People/Person/@Name").execute(inputAndOutputs), is(NAME));
     }
 
+    @Test(expected=IllegalStateException.class)
+    public void shouldThrowExceptionWhenXPathIsNotFound() throws Exception {
+        Document document = document("<People><Person Name=\"" + NAME + "\"/></People>");
+        CapturedInputAndOutputs inputAndOutputs = new CapturedInputAndOutputs().add(KEY, document);
+        getXpathValue(KEY, "//doesNotExist").execute(inputAndOutputs);        
+    }
+
     private Document document(String xml) throws JDOMException, IOException {
         return new SAXBuilder().build(new StringReader(xml));
     }

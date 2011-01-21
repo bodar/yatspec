@@ -37,7 +37,14 @@ public final class StateExtractors {
             private String getAttributeOrElementValue(Document document, String xpath) throws JDOMException {
                 XPath xpather = XPath.newInstance(xpath);
                 Object result = xpather.selectSingleNode(document);
+                checkThatResultIsFound(result, xpath);
                 return result instanceof Element ? ((Element) result).getText() : ((Attribute) result).getValue();
+            }
+
+            private void checkThatResultIsFound(Object result, String xpath) {
+                if (result == null) {
+                    throw new IllegalStateException("Result not found at " + xpath);
+                }
             }
         };
     }

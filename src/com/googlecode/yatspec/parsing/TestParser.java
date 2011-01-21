@@ -53,6 +53,7 @@ public class TestParser {
     }
 
 
+    @SuppressWarnings("unchecked")
     private static Sequence<ASTMethodDeclaration> getMethodAST(ASTCompilationUnit classAST) throws JaxenException {
         return sequence(classAST.findChildNodesWithXPath("//MethodDeclaration[preceding-sibling::Annotation/MarkerAnnotation/Name[@Image='Test']]"));
     }
