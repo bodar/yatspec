@@ -58,6 +58,7 @@
                     <fileset dir="${unzipped.jar}">
                         <include name="**/*Test*"/>
                         <exclude name="**/*$*"/>
+                        <exclude name="**/Abstract*"/>
                     </fileset>
                 </batchtest>
             </junit>
