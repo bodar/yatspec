@@ -23,6 +23,7 @@ public class SequenceDiagramGenerator {
     private String FULLY_QUALIFIED_MESSAGE_SEND_REGEXP = "(.*) " + FROM + " (.*) " + TO + " (.*)";
     private String MESSAGE_SEND_WITH_DEFAULT_RECEIVER_REGEXP = "(.*) " + FROM + " (.*)";
     private String MESSAGE_SEND_WITH_DEFAULT_SENDER_REGEXP = "(.*) " + TO + " (.*)";
+    private StringBuffer plantUmlCollector;
 
     public SequenceDiagramGenerator(CapturedInputAndOutputs capturedInputAndOutputs) {
         this(capturedInputAndOutputs, DEFAULT_SUBJECT);
@@ -33,24 +34,32 @@ public class SequenceDiagramGenerator {
         this.subject = subject;
     }
 
+    public void logPlantUmlMarkupTo(StringBuffer plantUmlCollector) {
+        this.plantUmlCollector = plantUmlCollector;
+    }
+
     public void generateSequenceDiagram() {
         List<SequenceDiagramMessage> messagesCollector = new ArrayList<SequenceDiagramMessage>();
-        StringBuffer buffer = new StringBuffer("@startuml\n");
+        StringBuffer plantUmlMarkup = new StringBuffer("@startuml\n");
         for (Map.Entry<String, Object> captured : capturedInputAndOutputs.entrySet()) {
             final String name = captured.getKey();
             if (name.matches(FULLY_QUALIFIED_MESSAGE_SEND_REGEXP)) {
-                buffer.append(fromToStatement(name, messagesCollector) + "\n");
+                plantUmlMarkup.append(fromToStatement(name, messagesCollector) + "\n");
             } else {
                 if (name.matches(MESSAGE_SEND_WITH_DEFAULT_RECEIVER_REGEXP)) {
-                    buffer.append(fromStatement(name, messagesCollector) + "\n");
+                    plantUmlMarkup.append(fromStatement(name, messagesCollector) + "\n");
                 }
                 if (name.matches(MESSAGE_SEND_WITH_DEFAULT_SENDER_REGEXP)) {
-                    buffer.append(toStatement(name, messagesCollector) + "\n");
+                    plantUmlMarkup.append(toStatement(name, messagesCollector) + "\n");
                 }
             }
         }
-        buffer.append("@enduml\n");
-        SourceStringReader reader = new SourceStringReader(buffer.toString());
+        plantUmlMarkup.append("@enduml\n");
+        if(plantUmlCollector != null) {
+            plantUmlCollector.append(plantUmlMarkup);
+        }
+        
+        SourceStringReader reader = new SourceStringReader(plantUmlMarkup.toString());
         final ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
             reader.generateImage(os, FileFormat.SVG);

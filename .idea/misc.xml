@@ -6,6 +6,7 @@
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
   </component>
+  <component name="IdProvider" IDEtalkID="BB54260B97B56A66832099915752DC33" />
   <component name="JavadocGenerationManager">
     <option name="OUTPUT_DIRECTORY" />
     <option name="OPTION_SCOPE" value="protected" />
@@ -72,9 +73,13 @@
     <option name="referencePos" value="0" />
     <option name="showLabels" value="true" />
   </component>
+  <component name="SvnBranchConfigurationManager">
+    <option name="mySupportsUserInfoFilter" value="true" />
+  </component>
   <component name="TestDoxConfiguration">
     <option name="createTestIfMissing" value="true" />
     <option name="deletePackageOccurrences" value="true" />
   </component>
+  <component name="WebServicesPlugin" addRequiredLibraries="true" />
 </project>
 
