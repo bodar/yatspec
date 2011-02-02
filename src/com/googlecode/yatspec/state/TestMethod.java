@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.state.TestResult.getNotesValue;
@@ -22,6 +24,7 @@ public class TestMethod {
     private final ScenarioTable scenarioTable;
     private final List<String> specification;
     private Map<String, Scenario> scenarioResults = new LinkedHashMap<String, Scenario>();
+    public static final Pattern DOT_CLASS = Pattern.compile("\\.class([^A-Za-z_0-9]|$)");
 
     public TestMethod(Method method, String methodName, List<String> methodBody, ScenarioTable scenarioTable) {
         this.method = method;
@@ -33,14 +36,13 @@ public class TestMethod {
 
     private void buildUpScenarios() {
         if (scenarioTable.isEmpty()) {
-            scenarioResults.put(methodName, new Scenario("", sequence(specification).map(wordify()).toList()));
+            scenarioResults.put(methodName, new Scenario("", sequence(specification).map(removeDotClass()).map(wordify()).toList()));
         } else {
             for (List<String> row : scenarioTable.getRows()) {
                 scenarioResults.put(buildName(methodName, row), new Scenario(buildName(methodName, row), replaceScenarioData(scenarioTable.getHeaders(), row)));
             }
         }
     }
-
 
     private List<String> replaceScenarioData(final List<String> headers, final List<String> values) {
         return sequence(specification).map(new Callable1<String, String>() {
@@ -61,6 +63,14 @@ public class TestMethod {
             return value;
         }
         return "\"" + value + "\"";
+    }
+
+    private Callable1<? super String, String> removeDotClass() {
+        return new Callable1<String, String>() {
+            public String call(String s) throws Exception {
+                return DOT_CLASS.matcher(s).replaceAll("$1");
+            }
+        };
     }
 
     public static Callable1<String, String> wordify() {
