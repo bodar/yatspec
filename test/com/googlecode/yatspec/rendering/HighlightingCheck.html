@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title></title>
+    <link rel=StyleSheet href="../../../../../src/com/googlecode/yatspec/rendering/yatspec.css" type="text/css"/>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../../../src/com/googlecode/yatspec/rendering/yatspec.js" TYPE="text/javascript" MEDIA=screen></script>
+
+</head>
+<body>
+
+    <h1>Highlighting  example</h1>
+    <div class="contents">
+        <h2>Contents</h2>
+
+        <ul class="contents">
+                <li class='test-passed'><a href="#reallySimpleExample">Really simple  example</a></li>
+        </ul>
+    </div>
+
+    <div class="testmethod" id=reallySimpleExample>
+            <div class="scenario" id="1584283620_747585196">
+            <h2>Specification</h2>
+            <h2>Test results:</h2>
+
+
+            <pre class='highlight results test-passed'> Test passed</pre>
+
+            <h3 class="logKey">Interesting Givens</h3>
+
+            <table class="interestingGivens logValue">
+                <tr>
+                    <th class="key">The Sport of</th>
+                    <td class="interestingGiven">Kings</td>
+                </tr>
+                <tr>
+                    <th class="key">I see three</th>
+                    <td class="interestingGiven">Ships</td>
+                </tr>
+                <tr>
+                    <th class="key">Nom nom nom</th>
+                    <td class="interestingGiven">Cabbage</td>
+                </tr>
+            </table>
+
+            <h3 class="logKey" logkey="Result">Xml Output</h3>
+            <div class="logValue highlight xml">
+        &lt;xml&gt;
+            &lt;anElement attribute="Ships" someOtherAttribute="Sealing Wax"&gt;
+                &lt;nested myAttribute="Kings"&gt;Cabbages&lt;/nested&gt;
+                &lt;nested&gt;I do like Cabbage, but I couldn't eat a whole one&lt;/nested&gt;
+            &lt;/anElement&gt;
+            &lt;myElement&gt;Of Shoes And Ships And Sealing Wax, Of Cabbages and Kings...&lt;myElement&gt;
+        &lt;/xml&gt;
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

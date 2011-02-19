@@ -54,29 +54,32 @@ yatspec.highlight = function(element, pairs) {
 $(document).ready(function () {
     $('.highlight.specification').each(function() {
         yatspec.highlight(this, [
-            {pattern: '"[^"]*"', cssClass: "quote" },
-            {pattern: "Given", cssClass: "keyword" },
-            {pattern: "And", cssClass: "keyword" },
-            {pattern: "When", cssClass: "keyword" },
-            {pattern: "Then", cssClass: "keyword" },
+            {pattern: '"[^"]*"',     cssClass: "quote" },
+            {pattern: "Given",       cssClass: "keyword" },
+            {pattern: "And",         cssClass: "keyword" },
+            {pattern: "When",        cssClass: "keyword" },
+            {pattern: "Then",        cssClass: "keyword" },
             {pattern: "[A-Z_]{2,}" , cssClass: "constant" },
-            {pattern: "[\\d]+" , cssClass: "literal" }
+            {pattern: "[\\d]+" ,     cssClass: "literal" }
         ]);
     })
 
     $('.highlight.results').each(function() {
         yatspec.highlight(this, [
-            {pattern: '"[^"]*"', cssClass: "quote" },
-            {pattern: "Expected", cssClass: "keyword" },
-            {pattern: "got", cssClass: "keyword" },
+            {pattern: '"[^"]*"',     cssClass: "quote" },
+            {pattern: "Expected",    cssClass: "keyword" },
+            {pattern: "got",         cssClass: "keyword" },
             {pattern: "[A-Z_]{2,}" , cssClass: "constant" },
-            {pattern: "[\\d]+" , cssClass: "literal" }
+            {pattern: "[\\d]+" ,     cssClass: "literal" }
         ]);
     })
 
     $('.scenario').each(function() {
         var interestingGivens = $('.interestingGiven', this).map(function() {
-            return { pattern: $(this).text(), cssClass: "interestingGiven" };
+            return [
+            {pattern: '"' + $(this).text() + '"',     cssClass: "interestingGiven" },
+            {pattern: '\\b' + $(this).text() + '\\b', cssClass: "interestingGiven" },
+            ]   ;
         }).get();
 
         $('.logKey', this).click(function() {
@@ -87,9 +90,9 @@ $(document).ready(function () {
             $(this).next('.logValue.highlight.xml').each(function() {
                 if (this.children.length == 0 || this.children[0].tagName.toLowerCase() != "svg") {
                     yatspec.highlight(this, interestingGivens.concat([
-                        {pattern: '"[^"]*"', cssClass: "quote" },
+                        {pattern: '"[^"]*"',      cssClass: "quote" },
                         {pattern: "&lt;[^\\s&]+", cssClass: "keyword" },
-                        {pattern: "\\??&gt;", cssClass: "keyword" },
+                        {pattern: "\\??&gt;",     cssClass: "keyword" },
                         {pattern: "\\s[\\w:-]+=", cssClass: "constant" }
                     ]));
                 }
@@ -100,6 +103,3 @@ $(document).ready(function () {
     })
 
 }, false);
-
-
-
