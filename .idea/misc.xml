@@ -62,17 +62,6 @@
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" assert-keyword="true" jdk-15="true" project-jdk-name="1.6" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
-  <component name="Regex">
-    <option name="pos1" value="218" />
-    <option name="pos2" value="218" />
-    <option name="pos3" value="162" />
-    <option name="pos4" value="444" />
-    <option name="pos5" value="162" />
-    <option name="autoUpdate" value="true" />
-    <option name="referenceOn" value="false" />
-    <option name="referencePos" value="0" />
-    <option name="showLabels" value="true" />
-  </component>
   <component name="SvnBranchConfigurationManager">
     <option name="mySupportsUserInfoFilter" value="true" />
   </component>
