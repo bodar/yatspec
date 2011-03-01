@@ -1,5 +1,9 @@
 syntax: glob
-out
+*.orig
 *.iws
-build/artifacts
 .idea/workspace.xml
+out
+build/artifacts
+lib/build
+lib/runtime
+lib/optional
