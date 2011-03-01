@@ -93,6 +93,11 @@
                              dependencies="build/runtime.dependencies"
                              directory="${artifacts}"/>
 
+        <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="all.dependancies"/>
+        <xmltask source="${artifacts}/${release.pom}" dest="${artifacts}/${release.pom}">
+            <insert path="//*[local-name()='dependency'][*[local-name()='groupId'][text()='pmd']]" file="${build}/pmd.exclusions"/>
+        </xmltask>
+
     </target>
 
     <target name="build" depends="update, clean, compile, test, package" description="build all"/>
