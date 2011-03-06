@@ -37,7 +37,7 @@
     </path>
 
     <target name="update">
-        <!--<install version="20"/>-->
+        <!--<install version="25"/>-->
         <parallel>
             <update dependencies="build/build.dependencies"
                     directory="${build.dependencies.dir}"/>
@@ -92,6 +92,11 @@
         <generate.pom artifact.uri="mvn:com.googlecode.${ant.project.name}:${ant.project.name}:jar:${release.version}"
                              dependencies="build/runtime.dependencies"
                              directory="${artifacts}"/>
+
+        <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="all.dependancies"/>
+        <xmltask source="${artifacts}/${release.pom}" dest="${artifacts}/${release.pom}">
+            <insert path="//*[local-name()='dependency'][*[local-name()='groupId'][text()='pmd']]" file="${build}/pmd.exclusions"/>
+        </xmltask>
 
     </target>
 
