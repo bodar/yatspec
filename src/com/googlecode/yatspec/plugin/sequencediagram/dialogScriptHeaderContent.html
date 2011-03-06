@@ -1,0 +1,88 @@
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/themes/base/jquery-ui.css" type="text/css" media="all"/>
+<link rel="stylesheet" href="http://static.jquery.com/ui/css/demo-docs-theme/ui.theme.css" type="text/css" media="all"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+    var isAssociatedWithASequenceDiagramMessage = function(scenario, logKeyNode) {
+        logKeyId = logKeyNode.getAttribute("logkey")
+        isAssociated = false;
+        scenario.find(".sequence_diagram_clickable").each(function() {
+            if (this.getAttribute("sequence_diagram_message_id") == logKeyId) {
+                isAssociated = true;
+            }
+        });
+
+        return isAssociated;
+    }
+
+    var createDialogsForSequenceDiagramMessages = function() {
+        var messagePayloadDialogs = {};
+        $(".sequence_diagram_clickable").each(function() {
+            sequenceDiagramMessageId = $(this).attr("sequence_diagram_message_id");
+
+            myScenario = $(this).parents(".scenario");
+            scenarioUid = myScenario.attr("id");
+
+            dialogContent = myScenario.children().filter(function() {
+                return this.tagName == "H3" && sequenceDiagramMessageId == $(this).attr("logkey");
+
+            }).next("div").clone()
+
+            capturedInputAndOutputsName = $(this).children("text").text();
+            sequenceDiagramMessageId = "" + $(this).attr("sequence_diagram_message_id") + "_" + scenarioUid;
+            messagePayloadDialogs[sequenceDiagramMessageId] = dialogContent.dialog({title:capturedInputAndOutputsName,minWidth: 800,stack:false,closeOnEscape:true, autoOpen:false });
+        })
+        return messagePayloadDialogs;
+    }
+
+    $(document).ready(function () {
+
+        $(".SvgWrapper").toggleClass("hide");
+
+        var messagePayloadDialogs = {};
+
+        var isInitialised = false;
+
+        $(".sequence_diagram_clickable").click(function() {
+
+            if (!isInitialised) {
+                messagePayloadDialogs = createDialogsForSequenceDiagramMessages();
+                isInitialised = true;
+            }
+
+            myScenario = $(this).parents(".scenario");
+            scenarioUid = myScenario.attr("id");
+            sequenceDiagramMessageId = "" + $(this).attr("sequence_diagram_message_id")  + "_" + scenarioUid;
+            var dialog = messagePayloadDialogs[sequenceDiagramMessageId];
+            dialog.openMethod="click";
+            dialog.dialog("open");
+        })
+
+        $(".sequence_diagram_clickable").hover(function() {
+
+            if (!isInitialised) {
+                messagePayloadDialogs = createDialogsForSequenceDiagramMessages();
+                isInitialised = true;
+            }
+
+            myScenario = $(this).parents(".scenario");
+            scenarioUid = myScenario.attr("id");
+            sequenceDiagramMessageId = "" + $(this).attr("sequence_diagram_message_id")  + "_" + scenarioUid;
+            var dialog = messagePayloadDialogs[sequenceDiagramMessageId];
+            dialog.openMethod="hover";
+            dialog.dialog("open");
+        }, function(){
+            myScenario = $(this).parents(".scenario");
+            scenarioUid = myScenario.attr("id");
+            sequenceDiagramMessageId = "" + $(this).attr("sequence_diagram_message_id")  + "_" + scenarioUid;
+            var dialog = messagePayloadDialogs[sequenceDiagramMessageId];
+            if(dialog.openMethod == "hover" ) {
+                dialog.dialog("close")
+            }
+    })
+
+
+    })
+
+</script>

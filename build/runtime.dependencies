@@ -1,0 +1,7 @@
+mvn:antlr:antlr:jar:2.7.7
+mvn:org.antlr:stringtemplate:jar:3.2.1
+mvn:pmd:pmd:jar:4.2.5
+mvn:jaxen:jaxen:jar:1.1.1
+mvn:org.jdom:jdom:jar:1.1
+
+mvn://repo.bodar.com/com.googlecode.totallylazy:totallylazy:jar:264
