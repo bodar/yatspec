@@ -10,15 +10,18 @@ import net.sourceforge.pmd.parsers.Java15Parser;
 import org.jaxen.JaxenException;
 import org.junit.Test;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import static com.googlecode.totallylazy.Predicates.notNull;
+import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.parsing.TestMethodExtractor.extractTestMethod;
-import static java.util.Collections.emptyList;
 
 public class TestParser {
     public static final String LINE_SEPARATOR = System.getProperty("line.separator");
@@ -41,7 +44,7 @@ public class TestParser {
         final ASTCompilationUnit classAST = getClassAST(wholeFile);
         final Sequence<ASTMethodDeclaration> methodASTs = getMethodAST(classAST);
 
-        Sequence<TestMethod> myTestMethods = methodASTs.zip(methods).map(extractTestMethod(wholeFile)).filter(notNull(TestMethod.class));
+        Sequence<TestMethod> myTestMethods = methodASTs.zip(methods).map(extractTestMethod(wholeFile)).filter(notNullValue());
         Sequence<TestMethod> parentTestMethods = collectTestMethods(aClass.getSuperclass(), methods);
 
         return myTestMethods.join(parentTestMethods);
