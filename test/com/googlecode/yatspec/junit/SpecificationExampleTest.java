@@ -1,7 +1,11 @@
 package com.googlecode.yatspec.junit;
 
-import com.googlecode.yatspec.state.givenwhenthen.*;
-import org.hamcrest.Matcher;
+import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
+import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
+import com.googlecode.yatspec.state.givenwhenthen.GivensBuilder;
+import com.googlecode.yatspec.state.givenwhenthen.InterestingGivens;
+import com.googlecode.yatspec.state.givenwhenthen.StateExtractor;
+import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

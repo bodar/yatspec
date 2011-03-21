@@ -1,8 +1,5 @@
 package com.googlecode.yatspec.state;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.yatspec.parsing.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 

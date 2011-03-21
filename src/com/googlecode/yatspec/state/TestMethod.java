@@ -12,7 +12,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.state.TestResult.getNotesValue;
