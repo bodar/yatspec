@@ -9,7 +9,6 @@ import java.io.File;
 
 import static com.googlecode.totallylazy.Files.files;
 import static com.googlecode.totallylazy.Files.isDirectory;
-import static com.googlecode.totallylazy.Sequences.empty;
 
 @SuppressWarnings("unchecked")
 public class Files {
@@ -36,15 +35,6 @@ public class Files {
             @Override
             public Sequence<File> call(Sequence<File> filesToReturn, File file) throws Exception {
                 return filesToReturn.join(filter(file, filePredicate));
-            }
-        };
-    }
-
-    private static Callable2<Sequence<File>, File, Sequence<File>> addFile() {
-        return new Callable2<Sequence<File>, File, Sequence<File>>() {
-            @Override
-            public Sequence<File> call(Sequence<File> fileSequence, File file) throws Exception {
-                return fileSequence.add(file);
             }
         };
     }
