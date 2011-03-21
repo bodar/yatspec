@@ -21,6 +21,7 @@ import java.util.List;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.yatspec.parsing.Files.find;
 import static com.googlecode.yatspec.parsing.TestMethodExtractor.extractTestMethod;
 
 public class TestParser {
@@ -33,10 +34,10 @@ public class TestParser {
     }
 
     private static Sequence<TestMethod> collectTestMethods(Class aClass, Sequence<Method> methods) throws JaxenException, IOException {
-        if (!canGetJavaSourceFile(aClass)) {
+        final File javaSource = getJavaSourceFile(aClass);
+        if (javaSource == null) {
             return empty();
         }
-        final File javaSource = getJavaSourceFile(aClass);
 
         final InputStream stream = new FileInputStream(javaSource);
         final String wholeFile = Strings.toString(stream);
@@ -68,20 +69,17 @@ public class TestParser {
         };
     }
 
-
     @SuppressWarnings("unchecked")
     private static Sequence<ASTMethodDeclaration> getMethodAST(ASTCompilationUnit classAST) throws JaxenException {
         return sequence(classAST.findChildNodesWithXPath("//MethodDeclaration[preceding-sibling::Annotation/MarkerAnnotation/Name[@Image='Test']]"));
     }
 
-    private static File getJavaSourceFile(Class testClass) {
-        final String filename = javaSourceFilename(testClass);
-        return Files.find(filename);
+    private static File getJavaSourceFile(Class clazz) {
+        return find(parentDirectory(), javaSourceFilename(clazz));
     }
 
-    private static boolean canGetJavaSourceFile(Class testClass) {
-        final String filename = javaSourceFilename(testClass);
-        return Files.canFind(filename);
+    private static File parentDirectory() {
+        return new File(".");
     }
 
     private static String javaSourceFilename(Class testClass) {
@@ -89,7 +87,7 @@ public class TestParser {
     }
 
 
-    public static String getPath(String testClassName) {
-        return testClassName.replaceAll("\\.", "/");
+    public static String getPath(String className) {
+        return className.replaceAll("\\.", "/");
     }
 }

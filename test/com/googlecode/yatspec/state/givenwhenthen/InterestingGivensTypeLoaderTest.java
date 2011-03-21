@@ -1,12 +1,11 @@
 package com.googlecode.yatspec.state.givenwhenthen;
 
-import com.googlecode.yatspec.state.givenwhenthen.InterestingGivens;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.CoreMatchers.is;
 import static com.googlecode.yatspec.state.givenwhenthen.InterestingGivensTypeLoader.interestingGivensType;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class InterestingGivensTypeLoaderTest {
     private InterestingGivens interestingGivens;

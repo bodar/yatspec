@@ -2,7 +2,6 @@ package com.googlecode.yatspec.parsing;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Strings;
-import com.googlecode.totallylazy.regex.Matches;
 import com.googlecode.totallylazy.regex.Regex;
 
 import java.util.regex.MatchResult;

@@ -1,10 +1,11 @@
 package com.googlecode.yatspec.rendering;
 
-import static com.googlecode.yatspec.parsing.TestParser.getPath;
 import com.googlecode.yatspec.state.Result;
 
 import java.io.File;
 import java.io.FileWriter;
+
+import static com.googlecode.yatspec.parsing.TestParser.getPath;
 
 public class ResultWriter {
     private final File outputDirectory;

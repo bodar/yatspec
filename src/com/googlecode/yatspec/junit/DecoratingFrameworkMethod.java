@@ -1,6 +1,5 @@
 package com.googlecode.yatspec.junit;
 
-import com.googlecode.yatspec.state.Scenario;
 import com.googlecode.yatspec.state.TestMethod;
 import org.junit.runners.model.FrameworkMethod;
 

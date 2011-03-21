@@ -1,7 +1,7 @@
 package com.googlecode.yatspec.rendering;
 
-import com.googlecode.yatspec.state.TestResult;
 import com.googlecode.totallylazy.Strings;
+import com.googlecode.yatspec.state.TestResult;
 import org.junit.Test;
 
 import java.io.File;

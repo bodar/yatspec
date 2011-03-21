@@ -2,7 +2,6 @@ package com.googlecode.yatspec.parsing;
 
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.state.TestMethod;
-import com.googlecode.yatspec.state.TestResult;
 import org.junit.Test;
 
 import java.util.List;

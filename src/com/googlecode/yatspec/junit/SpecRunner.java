@@ -16,7 +16,6 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;

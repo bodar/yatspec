@@ -1,7 +1,8 @@
 package com.googlecode.yatspec.rendering;
 
-import org.antlr.stringtemplate.AttributeRenderer;
 import com.googlecode.totallylazy.Strings;
+import org.antlr.stringtemplate.AttributeRenderer;
+
 import static com.googlecode.totallylazy.Option.option;
 
 public class XmlStringRenderer implements AttributeRenderer {
