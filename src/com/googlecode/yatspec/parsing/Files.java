@@ -1,38 +1,48 @@
 package com.googlecode.yatspec.parsing;
 
+import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 
 import java.io.File;
 import java.io.FileFilter;
 
-import static com.googlecode.totallylazy.Predicates.and;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.or;
+import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.yatspec.parsing.Predicates.directory;
 
 @SuppressWarnings("unchecked")
 public class Files {
 
-    public static File find(File directoryWithin, String filename) {
-        return find(directoryWithin, is(directory()), is(fileWithName(filename)));
+    public static String toJavaPath(Class testClass) {
+        return toPath(testClass) + ".java";
     }
 
-    public static File find(File directoryWithin, Predicate<? super File> directoryPredicate, Predicate<? super File> filePredicate) {
-        Sequence<File> files = findRecursively(directoryWithin, directoryPredicate, filePredicate);
-        return files.filter(filePredicate).headOption().getOrNull();
+    public static String toHtmlPath(Class testClass) {
+        return toPath(testClass) + ".html";
     }
 
-    private static Sequence<File> findRecursively(File directoryWithin, Predicate<? super File> directoryPredicate, Predicate<? super File> filePredicate) {
-        Sequence<File> files = files(directoryWithin, or(directoryPredicate, filePredicate));
-        for (File file : files.filter(directoryPredicate)) {
-            files = files.join(findRecursively(file, directoryPredicate, filePredicate));
-        }
-        return files;
+    public static File findOnly(File directoryWithin, Predicate<? super File> filePredicate) {
+        return find(directoryWithin, filePredicate).headOption().getOrNull();
     }
 
-    private static Predicate<File> fileWithName(String filename) {
-        return and(is(file()), withFilename(filename));
+    public static Sequence<File> find(File directoryWithin, Predicate<? super File> filePredicate) {
+        return findRecursively(directoryWithin, is(directory()), filePredicate);
+    }
+
+    private static Sequence<File> findRecursively(File directoryWithin, final Predicate<? super File> directoryPredicate, final Predicate<? super File> filePredicate) {
+        return files(directoryWithin, or(directoryPredicate, filePredicate)).fold(empty(File.class), new Callable2<Sequence<File>, File, Sequence<File>>() {
+            @Override
+            public Sequence<File> call(Sequence<File> filesToReturn, File file) throws Exception {
+                return filePredicate.matches(file) ? filesToReturn.add(file) : filesToReturn.join(findRecursively(file, directoryPredicate, filePredicate));
+            }
+        });
+    }
+
+    private static String toPath(Class clazz) {
+        return clazz.getName().replaceAll("\\.", "/");
     }
 
     private static Sequence<File> files(File directoryWithin, final Predicate<? super File> predicate) {
@@ -43,30 +53,6 @@ public class Files {
         return new FileFilter() {
             public boolean accept(File file) {
                 return predicate.matches(file);
-            }
-        };
-    }
-
-    private static Predicate<? super File> file() {
-       return new Predicate<File>() {
-           public boolean matches(File file) {
-               return file.isFile();
-           }
-       };
-    }
-
-    private static Predicate<? super File> directory() {
-       return new Predicate<File>() {
-           public boolean matches(File file) {
-               return file.isDirectory();
-           }
-       };
-    }
-
-    private static Predicate<? super File> withFilename(final String filename) {
-        return new Predicate<File>() {
-            public boolean matches(File file) {
-                return file.getName().equals(filename);
             }
         };
     }

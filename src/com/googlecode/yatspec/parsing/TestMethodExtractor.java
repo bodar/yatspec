@@ -15,10 +15,10 @@ import org.jaxen.JaxenException;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static java.util.Arrays.asList;
 
 public class TestMethodExtractor implements Callable1<Pair<ASTMethodDeclaration,Method>, TestMethod> {
     public static TestMethodExtractor extractTestMethod(String wholeFile) throws IOException {
@@ -49,9 +49,10 @@ public class TestMethodExtractor implements Callable1<Pair<ASTMethodDeclaration,
     private List<String> getSourceForBlock(List<ASTBlockStatement> blocks) {
         ASTBlockStatement firstBlock = blocks.get(0);
         ASTBlockStatement lastBlock = blocks.get(blocks.size() - 1);
-        return Arrays.asList(lines).subList(firstBlock.getBeginLine() - 1, lastBlock.getEndLine());
+        return asList(lines).subList(firstBlock.getBeginLine() - 1, lastBlock.getEndLine());
     }
 
+    @SuppressWarnings({"unchecked"})
     private ScenarioTable getScenarioTable(ASTMethodDeclaration method) {
         ScenarioTable table = new ScenarioTable();
         try {
