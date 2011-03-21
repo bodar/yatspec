@@ -1,14 +1,12 @@
 package com.googlecode.yatspec.parsing;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.*;
 
 import java.io.File;
 
 import static com.googlecode.totallylazy.Files.files;
 import static com.googlecode.totallylazy.Files.isDirectory;
+import static com.googlecode.totallylazy.Files.recursiveFiles;
 
 @SuppressWarnings("unchecked")
 public class Files {
@@ -22,24 +20,11 @@ public class Files {
     }
 
     public static Option<File> find(File directory, Predicate<? super File> filePredicate) {
-        return filter(directory, filePredicate).headOption();
+        return recursiveFiles(directory).filter(filePredicate).headOption();
     }
 
     public static Sequence<File> filter(File directory, final Predicate<? super File> filePredicate) {
-        return files(directory).
-                filter(filePredicate).
-                join(files(directory).
-                        filter(isDirectory()).
-                        flatMap(filter(filePredicate)));
-    }
-
-    public static Callable1<File, Iterable<File>> filter(final Predicate<? super File> filePredicate) {
-        return new Callable1<File, Iterable<File>>() {
-            @Override
-            public Iterable<File> call(File directory) throws Exception {
-                return filter(directory, filePredicate);
-            }
-        };
+        return recursiveFiles(directory).filter(filePredicate);
     }
 
     private static String toPath(Class clazz) {

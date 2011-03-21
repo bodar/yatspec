@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.io.File;
 
 import static com.googlecode.totallylazy.Files.name;
+import static com.googlecode.totallylazy.Files.workingDirectory;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Strings.endsWith;
@@ -25,7 +26,4 @@ public class FilesTest {
         assertThat(Files.find(workingDirectory(), where(name(), endsWith("doesNotExist"))), is((Option<File>)none(File.class)));
     }
 
-    private File workingDirectory() {
-        return new File(".");
-    }
 }

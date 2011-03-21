@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Files.path;
+import static com.googlecode.totallylazy.Files.workingDirectory;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.empty;
@@ -83,7 +84,4 @@ public class TestParser {
         return Files.find(workingDirectory(), where(path(), endsWith(toJavaPath(clazz))));
     }
 
-    private static File workingDirectory() {
-        return new File(".");
-    }
 }
