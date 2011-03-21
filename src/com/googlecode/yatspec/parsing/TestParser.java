@@ -18,11 +18,13 @@ import java.io.StringReader;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import static com.googlecode.totallylazy.Files.path;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
+import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Strings.endsWith;
 import static com.googlecode.yatspec.parsing.Files.toJavaPath;
-import static com.googlecode.yatspec.parsing.Predicates.pathEndsWith;
 import static com.googlecode.yatspec.parsing.TestMethodExtractor.extractTestMethod;
 
 public class TestParser {
@@ -77,7 +79,7 @@ public class TestParser {
 
     @SuppressWarnings({"unchecked"})
     private static File getJavaSourceFile(Class clazz) {
-        return Files.findOnly(workingDirectory(), pathEndsWith(toJavaPath(clazz)));
+        return Files.find(workingDirectory(), where(path(), endsWith(toJavaPath(clazz)))).getOrNull();
     }
 
     private static File workingDirectory() {
