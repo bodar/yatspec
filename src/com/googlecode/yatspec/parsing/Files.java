@@ -27,7 +27,7 @@ public class Files {
     }
 
     public static Sequence<File> filter(File directoryWithin, final Predicate<? super File> filePredicate) {
-        Sequence<File> matchingFiles = files(directoryWithin).filter(filePredicate).fold(empty(File.class), addFile());
+        Sequence<File> matchingFiles = files(directoryWithin).filter(filePredicate);
         return files(directoryWithin).filter(isDirectory()).fold(matchingFiles, addFiles(filePredicate));
     }
 

@@ -1,5 +1,6 @@
 package com.googlecode.yatspec.parsing;
 
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Strings;
@@ -37,12 +38,12 @@ public class TestParser {
     }
 
     private static Sequence<TestMethod> collectTestMethods(Class aClass, Sequence<Method> methods) throws JaxenException, IOException {
-        final File javaSource = getJavaSourceFile(aClass);
-        if (javaSource == null) {
+        final Option<File> javaSource = getJavaSourceFile(aClass);
+        if (javaSource.isEmpty()) {
             return empty();
         }
 
-        final InputStream stream = new FileInputStream(javaSource);
+        final InputStream stream = new FileInputStream(javaSource.get());
         final String wholeFile = Strings.toString(stream);
 
         final ASTCompilationUnit classAST = getClassAST(wholeFile);
@@ -78,8 +79,8 @@ public class TestParser {
     }
 
     @SuppressWarnings({"unchecked"})
-    private static File getJavaSourceFile(Class clazz) {
-        return Files.find(workingDirectory(), where(path(), endsWith(toJavaPath(clazz)))).getOrNull();
+    private static Option<File> getJavaSourceFile(Class clazz) {
+        return Files.find(workingDirectory(), where(path(), endsWith(toJavaPath(clazz))));
     }
 
     private static File workingDirectory() {
