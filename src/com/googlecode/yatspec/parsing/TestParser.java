@@ -21,7 +21,8 @@ import java.util.List;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.yatspec.parsing.Files.find;
+import static com.googlecode.yatspec.parsing.Files.toJavaPath;
+import static com.googlecode.yatspec.parsing.Predicates.pathEndsWith;
 import static com.googlecode.yatspec.parsing.TestMethodExtractor.extractTestMethod;
 
 public class TestParser {
@@ -74,20 +75,12 @@ public class TestParser {
         return sequence(classAST.findChildNodesWithXPath("//MethodDeclaration[preceding-sibling::Annotation/MarkerAnnotation/Name[@Image='Test']]"));
     }
 
+    @SuppressWarnings({"unchecked"})
     private static File getJavaSourceFile(Class clazz) {
-        return find(parentDirectory(), javaSourceFilename(clazz));
+        return Files.findOnly(workingDirectory(), pathEndsWith(toJavaPath(clazz)));
     }
 
-    private static File parentDirectory() {
+    private static File workingDirectory() {
         return new File(".");
-    }
-
-    private static String javaSourceFilename(Class testClass) {
-        return getPath(testClass.getSimpleName()) + ".java";
-    }
-
-
-    public static String getPath(String className) {
-        return className.replaceAll("\\.", "/");
     }
 }

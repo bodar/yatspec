@@ -5,7 +5,7 @@ import com.googlecode.yatspec.state.Result;
 import java.io.File;
 import java.io.FileWriter;
 
-import static com.googlecode.yatspec.parsing.TestParser.getPath;
+import static com.googlecode.yatspec.parsing.Files.toHtmlPath;
 
 public class ResultWriter {
     private final File outputDirectory;
@@ -27,6 +27,6 @@ public class ResultWriter {
     }
 
     private File getHtmlOutputFile(Class testClass) {
-        return new File(outputDirectory, getPath(testClass.getName()) + ".html");
+        return new File(outputDirectory, toHtmlPath(testClass));
     }
 }
