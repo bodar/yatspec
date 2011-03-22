@@ -3,7 +3,6 @@ package com.googlecode.yatspec.state;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.yatspec.junit.Notes;
-import com.googlecode.yatspec.parsing.TestParser;
 import com.googlecode.yatspec.parsing.Text;
 
 import java.lang.reflect.Method;
@@ -109,7 +108,7 @@ public class TestMethod {
 
     @Override
     public String toString() {
-        return getName() + TestParser.LINE_SEPARATOR + getSpecification();
+        return getName() + System.getProperty("line.separator") + getSpecification();
     }
 
     public ScenarioTable getScenarioTable() {

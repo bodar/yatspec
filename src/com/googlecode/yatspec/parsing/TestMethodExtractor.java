@@ -2,6 +2,8 @@ package com.googlecode.yatspec.parsing;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Strings;
 import com.googlecode.yatspec.state.ScenarioTable;
 import com.googlecode.yatspec.state.TestMethod;
 import net.sourceforge.pmd.ast.ASTBlockStatement;
@@ -13,6 +15,7 @@ import net.sourceforge.pmd.ast.ASTVariableDeclaratorId;
 import net.sourceforge.pmd.ast.SimpleNode;
 import org.jaxen.JaxenException;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -21,9 +24,9 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static java.util.Arrays.asList;
 
 public class TestMethodExtractor implements Callable1<Pair<ASTMethodDeclaration,Method>, TestMethod> {
-    public static TestMethodExtractor extractTestMethod(String wholeFile) throws IOException {
-        final String[] lines = wholeFile.split(TestParser.LINE_SEPARATOR);
-        return new TestMethodExtractor(lines);
+    public static TestMethodExtractor extractTestMethod(File file) throws IOException {
+        final Sequence<String> lines = Strings.lines(file);
+        return new TestMethodExtractor(lines.toArray(String.class));
     }
 
     private final String[] lines;
