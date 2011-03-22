@@ -1,9 +1,6 @@
 package com.googlecode.yatspec.parsing;
 
-import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Strings;
+import com.googlecode.totallylazy.*;
 import com.googlecode.yatspec.state.TestMethod;
 import net.sourceforge.pmd.ast.ASTCompilationUnit;
 import net.sourceforge.pmd.ast.ASTMethodDeclaration;
@@ -16,12 +13,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Files.path;
 import static com.googlecode.totallylazy.Files.recursiveFiles;
 import static com.googlecode.totallylazy.Files.workingDirectory;
+import static com.googlecode.totallylazy.Methods.annotation;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.empty;
@@ -64,23 +63,15 @@ public class TestParser {
     }
 
     private static Sequence<Method> getMethods(Class aClass) {
-        return sequence(aClass.getMethods()).filter(hasTestAnnotation());
+        return sequence(aClass.getMethods()).filter(where(annotation(Test.class), notNullValue()));
     }
 
-    private static Predicate<Method> hasTestAnnotation() {
-        return new Predicate<Method>() {
-            public boolean matches(Method method) {
-                return method.getAnnotation(Test.class) != null;
-            }
-        };
-    }
 
     @SuppressWarnings("unchecked")
     private static Sequence<ASTMethodDeclaration> getMethodAST(ASTCompilationUnit classAST) throws JaxenException {
         return sequence(classAST.findChildNodesWithXPath("//MethodDeclaration[preceding-sibling::Annotation/MarkerAnnotation/Name[@Image='Test']]"));
     }
 
-    @SuppressWarnings({"unchecked"})
     private static Option<File> getJavaSourceFile(Class clazz) {
         return recursiveFiles(workingDirectory()).find(where(path(), endsWith(toJavaPath(clazz))));
     }
