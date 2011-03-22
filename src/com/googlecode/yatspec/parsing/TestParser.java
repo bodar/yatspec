@@ -8,18 +8,12 @@ import net.sourceforge.pmd.parsers.Java15Parser;
 import org.jaxen.JaxenException;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.lang.annotation.Annotation;
+import java.io.*;
 import java.lang.reflect.Method;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Files.path;
 import static com.googlecode.totallylazy.Files.recursiveFiles;
-import static com.googlecode.totallylazy.Files.workingDirectory;
 import static com.googlecode.totallylazy.Methods.annotation;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Predicates.where;
@@ -30,7 +24,6 @@ import static com.googlecode.yatspec.parsing.Files.toJavaPath;
 import static com.googlecode.yatspec.parsing.TestMethodExtractor.extractTestMethod;
 
 public class TestParser {
-    public static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
     public static List<TestMethod> parseTestMethods(Class aClass) throws Exception {
         final Sequence<Method> methods = getMethods(aClass);
@@ -44,22 +37,24 @@ public class TestParser {
             return empty();
         }
 
-        final InputStream stream = new FileInputStream(javaSource.get());
-        final String wholeFile = Strings.toString(stream);
-
-        final ASTCompilationUnit classAST = getClassAST(wholeFile);
+        File file = javaSource.get();
+        final ASTCompilationUnit classAST = getClassAST(file);
         final Sequence<ASTMethodDeclaration> methodASTs = getMethodAST(classAST);
 
-        Sequence<TestMethod> myTestMethods = methodASTs.zip(methods).map(extractTestMethod(wholeFile)).filter(notNullValue());
+        Sequence<TestMethod> myTestMethods = methodASTs.zip(methods).map(extractTestMethod(file)).filter(notNullValue());
         Sequence<TestMethod> parentTestMethods = collectTestMethods(aClass.getSuperclass(), methods);
 
         return myTestMethods.join(parentTestMethods);
     }
 
-    private static ASTCompilationUnit getClassAST(String wholeFile) {
+    private static ASTCompilationUnit getClassAST(File file) throws FileNotFoundException {
+        return (ASTCompilationUnit) commentIgnoringParser().parse(new BufferedReader(new FileReader(file)));
+    }
+
+    private static Java15Parser commentIgnoringParser() {
         final Java15Parser parser = new Java15Parser();
-        parser.setExcludeMarker("//"); // exclude comments
-        return (ASTCompilationUnit) parser.parse(new StringReader(wholeFile));
+        parser.setExcludeMarker("//");
+        return parser;
     }
 
     private static Sequence<Method> getMethods(Class aClass) {
@@ -74,6 +69,10 @@ public class TestParser {
 
     private static Option<File> getJavaSourceFile(Class clazz) {
         return recursiveFiles(workingDirectory()).find(where(path(), endsWith(toJavaPath(clazz))));
+    }
+
+    private static File workingDirectory() {
+        return new File(System.getProperty("user.dir"));
     }
 
 }
