@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Files.path;
+import static com.googlecode.totallylazy.Files.recursiveFiles;
 import static com.googlecode.totallylazy.Files.workingDirectory;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Predicates.where;
@@ -81,7 +82,7 @@ public class TestParser {
 
     @SuppressWarnings({"unchecked"})
     private static Option<File> getJavaSourceFile(Class clazz) {
-        return Files.find(workingDirectory(), where(path(), endsWith(toJavaPath(clazz))));
+        return recursiveFiles(workingDirectory()).find(where(path(), endsWith(toJavaPath(clazz))));
     }
 
 }
