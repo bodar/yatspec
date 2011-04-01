@@ -75,7 +75,7 @@ $(document).ready(function () {
     })
 
     $('.scenario').each(function() {
-        var interestingGivens = $('.interestingGiven', this).map(function() {
+        var interestingGivens = $('.interestingGiven', this).filter(':not(:empty)').map(function() {
             return [
             {pattern: '"' + $(this).text() + '"',     cssClass: "interestingGiven" },
             {pattern: '\\b' + $(this).text() + '\\b', cssClass: "interestingGiven" },
