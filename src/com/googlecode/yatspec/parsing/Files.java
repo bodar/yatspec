@@ -1,6 +1,7 @@
 package com.googlecode.yatspec.parsing;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Strings;
 
 import java.io.File;
@@ -19,7 +20,15 @@ public class Files {
     }
 
     public static String toPath(Class clazz) {
-        return characters(clazz.getName()).map(toSeparator()).toString("");
+        return classNameToString(characters(clazz.getName()).map(toSeparator()));
+    }
+
+    private static String classNameToString(Sequence<Character> className) {
+        StringBuilder builder = new StringBuilder();
+        for (Character c : className.toArray(Character.class)) {
+            builder.append(c);
+        }
+        return builder.toString();
     }
 
     private static Callable1<? super Character, Character> toSeparator() {
