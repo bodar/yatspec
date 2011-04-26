@@ -30,6 +30,10 @@ $if(testResult.notes)$
     <pre class="notes">$testResult.notes$</pre>
 $endif$
 
+$if(testResult.link)$
+    <a href="$testResult.link.href$">$testResult.link.text$</a>
+$endif$
+
 <div class="contents">
     <h2>Contents</h2>
 

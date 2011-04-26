@@ -1,5 +1,6 @@
 package com.googlecode.yatspec.rendering;
 
+import com.googlecode.yatspec.junit.Link;
 import com.googlecode.yatspec.state.TestResult;
 import org.junit.Test;
 
@@ -11,6 +12,7 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 
+@Link(href = "foo", text = "bar")
 public class ResultRendererTest {
     @Test
     public void loadsTemplateOffClassPath() throws Exception {
@@ -51,6 +53,15 @@ public class ResultRendererTest {
 
         assertThat(html, containsString("walrus"));
 
+    }
+    
+    @Test
+    public void rendersLink() throws Exception {
+        TestResult result = new TestResult(getClass());
+        String html = new ResultRenderer().render(result);
+
+        assertThat(html, containsString("href=\"foo\""));
+        assertThat(html, containsString(">bar<"));
     }
 
     private TestResult aTestResultWithCustomRenderTypeAddedToScenarioLogs() throws Exception {

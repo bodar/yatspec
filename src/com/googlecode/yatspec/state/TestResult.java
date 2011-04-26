@@ -1,6 +1,7 @@
 package com.googlecode.yatspec.state;
 
 import com.googlecode.totallylazy.Predicate;
+import com.googlecode.yatspec.junit.Link;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.parsing.TestParser;
 import com.googlecode.yatspec.parsing.Text;
@@ -29,7 +30,7 @@ public class TestResult implements Result {
     }
 
     public List<TestMethod> getTestMethods() throws Exception {
-        if(testMethods == null){
+        if (testMethods == null) {
             testMethods = TestParser.parseTestMethods(klass);
         }
         return testMethods;
@@ -43,7 +44,7 @@ public class TestResult implements Result {
 
     public String getName() {
         String className = getTestClass().getSimpleName();
-        if(className.endsWith("Test")){
+        if (className.endsWith("Test")) {
             className = removeTestFrom(className);
         }
         return Text.wordify(className);
@@ -86,9 +87,32 @@ public class TestResult implements Result {
     public Content getCustomHeaderContent() {
         return customHeaderContent;
     }
+
     public static String getNotesValue(Notes annotation) {
         return annotation == null ? null : annotation.value();
     }
 
+    public LinkDetails getLink() {
+        Link link = getTestClass().getAnnotation(Link.class);
+        if (link == null) {
+            return null;
+        }
+        return new LinkDetails(link);
+    }
 
+    public static class LinkDetails {
+        private final Link link;
+
+        public LinkDetails(Link link) {
+            this.link = link;
+        }
+
+        public String getHref() {
+            return link.href();
+        }
+
+        public String getText() {
+            return link.text();
+        }
+    }
 }
