@@ -6,6 +6,7 @@ import java.util.List;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.state.TestMethod.wordify;
 
+@SuppressWarnings("unused")
 public class ScenarioTable {
     private List<String> headers = new ArrayList<String>();
     private List<List<String>> rows = new ArrayList<List<String>>();
