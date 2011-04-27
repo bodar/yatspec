@@ -3,6 +3,8 @@ package com.googlecode.yatspec.rendering;
 import org.antlr.stringtemplate.AttributeRenderer;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
+import java.util.Map;
+
 public class EnhancedStringTemplateGroup extends StringTemplateGroup {
     private AttributeRenderer defaultRenderer;
 
@@ -14,12 +16,15 @@ public class EnhancedStringTemplateGroup extends StringTemplateGroup {
         defaultRenderer = renderer;
     }
 
-    public <T> void registerDefaultRenderer(Renderer<T> renderer) {
-        defaultRenderer = new RendererAdapter<T>(renderer);
-    }
-
     public <T> void registerRenderer(Class<T> attributeClassType, Renderer<T> renderer) {
         super.registerRenderer(attributeClassType, new RendererAdapter<T>(renderer));
+    }
+
+    @SuppressWarnings({"unchecked"})
+    public void registerRenderers(Map<Class, Renderer> renderers) {
+        for (Map.Entry<Class, Renderer> rendererType : renderers.entrySet()) {
+            registerRenderer(rendererType.getKey(), rendererType.getValue());
+        }
     }
 
     @Override

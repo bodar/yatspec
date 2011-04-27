@@ -9,6 +9,7 @@ class RendererAdapter<T> implements AttributeRenderer {
         this.renderer = renderer;
     }
 
+    @SuppressWarnings({"unchecked"})
     public String toString(Object o) {
         try {
             return renderer.render((T) o);

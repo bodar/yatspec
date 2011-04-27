@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class Scenario {
     private TestState testState = new TestState();
     private final String name;

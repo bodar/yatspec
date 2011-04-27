@@ -21,7 +21,7 @@ public class ResultRenderer implements Renderer<Result> {
         group.registerDefaultRenderer(new XmlStringRenderer() );
         group.registerRenderer(Document.class, new DocumentRenderer());
         group.registerRenderer(Content.class, new ToStringRenderer<Content>());
-        register(group, result.getCustomRenderers());
+        group.registerRenderers(result.getCustomRenderers());
         final StringTemplate template = group.getInstanceOf(getResourceRelativeTo(this.getClass(), "yatspec"));
         template.setAttribute("script", loadContent("yatspec.js"));
         template.setAttribute("customHeaderContent", result.getCustomHeaderContent());
@@ -33,17 +33,11 @@ public class ResultRenderer implements Renderer<Result> {
         return writer.toString();
     }
 
-    private void register(EnhancedStringTemplateGroup group, Map<Class, Renderer> renderers) {
-        for (Class rendererType : renderers.keySet()) {
-            group.registerRenderer(rendererType, renderers.get(rendererType));
-        }
-    }
-
     private Content loadContent(final String resource) throws IOException {
         return new Content(getClass().getResource(resource));
     }
 
-    private Map<Status, String> getCssMap() {
+    private static Map<Status, String> getCssMap() {
         return new HashMap<Status, String>() {{
             put(Status.Passed, "test-passed" );
             put(Status.Failed, "test-failed" );

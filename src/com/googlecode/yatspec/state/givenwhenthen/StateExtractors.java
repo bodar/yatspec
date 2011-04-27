@@ -4,11 +4,11 @@ import com.googlecode.totallylazy.Callable1;
 import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jdom.xpath.XPath;
 
 import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static org.jdom.xpath.XPath.newInstance;
 
 public final class StateExtractors {
 
@@ -60,7 +60,7 @@ public final class StateExtractors {
     private static Callable1<? super Document, List<String>> toAttributeOrElementValues(final String xpath) {
         return new Callable1<Document, List<String>>() {
             public List<String> call(Document document) throws Exception {
-                List result = XPath.newInstance(xpath).selectNodes(document);
+                List result = newInstance(xpath).selectNodes(document);
                 checkThatValuesAreFound(result, xpath);
                 return sequence(result).map(toAttributeOrElement()).toList();
             }

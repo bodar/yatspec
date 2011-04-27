@@ -44,7 +44,7 @@ public class SequenceDiagramHyperlinker {
         remainingInputLines.remove(remainingInputLines.size() - 1);
     }
 
-    private boolean isSequenceDiagramLineForMessage(SequenceDiagramMessage currentMessage, String currentInputLine) {
+    private static boolean isSequenceDiagramLineForMessage(SequenceDiagramMessage currentMessage, String currentInputLine) {
         return currentInputLine.startsWith("<text") && currentInputLine.matches(".*>" + currentMessage.getVisibleName() + "<.*");
     }
 
