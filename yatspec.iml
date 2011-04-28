@@ -14,6 +14,7 @@
     <orderEntry type="library" name="manual" level="project" />
     <orderEntry type="library" name="optional" level="project" />
     <orderEntry type="library" name="runtime" level="project" />
+    <orderEntry type="library" name="Yatspec" level="project" />
   </component>
 </module>
 
