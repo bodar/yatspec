@@ -3,6 +3,7 @@ package com.googlecode.yatspec.plugin.sequencediagram;
 import com.googlecode.yatspec.rendering.Content;
 import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
 import net.sourceforge.plantuml.FileFormat;
+import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 
 import java.io.ByteArrayOutputStream;
@@ -62,7 +63,7 @@ public class SequenceDiagramGenerator {
         SourceStringReader reader = new SourceStringReader(plantUmlMarkup.toString());
         final ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
-            reader.generateImage(os, FileFormat.SVG);
+            reader.generateImage(os, new FileFormatOption(FileFormat.SVG));
             os.close();
         } catch (IOException e) {
             e.printStackTrace();
