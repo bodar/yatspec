@@ -1,5 +1,6 @@
 package com.googlecode.yatspec.state;
 
+@SuppressWarnings({"unused"})
 public class LogKey {
     private final String value;
 
@@ -22,9 +23,8 @@ public class LogKey {
 
         LogKey logKey = (LogKey) o;
 
-        if (!value.equals(logKey.value)) return false;
+        return value.equals(logKey.value);
 
-        return true;
     }
 
     @Override

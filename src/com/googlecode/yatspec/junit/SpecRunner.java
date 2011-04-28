@@ -45,11 +45,15 @@ public class SpecRunner extends TableRunner {
 
     @Override
     protected List<FrameworkMethod> computeTestMethods() {
-        return sequence(super.computeTestMethods()).filter(new Predicate<FrameworkMethod>() {
+        return sequence(super.computeTestMethods()).filter(isNotEvaluateMethod()).toList();
+    }
+
+    private static Predicate<FrameworkMethod> isNotEvaluateMethod() {
+        return new Predicate<FrameworkMethod>() {
             public boolean matches(FrameworkMethod method) {
-                return !method.getName().equals("evaluate"); 
+                return !method.getName().equals("evaluate");
             }
-        }).toList();
+        };
     }
 
     @Override

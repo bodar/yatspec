@@ -13,15 +13,15 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.yatspec.state.TestResult.getNotesValue;
 
 
-public class TestMethod {
+@SuppressWarnings({"unused"})
+public class TestMethod implements Notable {
     private final Method method;
     private final String methodName;
     private final ScenarioTable scenarioTable;
     private final List<String> specification;
-    private Map<String, Scenario> scenarioResults = new LinkedHashMap<String, Scenario>();
+    private final Map<String, Scenario> scenarioResults = new LinkedHashMap<String, Scenario>();
     public static final Pattern DOT_CLASS = Pattern.compile("\\.class([^A-Za-z_0-9]|$)");
 
     public TestMethod(Method method, String methodName, List<String> methodBody, ScenarioTable scenarioTable) {
@@ -56,14 +56,14 @@ public class TestMethod {
         }).map(wordify()).toList();
     }
 
-    private String displayValue(String value) {
+    private static String displayValue(String value) {
         if (value.matches("[A-Z0-9]*")) {
             return value;
         }
         return "\"" + value + "\"";
     }
 
-    private Callable1<? super String, String> removeDotClass() {
+    private static Callable1<? super String, String> removeDotClass() {
         return new Callable1<String, String>() {
             public String call(String s) throws Exception {
                 return DOT_CLASS.matcher(s).replaceAll("$1");
@@ -127,8 +127,9 @@ public class TestMethod {
         return scenarioResults.get(name) != null;
     }
 
-    public String getNotes() {
-        return getNotesValue(method.getAnnotation(Notes.class));
+    @Override
+    public Notes getNotes() throws Exception {
+        return method.getAnnotation(Notes.class);
     }
 
     public static String buildName(String methodName, List<String> scenarioData) {

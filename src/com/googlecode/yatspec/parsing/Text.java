@@ -38,10 +38,7 @@ public class Text {
     };
 
     private static String lowercaseSingleLetters(String value) {
-        if( value.length() == 1){
-            return value.toLowerCase();
-        }
-        return value;
+        return value.length() == 1 ? value.toLowerCase() : value;
     }
 
     private static final String spaceRemoverReplacer = "$1";

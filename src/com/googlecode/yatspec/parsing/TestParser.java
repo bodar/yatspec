@@ -1,6 +1,8 @@
 package com.googlecode.yatspec.parsing;
 
-import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Strings;
 import com.googlecode.yatspec.state.TestMethod;
 import net.sourceforge.pmd.ast.ASTCompilationUnit;
 import net.sourceforge.pmd.ast.ASTMethodDeclaration;
@@ -8,7 +10,9 @@ import net.sourceforge.pmd.parsers.Java15Parser;
 import org.jaxen.JaxenException;
 import org.junit.Test;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -27,7 +31,6 @@ public class TestParser {
 
     public static List<TestMethod> parseTestMethods(Class aClass) throws Exception {
         final Sequence<Method> methods = getMethods(aClass);
-
         return collectTestMethods(aClass, methods).toList();
     }
 
@@ -47,8 +50,8 @@ public class TestParser {
         return myTestMethods.join(parentTestMethods);
     }
 
-    private static ASTCompilationUnit getClassAST(File file) throws FileNotFoundException {
-        return (ASTCompilationUnit) commentIgnoringParser().parse(new BufferedReader(new FileReader(file)));
+    private static ASTCompilationUnit getClassAST(File file) throws IOException {
+        return (ASTCompilationUnit) commentIgnoringParser().parse(new StringReader(Strings.toString(file)));
     }
 
     private static Java15Parser commentIgnoringParser() {
@@ -61,17 +64,16 @@ public class TestParser {
         return sequence(aClass.getMethods()).filter(where(annotation(Test.class), notNullValue()));
     }
 
-
     @SuppressWarnings("unchecked")
     private static Sequence<ASTMethodDeclaration> getMethodAST(ASTCompilationUnit classAST) throws JaxenException {
         return sequence(classAST.findChildNodesWithXPath("//MethodDeclaration[preceding-sibling::Annotation/MarkerAnnotation/Name[@Image='Test']]"));
     }
 
     private static Option<File> getJavaSourceFile(Class clazz) {
-        return recursiveFiles(workingDirectory()).find(where(path(), endsWith(toJavaPath(clazz))));
+        return recursiveFiles(userDirectory()).find(where(path(), endsWith(toJavaPath(clazz))));
     }
 
-    private static File workingDirectory() {
+    private static File userDirectory() {
         return new File(System.getProperty("user.dir"));
     }
 
