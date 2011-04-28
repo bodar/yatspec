@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.yatspec.state.Notables.getNotesValue;
 
 
 @SuppressWarnings({"unused"})
@@ -129,8 +128,8 @@ public class TestMethod implements Notable {
     }
 
     @Override
-    public String getNotes() throws Exception {
-        return getNotesValue(method.getAnnotation(Notes.class));
+    public Notes getNotes() throws Exception {
+        return method.getAnnotation(Notes.class);
     }
 
     public static String buildName(String methodName, List<String> scenarioData) {

@@ -1,6 +1,7 @@
 package com.googlecode.yatspec.state;
 
-public interface Notable {
+import com.googlecode.yatspec.junit.Notes;
 
-    String getNotes() throws Exception;
+public interface Notable {
+    Notes getNotes() throws Exception;
 }

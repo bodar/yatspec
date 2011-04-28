@@ -12,7 +12,6 @@ import java.util.Map;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.parsing.Text.wordify;
-import static com.googlecode.yatspec.state.Notables.getNotesValue;
 
 public class TestResult implements Result {
 
@@ -71,10 +70,9 @@ public class TestResult implements Result {
         };
     }
 
-    @SuppressWarnings({"unchecked"})
     @Override
-    public String getNotes() throws Exception {
-        return getNotesValue(getTestClass().getAnnotation(Notes.class), customRenderers.get(Notes.class));
+    public Notes getNotes() throws Exception {
+        return getTestClass().getAnnotation(Notes.class);
     }
 
     @Override

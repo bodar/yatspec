@@ -5,7 +5,9 @@ import org.antlr.stringtemplate.StringTemplateGroup;
 
 import java.util.Map;
 
-public class EnhancedStringTemplateGroup extends StringTemplateGroup {
+import static java.lang.reflect.Proxy.isProxyClass;
+
+public final class EnhancedStringTemplateGroup extends StringTemplateGroup {
     private AttributeRenderer defaultRenderer;
 
     public EnhancedStringTemplateGroup(String name) {
@@ -30,10 +32,14 @@ public class EnhancedStringTemplateGroup extends StringTemplateGroup {
     @Override
     public AttributeRenderer getAttributeRenderer(Class attributeClassType) {
         AttributeRenderer attributeRenderer = super.getAttributeRenderer(attributeClassType);
-        if( attributeRenderer == null) {
-            return defaultRenderer;
+        if (attributeRenderer == null) {
+            return isAnnotationProxy(attributeClassType) ? new AnnotationRenderer(this) : defaultRenderer;
         }
         return attributeRenderer;
+    }
+
+    private static boolean isAnnotationProxy(Class attributeClassType) {
+        return isProxyClass(attributeClassType);
     }
 }
 
