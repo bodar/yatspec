@@ -1,5 +1,6 @@
 package com.googlecode.yatspec.rendering;
 
+import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.Status;
 import org.antlr.stringtemplate.NoIndentWriter;
@@ -18,9 +19,10 @@ public class ResultRenderer implements Renderer<Result> {
 
     public String render(Result result) throws Exception {
         final EnhancedStringTemplateGroup group = new EnhancedStringTemplateGroup("randomName");
-        group.registerDefaultRenderer(new XmlStringRenderer() );
+        group.registerDefaultRenderer(new XmlStringRenderer());
         group.registerRenderer(Document.class, new DocumentRenderer());
         group.registerRenderer(Content.class, new ToStringRenderer<Content>());
+        group.registerRenderer(Notes.class, new NotesRenderer());
         group.registerRenderers(result.getCustomRenderers());
         final StringTemplate template = group.getInstanceOf(getResourceRelativeTo(this.getClass(), "yatspec"));
         template.setAttribute("script", loadContent("yatspec.js"));
