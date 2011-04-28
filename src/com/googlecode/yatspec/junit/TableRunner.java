@@ -38,7 +38,7 @@ public class TableRunner extends BlockJUnit4ClassRunner {
         }).toList();
     }
 
-    private Callable1<Row, FrameworkMethod> decorateTestMethod(final FrameworkMethod frameworkMethod) {
+    private static Callable1<Row, FrameworkMethod> decorateTestMethod(final FrameworkMethod frameworkMethod) {
         return new Callable1<Row, FrameworkMethod>() {
             public FrameworkMethod call(Row row) {
                 return new DecoratingFrameworkMethod(frameworkMethod, row);

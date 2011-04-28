@@ -4,6 +4,7 @@ import org.hamcrest.Matcher;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
+@SuppressWarnings("unused")
 public class TestState implements TestLogger, WithTestState {
     public InterestingGivens interestingGivens = new InterestingGivens();
     public CapturedInputAndOutputs capturedInputAndOutputs = new CapturedInputAndOutputs();

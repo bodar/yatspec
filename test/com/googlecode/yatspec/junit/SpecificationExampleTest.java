@@ -1,5 +1,9 @@
 package com.googlecode.yatspec.junit;
 
+import com.googlecode.yatspec.rendering.HyperlinkRenderer;
+import com.googlecode.yatspec.rendering.NotesRenderer;
+import com.googlecode.yatspec.rendering.Renderer;
+import com.googlecode.yatspec.rendering.WithCustomRendering;
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
 import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
 import com.googlecode.yatspec.state.givenwhenthen.GivensBuilder;
@@ -9,15 +13,20 @@ import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.googlecode.yatspec.state.givenwhenthen.StateExtractors.getValue;
 import static java.lang.Double.valueOf;
 import static java.lang.Math.sqrt;
+import static java.util.Collections.singletonMap;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 @RunWith(SpecRunner.class)
 @Notes("This is a note on the whole class\n" +
         "It will preserve space")
-public class SpecificationExampleTest extends TestState {
+public class SpecificationExampleTest extends TestState implements WithCustomRendering {
     private static final String RADICAND = "Radicand";
     private static final String RESULT = "Result";
 
@@ -57,13 +66,13 @@ public class SpecificationExampleTest extends TestState {
         };
     }
 
-    private StateExtractor<Double> theResult() {
-        return new StateExtractor<Double>() {
-            public Double execute(CapturedInputAndOutputs capturedInputAndOutputs) throws Exception {
-                return capturedInputAndOutputs.getType(RESULT, Double.class);
-            }
-        };
+    private static StateExtractor<Double> theResult() {
+        return getValue(RESULT, Double.class);
     }
 
-
+    @SuppressWarnings({"unchecked"})
+    @Override
+    public Map<Class, Renderer> getCustomRenderers() {
+        return new HashMap(singletonMap(Notes.class, new HyperlinkRenderer("http://localhost:8080", new NotesRenderer())));
+    }
 }

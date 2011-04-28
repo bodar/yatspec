@@ -66,7 +66,7 @@ public class SequenceDiagramGenerator {
             reader.generateImage(os, new FileFormatOption(FileFormat.SVG));
             os.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         String svg = new String(os.toByteArray());
@@ -74,17 +74,6 @@ public class SequenceDiagramGenerator {
         svg = svg.replaceFirst("position:absolute;top:0;left:0;", "");
         svg = new SequenceDiagramHyperlinker().hyperlinkSequenceDiagram(messagesCollector, svg);
         capturedInputAndOutputs.put("Sequence diagram", new SvgWrapper(svg));
-    }
-
-    public String hyperlinkSequenceDiagram(List<SequenceDiagramMessage> messagesCollector, String svg) {
-        for (SequenceDiagramMessage sequenceDiagramMessage : messagesCollector) {
-            final String regexp = ".*(<text .*?>" + sequenceDiagramMessage.getVisibleName() + "</text>).*";
-            final Pattern pattern = Pattern.compile(regexp);
-            final java.util.regex.Matcher matcher = pattern.matcher(svg);
-            matcher.matches();
-            svg = svg.replaceFirst("(.*)(<text .*?>" + sequenceDiagramMessage.getVisibleName() + "</text>)(.*)", "$1<a class=\"sequence_diagram_clickable\" sequence_diagram_message_id=\""+sequenceDiagramMessage.getFullyQualifiedMessageName().replaceAll(" ", "_")+"\" href=\"#\">$2</a>$3");
-        }
-        return svg;
     }
 
     private String fromToStatement(String capturedInputAndOutputName, List<SequenceDiagramMessage> messagesCollector) {
