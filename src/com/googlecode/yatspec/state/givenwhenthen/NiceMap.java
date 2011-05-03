@@ -2,12 +2,17 @@ package com.googlecode.yatspec.state.givenwhenthen;
 
 import com.googlecode.totallylazy.Option;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static com.googlecode.totallylazy.Option.option;
+import static java.util.Collections.unmodifiableMap;
 
 @SuppressWarnings("unused")
-public class NiceMap<T extends NiceMap> extends LinkedHashMap<String, Object> {
+class NiceMap<T extends NiceMap> {
+    private final Map<String, Object> map = new LinkedHashMap<String, Object>();
+
     public NiceMap(Object... instances) {
         for (Object instance : instances) {
             add(instance);
@@ -15,8 +20,8 @@ public class NiceMap<T extends NiceMap> extends LinkedHashMap<String, Object> {
     }
 
     @SuppressWarnings({"unchecked"})
-    public <R> R getType(String key, Class<R> aClass) {
-        Object value = get(key);
+    public final <R> R getType(String key, Class<R> aClass) {
+        Object value = map.get(key);
         if(value == null) {
             return null;
         }
@@ -26,34 +31,46 @@ public class NiceMap<T extends NiceMap> extends LinkedHashMap<String, Object> {
         return (R) value;
     }
 
-    public <R> R getType(Class<R> aClass) {
-        return getType(aClass.getSimpleName(),aClass);
+    public final Map<String, Object> getTypes() {
+        return unmodifiableMap(map);
     }
 
-    public <R> Option<R> getOption(String key, Class<R> aClass) {
+    public final <R> R getType(Class<R> aClass) {
+        return getType(defaultName(aClass),aClass);
+    }
+
+    public final <R> Option<R> getOption(String key, Class<R> aClass) {
         return option(getType(key, aClass));
     }
 
-    public <R> Option<R> getOption(Class<R> aClass) {
+    public final <R> Option<R> getOption(Class<R> aClass) {
         return option(getType(aClass));
     }
 
     @SuppressWarnings({"unchecked"})
-    public T add(String key, Object instance){
-        put(key, instance);
+    public final T add(String key, Object instance){
+        map.put(key, instance);
         return (T) this;
     }
 
     @SuppressWarnings({"unchecked"})
-    public T add(Object instance){
+    public final T add(Object instance){
         if(instance == null) {
             return (T) this;
         }
-        return add(instance.getClass().getSimpleName(), instance);
+        return add(defaultName(instance.getClass()), instance);
     }
 
-    public boolean contains(Class aClass){
-        return containsKey(aClass.getSimpleName());
+    public final boolean contains(Class aClass){
+        return contains(defaultName(aClass));
+    }
+
+    public final boolean contains(String name) {
+        return map.containsKey(name);
+    }
+
+    private static String defaultName(Class<? extends Object> aClass) {
+        return aClass.getSimpleName();
     }
 
 }

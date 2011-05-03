@@ -60,7 +60,7 @@ public class ResultRendererTest {
     }
 
     private void addToCapturedInputsAndOutputs(TestResult result, Object thingToBeCustomRendered) throws Exception {
-        result.getTestMethods().get(0).getScenarios().get(0).getCapturedInputAndOutputs().put("custom rendered thing", thingToBeCustomRendered);
+        result.getTestMethods().get(0).getScenarios().get(0).getCapturedInputAndOutputs().add("custom rendered thing", thingToBeCustomRendered);
     }
 
     private static class RenderedType {
