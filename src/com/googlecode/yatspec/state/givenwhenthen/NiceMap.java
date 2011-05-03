@@ -52,6 +52,10 @@ class NiceMap<T extends NiceMap> {
         return (T) this;
     }
 
+    public final boolean isEmpty() {
+        return map.isEmpty();
+    }
+
     @SuppressWarnings({"unchecked"})
     public final T add(Object instance){
         if(instance == null) {

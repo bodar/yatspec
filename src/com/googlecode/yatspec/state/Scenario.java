@@ -32,18 +32,18 @@ public class Scenario {
 
     public Map<LogKey, Object> getLogs() {
         Map<LogKey, Object> result = new LinkedHashMap<LogKey, Object>();
-        for (Map.Entry<String, Object> entry : getCapturedInputAndOutputs().getTypes().entrySet()) {
+        for (Map.Entry<String, Object> entry : getCapturedInputAndOutputs().entrySet()) {
             result.put(new LogKey(entry.getKey()), entry.getValue());       
         }
         return result;
     }
 
-    public CapturedInputAndOutputs getCapturedInputAndOutputs() {
-        return testState.capturedInputAndOutputs;
+    public Map<String, Object> getCapturedInputAndOutputs() {
+        return testState.capturedInputAndOutputs.getTypes();
     }
 
-    public InterestingGivens getInterestingGivens() {
-        return testState.interestingGivens;
+    public Map<String, Object> getInterestingGivens() {
+        return testState.interestingGivens.getTypes();
     }
 
     public void setException(Throwable exception) {
