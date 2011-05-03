@@ -1,6 +1,8 @@
 package com.googlecode.yatspec.rendering;
 
+import com.googlecode.yatspec.state.Scenario;
 import com.googlecode.yatspec.state.TestResult;
+import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -60,7 +62,10 @@ public class ResultRendererTest {
     }
 
     private void addToCapturedInputsAndOutputs(TestResult result, Object thingToBeCustomRendered) throws Exception {
-        result.getTestMethods().get(0).getScenarios().get(0).getCapturedInputAndOutputs().add("custom rendered thing", thingToBeCustomRendered);
+        Scenario scenario = result.getTestMethods().get(0).getScenarios().get(0);
+        TestState testState = new TestState();
+        testState.capturedInputAndOutputs.add("custom rendered thing", thingToBeCustomRendered);
+        scenario.setTestState(testState);
     }
 
     private static class RenderedType {
