@@ -1,6 +1,5 @@
 package com.googlecode.yatspec.state;
 
-import com.googlecode.yatspec.junit.Link;
 import com.googlecode.yatspec.junit.Notes;
 import net.sourceforge.plantuml.cucadiagram.LinkDecor;
 import org.junit.Test;

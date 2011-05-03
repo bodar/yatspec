@@ -1,6 +1,5 @@
 package com.googlecode.yatspec.rendering;
 
-import com.googlecode.yatspec.junit.Link;
 import com.googlecode.yatspec.state.TestResult;
 import org.junit.Test;
 
