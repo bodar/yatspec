@@ -7,7 +7,7 @@ import java.util.Map;
 
 import static java.lang.reflect.Proxy.isProxyClass;
 
-final class EnhancedStringTemplateGroup extends StringTemplateGroup {
+public final class EnhancedStringTemplateGroup extends StringTemplateGroup {
     private AttributeRenderer defaultRenderer;
 
     public EnhancedStringTemplateGroup(String name) {

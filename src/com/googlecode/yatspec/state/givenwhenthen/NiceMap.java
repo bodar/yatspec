@@ -2,7 +2,6 @@ package com.googlecode.yatspec.state.givenwhenthen;
 
 import com.googlecode.totallylazy.Option;
 
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
