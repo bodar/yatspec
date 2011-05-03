@@ -27,7 +27,7 @@ public final class StateExtractors {
     public static <I extends Iterable<T>, T> StateExtractor<I> getValues(final String key, final Class<T> klazz) {
         return new StateExtractor<I>() {
             public I execute(CapturedInputAndOutputs capturedInputAndOutputs) throws Exception {
-                return (I) capturedInputAndOutputs.get(key);
+                return (I) capturedInputAndOutputs.getType(key, Iterable.class);
             }
         };
     }
