@@ -42,7 +42,7 @@ public class SequenceDiagramGenerator {
     public void generateSequenceDiagram() {
         List<SequenceDiagramMessage> messagesCollector = new ArrayList<SequenceDiagramMessage>();
         StringBuffer plantUmlMarkup = new StringBuffer("@startuml\n");
-        for (Map.Entry<String, Object> captured : capturedInputAndOutputs.entrySet()) {
+        for (Map.Entry<String, Object> captured : capturedInputAndOutputs.getTypes().entrySet()) {
             final String name = captured.getKey();
             if (name.matches(FULLY_QUALIFIED_MESSAGE_SEND_REGEXP)) {
                 plantUmlMarkup.append(fromToStatement(name, messagesCollector) + "\n");
@@ -73,7 +73,7 @@ public class SequenceDiagramGenerator {
         svg = svg.replaceFirst("<\\?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"\\?>", "");
         svg = svg.replaceFirst("position:absolute;top:0;left:0;", "");
         svg = new SequenceDiagramHyperlinker().hyperlinkSequenceDiagram(messagesCollector, svg);
-        capturedInputAndOutputs.put("Sequence diagram", new SvgWrapper(svg));
+        capturedInputAndOutputs.add("Sequence diagram", new SvgWrapper(svg));
     }
 
     private String fromToStatement(String capturedInputAndOutputName, List<SequenceDiagramMessage> messagesCollector) {

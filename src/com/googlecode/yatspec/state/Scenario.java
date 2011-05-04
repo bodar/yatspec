@@ -1,5 +1,7 @@
 package com.googlecode.yatspec.state;
 
+import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
+import com.googlecode.yatspec.state.givenwhenthen.InterestingGivens;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 
 import java.util.LinkedHashMap;
@@ -30,18 +32,18 @@ public class Scenario {
 
     public Map<LogKey, Object> getLogs() {
         Map<LogKey, Object> result = new LinkedHashMap<LogKey, Object>();
-        for (Map.Entry<String, Object> entry : testState.capturedInputAndOutputs.entrySet()) {
+        for (Map.Entry<String, Object> entry : getCapturedInputAndOutputs().entrySet()) {
             result.put(new LogKey(entry.getKey()), entry.getValue());       
         }
         return result;
     }
 
     public Map<String, Object> getCapturedInputAndOutputs() {
-        return testState.capturedInputAndOutputs;
+        return testState.capturedInputAndOutputs.getTypes();
     }
 
     public Map<String, Object> getInterestingGivens() {
-        return testState.interestingGivens;
+        return testState.interestingGivens.getTypes();
     }
 
     public void setException(Throwable exception) {

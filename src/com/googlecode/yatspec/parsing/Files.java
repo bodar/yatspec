@@ -2,12 +2,10 @@ package com.googlecode.yatspec.parsing;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Strings;
 
 import java.io.File;
 
 import static com.googlecode.totallylazy.Sequences.characters;
-import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Files {
 

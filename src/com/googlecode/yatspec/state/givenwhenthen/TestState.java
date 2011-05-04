@@ -31,11 +31,11 @@ public class TestState implements TestLogger, WithTestState {
     public void log(String name, Object value) {
         int count = 1;
         String keyName = name;
-        while (capturedInputAndOutputs.containsKey(keyName)) {
+        while (capturedInputAndOutputs.contains(keyName)) {
             keyName = name + count;
             count++;
         }
-        capturedInputAndOutputs.put(keyName, value);
+        capturedInputAndOutputs.add(keyName, value);
     }
 
     public TestState testState() {
