@@ -1,30 +1,19 @@
 package com.googlecode.yatspec.rendering;
 
-import org.antlr.stringtemplate.AttributeRenderer;
-import org.junit.Before;
+import com.googlecode.yatspec.junit.Notes;
 import org.junit.Test;
 
+import static com.googlecode.yatspec.rendering.Annotations.notesProxyInstance;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class AnnotationRendererTest {
-    private static final String RENDERED_VALUE = "test";
-    private AttributeRenderer annotationRenderer;
-
-    @Before
-    public void setUp() throws Exception {
-        EnhancedStringTemplateGroup stringTemplateGroup = new EnhancedStringTemplateGroup("name");
-        stringTemplateGroup.registerRenderer(Test.class, new DelegateAttributeRenderer(RENDERED_VALUE));
-        annotationRenderer = new AnnotationRenderer(stringTemplateGroup);
-    }
-
     @Test
     public void shouldRenderAnnotation() throws Exception {
-        assertThat(annotationRenderer.toString(testAnnotation()), equalTo(RENDERED_VALUE));
+        EnhancedStringTemplateGroup stringTemplateGroup = new EnhancedStringTemplateGroup("name");
+        stringTemplateGroup.registerRenderer(Notes.class, new NotesRenderer());
+        AnnotationRenderer annotationRenderer = new AnnotationRenderer(stringTemplateGroup);
+        Notes notes = notesProxyInstance();
+        assertThat(annotationRenderer.toString(notes), equalTo(notes.value()));
     }
-
-    private Object testAnnotation() throws Exception {
-        return getClass().getMethod("shouldRenderAnnotation").getAnnotation(Test.class);
-    }
-
 }
