@@ -53,6 +53,7 @@
     <target name="compile">
         <compile.and.jar src="${src}" jar="${release.jar.path}" classpathref="all.dependancies"
                          version="${release.version}"/>
+        <embed.totallylazy/>
         <compile.and.jar src="${test}" jar="${test.jar.path}" classpathref="all.jars" version="${release.version}"/>
     </target>
 
@@ -82,18 +83,18 @@
             <entry key="${release.pom}.labels" value="POM"/>
             <entry key="${release.src}.description" value="Source file build:${build.number}"/>
             <entry key="${release.src}.labels" value="Source"/>
-
             <entry key="${release.example}.description" value="Example of the generated output created just by running a JUnit test"/>
             <entry key="${release.example}.labels" value="Featured"/>
         </propertyfile>
 
         <generate.pom artifact.uri="mvn:com.googlecode.${ant.project.name}:${ant.project.name}:jar:${release.version}"
-                             dependencies="build/runtime.dependencies"
-                             directory="${artifacts}"/>
+                      dependencies="build/runtime.dependencies"
+                      directory="${artifacts}"/>
 
         <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="all.dependancies"/>
         <xmltask source="${artifacts}/${release.pom}" dest="${artifacts}/${release.pom}">
-            <insert path="//*[local-name()='dependency'][*[local-name()='groupId'][text()='pmd']]" file="${build}/pmd.exclusions"/>
+            <insert path="//*[local-name()='dependency'][*[local-name()='groupId'][text()='pmd']]"
+                    file="${build}/pmd.exclusions"/>
         </xmltask>
 
     </target>
