@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
+    <macrodef name="embed.totallylazy">
+        <sequential>
+            <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask"
+                     classpathref="all.dependancies"/>
+            <property name="release.no.totallylazy.jar" value="${artifacts}/${release.name}-nototallylazy.jar"/>
+            <jarjar jarfile="${release.no.totallylazy.jar}">
+                <zipfileset src="${release.jar.path}"/>
+                <zipgroupfileset dir="${build.dependencies.dir}" includes="totallylazy-*.jar" />
+                <rule pattern="com.googlecode.totallylazy.**" result="com.googlecode.yatspec.internal.totallylazy.@1"/>
+            </jarjar>
+            <delete file="${release.jar.path}"/>
+            <move file="${release.no.totallylazy.jar}" tofile="${release.jar.path}"/>
+        </sequential>
+    </macrodef>
+
+
 	<macrodef name="compile.and.jar">
         <attribute name="src"/>
         <attribute name="jar"/>
