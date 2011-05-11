@@ -5,7 +5,7 @@ import java.util.Map;
 
 import static java.util.Collections.unmodifiableMap;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "unchecked"})
 class NiceMap<T extends NiceMap> {
     private final Map<String, Object> map = new LinkedHashMap<String, Object>();
 
@@ -15,7 +15,6 @@ class NiceMap<T extends NiceMap> {
         }
     }
 
-    @SuppressWarnings({"unchecked"})
     public final <R> R getType(String key, Class<R> aClass) {
         Object value = map.get(key);
         if(value == null) {
@@ -35,7 +34,6 @@ class NiceMap<T extends NiceMap> {
         return getType(defaultName(aClass), aClass);
     }
 
-    @SuppressWarnings({"unchecked"})
     public final T add(String key, Object instance){
         map.put(key, instance);
         return (T) this;
@@ -45,7 +43,6 @@ class NiceMap<T extends NiceMap> {
         return map.isEmpty();
     }
 
-    @SuppressWarnings({"unchecked"})
     public final T add(Object instance){
         if(instance == null) {
             return (T) this;
@@ -61,7 +58,7 @@ class NiceMap<T extends NiceMap> {
         return map.containsKey(name);
     }
 
-    private static String defaultName(Class<? extends Object> aClass) {
+    private static String defaultName(Class<?> aClass) {
         return aClass.getSimpleName();
     }
 
