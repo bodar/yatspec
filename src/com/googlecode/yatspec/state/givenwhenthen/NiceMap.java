@@ -1,11 +1,8 @@
 package com.googlecode.yatspec.state.givenwhenthen;
 
-import com.googlecode.totallylazy.Option;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static com.googlecode.totallylazy.Option.option;
 import static java.util.Collections.unmodifiableMap;
 
 @SuppressWarnings("unused")
@@ -35,15 +32,7 @@ class NiceMap<T extends NiceMap> {
     }
 
     public final <R> R getType(Class<R> aClass) {
-        return getType(defaultName(aClass),aClass);
-    }
-
-    public final <R> Option<R> getOption(String key, Class<R> aClass) {
-        return option(getType(key, aClass));
-    }
-
-    public final <R> Option<R> getOption(Class<R> aClass) {
-        return option(getType(aClass));
+        return getType(defaultName(aClass), aClass);
     }
 
     @SuppressWarnings({"unchecked"})
