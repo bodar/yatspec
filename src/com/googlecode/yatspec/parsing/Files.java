@@ -1,7 +1,7 @@
 package com.googlecode.yatspec.parsing;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Strings;
 
 import java.io.File;
 
@@ -18,18 +18,14 @@ public class Files {
     }
 
     public static String toPath(Class clazz) {
-        return classNameToString(characters(clazz.getName()).map(toSeparator()));
+        return replaceDotsWithSlashes(clazz.getName());
     }
 
-    private static String classNameToString(Sequence<Character> className) {
-        StringBuilder builder = new StringBuilder();
-        for (Character c : className.toArray(Character.class)) {
-            builder.append(c);
-        }
-        return builder.toString();
+    public static String replaceDotsWithSlashes(final String name) {
+        return characters(name).map(dotsToSlashes()).toString(Strings.EMPTY, Strings.EMPTY, Strings.EMPTY, Long.MAX_VALUE);
     }
 
-    private static Callable1<? super Character, Character> toSeparator() {
+    private static Callable1<? super Character, Character> dotsToSlashes() {
         return new Callable1<Character, Character>() {
             public Character call(Character character) throws Exception {
                 return character == '.' ? File.separatorChar : character;
