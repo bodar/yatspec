@@ -1,5 +1,6 @@
 package com.googlecode.yatspec.state;
 
+import com.googlecode.yatspec.parsing.JavaSource;
 import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
 import com.googlecode.yatspec.state.givenwhenthen.InterestingGivens;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
@@ -12,12 +13,12 @@ import java.util.Map;
 public class Scenario {
     private TestState testState = new TestState();
     private final String name;
-    private final List<String> specification;
+    private final JavaSource specification;
     private Throwable exception;
     private boolean wasRun = false;
 
 
-    public Scenario(String name, List<String> specification) {
+    public Scenario(String name, JavaSource specification) {
         this.name = name;
         this.specification = specification;
     }
@@ -58,7 +59,7 @@ public class Scenario {
         return exception != null;
     }
 
-    public List<String> getSpecification() {
+    public JavaSource getSpecification() {
         return specification;
     }
 

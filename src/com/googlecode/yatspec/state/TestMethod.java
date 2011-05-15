@@ -2,7 +2,9 @@ package com.googlecode.yatspec.state;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Value;
 import com.googlecode.yatspec.junit.Notes;
+import com.googlecode.yatspec.parsing.JavaSource;
 import com.googlecode.yatspec.parsing.Text;
 
 import java.lang.reflect.Method;
@@ -20,11 +22,10 @@ public class TestMethod implements Notable {
     private final Method method;
     private final String methodName;
     private final ScenarioTable scenarioTable;
-    private final List<String> specification;
+    private final JavaSource specification;
     private final Map<String, Scenario> scenarioResults = new LinkedHashMap<String, Scenario>();
-    public static final Pattern DOT_CLASS = Pattern.compile("\\.class([^A-Za-z_0-9]|$)");
 
-    public TestMethod(Method method, String methodName, List<String> methodBody, ScenarioTable scenarioTable) {
+    public TestMethod(Method method, String methodName, JavaSource methodBody, ScenarioTable scenarioTable) {
         this.method = method;
         this.methodName = methodName;
         this.scenarioTable = scenarioTable;
@@ -34,50 +35,25 @@ public class TestMethod implements Notable {
 
     private void buildUpScenarios() {
         if (scenarioTable.isEmpty()) {
-            scenarioResults.put(methodName, new Scenario("", sequence(specification).map(removeDotClass()).map(wordify()).toList()));
+            scenarioResults.put(methodName, new Scenario("", specification));
         } else {
             for (List<String> row : scenarioTable.getRows()) {
-                scenarioResults.put(buildName(methodName, row), new Scenario(buildName(methodName, row), replaceScenarioData(scenarioTable.getHeaders(), row)));
+                String name = buildName(methodName, row);
+                scenarioResults.put(name, new Scenario(name,
+                        specification.replace(sequence(scenarioTable.getHeaders()).map(value(String.class)).toList(), row)));
             }
         }
     }
 
-    private List<String> replaceScenarioData(final List<String> headers, final List<String> values) {
-        return sequence(specification).map(new Callable1<String, String>() {
-            public String call(String specificationLine) {
-                String result = specificationLine;
-                for (int i = 0; i < headers.size(); i++) {
-                    String header = headers.get(i);
-                    String value = values.get(i);
-                    result = result.replaceAll("([^\\w\"])" + header + "([^\\w\"])", "$1" + displayValue(value) + "$2" );
-                }
-                return result;
-            }
-        }).map(wordify()).toList();
-    }
-
-    private static String displayValue(String value) {
-        if (value.matches("[A-Z0-9]*")) {
-            return value;
-        }
-        return "\"" + value + "\"";
-    }
-
-    private static Callable1<? super String, String> removeDotClass() {
-        return new Callable1<String, String>() {
-            public String call(String s) throws Exception {
-                return DOT_CLASS.matcher(s).replaceAll("$1");
+    private static <T> Callable1<? super Value<T>, T> value(Class<T> aClass) {
+        return new Callable1<Value<T>, T>() {
+            @Override
+            public T call(Value<T> instance) throws Exception {
+                return instance.value();
             }
         };
     }
 
-    public static Callable1<String, String> wordify() {
-        return new Callable1<String, String>() {
-            public String call(String value) {
-                return Text.wordify(value);
-            }
-        };
-    }
 
     public String getName() {
         return methodName;
@@ -102,7 +78,7 @@ public class TestMethod implements Notable {
         return Status.Passed;
     }
 
-    public List<String> getSpecification() {
+    public JavaSource getSpecification() {
         return specification;
     }
 

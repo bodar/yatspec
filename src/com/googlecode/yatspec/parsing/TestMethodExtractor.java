@@ -19,8 +19,7 @@ import static java.util.Arrays.asList;
 
 public class TestMethodExtractor implements Callable1<Pair<ASTMethodDeclaration,Method>, TestMethod> {
     public static TestMethodExtractor extractTestMethod(File file) throws IOException {
-        final Sequence<String> lines = lines(file);
-        return new TestMethodExtractor(lines.toArray(String.class));
+        return new TestMethodExtractor(lines(file).toArray(String.class));
     }
 
     private final String[] lines;
@@ -38,21 +37,21 @@ public class TestMethodExtractor implements Callable1<Pair<ASTMethodDeclaration,
         }
 
         final String name = methodAST.getMethodName();
-        final List<String> source = getSourceForBlock(blocks);
+        final JavaSource source = getSourceForBlock(blocks);
         final ScenarioTable scenarioTable = getScenarioTable(methodAST);
         return new TestMethod(method, name, source, scenarioTable);
     }
 
-    private List<String> getSourceForBlock(List<ASTBlockStatement> blocks) {
+    private JavaSource getSourceForBlock(List<ASTBlockStatement> blocks) {
         ASTBlockStatement firstBlock = blocks.get(0);
         ASTBlockStatement lastBlock = blocks.get(blocks.size() - 1);
-        return asList(lines).subList(firstBlock.getBeginLine() - 1, lastBlock.getEndLine());
+        return new JavaSource(asList(lines).subList(firstBlock.getBeginLine() - 1, lastBlock.getEndLine()));
     }
 
     @SuppressWarnings({"unchecked"})
     private ScenarioTable getScenarioTable(ASTMethodDeclaration method) {
-        ScenarioTable table = new ScenarioTable();
         try {
+            ScenarioTable table = new ScenarioTable();
             final ASTMethodDeclarator declarator = method.getFirstChildOfType(ASTMethodDeclarator.class);
             final List<ASTVariableDeclaratorId> declaratorIds = declarator.findChildrenOfType(ASTVariableDeclaratorId.class);
             final List<String> parameters = getValues(declaratorIds);
@@ -64,10 +63,10 @@ public class TestMethodExtractor implements Callable1<Pair<ASTMethodDeclaration,
                 final List<String> values = getValues(astLiterals);
                 table.addRow(values);
             }
+            return table;
         } catch (JaxenException e) {
             throw new RuntimeException(e);
         }
-        return table;
     }
 
     private <T extends SimpleNode> List<String> getValues(List<T> astLiterals) {

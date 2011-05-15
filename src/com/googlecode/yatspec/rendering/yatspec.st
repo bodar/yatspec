@@ -56,7 +56,7 @@ $endif$
                 <table class="scenarios">
                     <thead>
                     <tr>
-                        $testMethod.scenarioTable.displayHeaders: { header | <th>$header$</th> }$
+                        $testMethod.scenarioTable.headers: { header | <th>$header$</th> }$
                     </tr>
                     </thead>
                     <tbody>
