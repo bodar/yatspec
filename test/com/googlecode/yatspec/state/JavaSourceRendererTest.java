@@ -1,11 +1,12 @@
 package com.googlecode.yatspec.state;
 
+import com.googlecode.yatspec.rendering.JavaSourceRenderer;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class TestMethodTest {
+public class JavaSourceRendererTest {
     @Test
     public void shouldRemoveDotClassFromRenderedOutput() throws Exception {
         assertThat(renderedVersionOf("get(SomeThing.class)"),                       is("get(SomeThing)"));
@@ -16,6 +17,6 @@ public class TestMethodTest {
     }
 
     private String renderedVersionOf(String s) {
-        return TestMethod.DOT_CLASS.matcher(s).replaceAll("$1");
+        return JavaSourceRenderer.DOT_CLASS.matcher(s).replaceAll("$1");
     }
 }
