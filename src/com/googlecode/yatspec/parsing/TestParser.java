@@ -44,7 +44,6 @@ public class TestParser {
         final ASTCompilationUnit classAST = getClassAST(file);
         final Sequence<ASTMethodDeclaration> methodASTs = getMethodAST(classAST);
 
-//        Sequence<TestMethod> myTestMethods = methodASTs.zip(methods).map(extractTestMethod(file)).filter(notNullValue());
         Sequence<TestMethod> myTestMethods = methodASTs.zip(methods).map(extractTestMethod(file));
         Sequence<TestMethod> parentTestMethods = collectTestMethods(aClass.getSuperclass(), methods);
 
