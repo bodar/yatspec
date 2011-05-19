@@ -45,6 +45,11 @@ public class SpecificationExampleTest extends TestState implements WithCustomRen
         then(theResult(), is(valueOf(result)));
     }
 
+    @Test
+    public void printEmptyTestName() throws Exception {
+
+    }
+
     private GivensBuilder theRadicand(final String number) {
         return theRadicand(Integer.valueOf(number));
     }
