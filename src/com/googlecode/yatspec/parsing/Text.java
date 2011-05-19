@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 import static com.googlecode.totallylazy.regex.Regex.regex;
 
 public class Text {
-    private static final Regex wordDelimiter = Regex.regex("[\\\\(\\\\),\\\\.;]|([A-Z]*?)([A-Z][a-z])");
+    private static final Regex wordDelimiter = Regex.regex(Strings.toString(Text.class.getResourceAsStream("wordDelimiter.regex")));
     private static final Pattern spaceRemover = Pattern.compile("\\s*(\\S+\\s)");
     private static final Regex stringIgnorer = regex("\"[^\"]+\"");
 
