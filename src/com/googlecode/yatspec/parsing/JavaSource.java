@@ -3,6 +3,7 @@ package com.googlecode.yatspec.parsing;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Value;
 
+import java.util.Collections;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -12,6 +13,10 @@ public class JavaSource implements Value<List<String>> {
 
     public JavaSource(List<String> lines) {
         this.lines = lines;
+    }
+
+    public static JavaSource empty() {
+        return new JavaSource(Collections.<String>emptyList());
     }
 
     @Override

@@ -11,13 +11,15 @@ import org.jaxen.JaxenException;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Strings.empty;
 import static com.googlecode.totallylazy.Strings.lines;
 import static java.util.Arrays.asList;
 
-public class TestMethodExtractor implements Callable1<Pair<ASTMethodDeclaration,Method>, TestMethod> {
+public class TestMethodExtractor implements Callable1<Pair<ASTMethodDeclaration, Method>, TestMethod> {
     public static TestMethodExtractor extractTestMethod(File file) throws IOException {
         return new TestMethodExtractor(lines(file).toArray(String.class));
     }
@@ -28,16 +30,14 @@ public class TestMethodExtractor implements Callable1<Pair<ASTMethodDeclaration,
         this.lines = lines;
     }
 
-    public TestMethod call(Pair<ASTMethodDeclaration,Method> pair) {
+    public TestMethod call(Pair<ASTMethodDeclaration, Method> pair) {
         ASTMethodDeclaration methodAST = pair.first();
         Method method = pair.second();
         final List<ASTBlockStatement> blocks = methodAST.findChildrenOfType(ASTBlockStatement.class);
-        if (blocks.isEmpty()) {
-            return null;
-        }
 
         final String name = methodAST.getMethodName();
-        final JavaSource source = getSourceForBlock(blocks);
+
+        final JavaSource source = blocks.isEmpty() ? JavaSource.empty() : getSourceForBlock(blocks);
         final ScenarioTable scenarioTable = getScenarioTable(methodAST);
         return new TestMethod(method, name, source, scenarioTable);
     }
@@ -82,7 +82,7 @@ public class TestMethodExtractor implements Callable1<Pair<ASTMethodDeclaration,
     }
 
     private String getValue(SimpleNode parameter) {
-        final String line = lines[parameter.getBeginLine() -1];
+        final String line = lines[parameter.getBeginLine() - 1];
         final String valueWithQuotes = line.substring(parameter.getBeginColumn() - 1, parameter.getEndColumn());
         return valueWithQuotes.replace("\"", "");
     }
