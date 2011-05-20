@@ -7,8 +7,4 @@ public class CapturedInputAndOutputs extends NiceMap<CapturedInputAndOutputs>{
     public CapturedInputAndOutputs(Object... instances) {
         super(instances);
     }
-
-    public CapturedInputAndOutputs(List<Map.Entry<String, Object>> entries) {
-        super(entries);
-    }
 }
