@@ -62,4 +62,9 @@ class NiceMap<T extends NiceMap> {
         return aClass.getSimpleName();
     }
 
+    public T  putAll(T inputMap) {
+        map.putAll(inputMap.getTypes());
+        return (T) this;
+    }
+
 }
