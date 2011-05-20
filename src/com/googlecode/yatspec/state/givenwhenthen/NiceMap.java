@@ -1,6 +1,8 @@
 package com.googlecode.yatspec.state.givenwhenthen;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import static java.util.Collections.unmodifiableMap;
@@ -13,6 +15,10 @@ class NiceMap<T extends NiceMap> {
         for (Object instance : instances) {
             add(instance);
         }
+    }
+
+    public NiceMap(List<Map.Entry<String, Object>> entries) {
+        map.putAll(new HashMap<String, Object>());
     }
 
     public final <R> R getType(String key, Class<R> aClass) {
