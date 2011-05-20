@@ -3,7 +3,9 @@ package com.googlecode.yatspec.plugin.sequencediagram;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 
@@ -14,9 +16,9 @@ public class SequenceDiagramHyperlinkerTest {
             "    <g>\n" +
             "        <line/>\n" +
             "        <rect/>\n" +
-            "        <text font-size=\"9\">mrflintstone</text>\n" +
+            "        <text font-size=\"9\">barney</text>\n" +
             "        <rect/>\n" +
-            "        <text font-size=\"10\">mrflintstone</text>\n" +
+            "        <text font-size=\"10\">fred</text>\n" +
             "        <text font-size=\"11\">open</text>\n" +
             "        <line/>\n" +
             "        <text font-size=\"12\">close</text>\n" +
@@ -31,9 +33,9 @@ public class SequenceDiagramHyperlinkerTest {
                     "<g>\n" +
                     "<line />\n" +
                     "<rect />\n" +
-                    "<text font-size=\"9\">mrflintstone</text>\n" +
+                    "<a class=\"sequence_diagram_actor\" sequence_diagram_actor_id=\"barney\" href=\"#\"><text font-size=\"9\">barney</text></a>\n" +
                     "<rect />\n" +
-                    "<text font-size=\"10\">mrflintstone</text>\n" +
+                    "<a class=\"sequence_diagram_actor\" sequence_diagram_actor_id=\"fred\" href=\"#\"><text font-size=\"10\">fred</text></a>\n" +
                     "<a class=\"sequence_diagram_clickable\" sequence_diagram_message_id=\"open_from_someone\" href=\"#\"><text font-size=\"11\">open</text></a>\n" +
                     "<line />\n" +
                     "<a class=\"sequence_diagram_clickable\" sequence_diagram_message_id=\"close_to_someone\" href=\"#\"><text font-size=\"12\">close</text></a>\n" +
@@ -47,7 +49,10 @@ public class SequenceDiagramHyperlinkerTest {
         messages.add(new SequenceDiagramMessage("open", "open from someone"));
         messages.add(new SequenceDiagramMessage("close", "close to someone"));
         messages.add(new SequenceDiagramMessage("open", "second open from someone"));
-        String outputSvg = new SequenceDiagramHyperlinker().hyperlinkSequenceDiagram(messages, inputSvg);
+        List<String> actorNames = new ArrayList<String>();
+        actorNames.add("barney");
+        actorNames.add("fred");
+        String outputSvg = new SequenceDiagramHyperlinker().hyperlinkSequenceDiagram(actorNames,messages, inputSvg);
         assertEquals(expectedSvg, outputSvg);
     }
 }
