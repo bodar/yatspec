@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Yatspec">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/lib/optional" />
+      <root url="file://$PROJECT_DIR$/lib/runtime" />
+      <root url="file://$PROJECT_DIR$/lib/build" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/build" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/optional" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/runtime" recursive="false" />
+  </library>
+</component>
