@@ -1,15 +1,8 @@
 package com.googlecode.yatspec.state.givenwhenthen;
 
-import com.googlecode.totallylazy.Callable1;
-import com.sun.org.apache.xerces.internal.impl.dv.xs.YearDV;
-import sun.misc.UCDecoder;
-
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static java.util.Collections.unmodifiableMap;
 
 @SuppressWarnings({"unused", "unchecked"})
