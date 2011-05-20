@@ -23,14 +23,4 @@ public class NiceMapTest {
         }
     }
 
-    @Test
-    public void shouldAddOneMapToAnother() throws Exception {
-        NiceMap niceMap = new NiceMap().add("Key", "value");
-        NiceMap anotherNiceMap = new NiceMap().add("Key2", "value2");
-
-        Map<String, String> combinedMap = niceMap.putAll(anotherNiceMap).getTypes();
-        
-        assertThat(combinedMap, hasEntry("Key", "value"));
-    }
-
 }

@@ -62,8 +62,10 @@ class NiceMap<T extends NiceMap> {
         return aClass.getSimpleName();
     }
 
-    public T  putAll(T inputMap) {
-        map.putAll(inputMap.getTypes());
+    public T  putAll(Iterable<Map.Entry<String, Object>> entries) {
+        for (Map.Entry<String, Object> entry : entries) {
+            map.put(entry.getKey(), entry.getValue());
+        }
         return (T) this;
     }
 
