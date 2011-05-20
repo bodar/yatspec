@@ -1,10 +1,15 @@
 package com.googlecode.yatspec.state.givenwhenthen;
 
+import com.googlecode.totallylazy.Callable1;
+import com.sun.org.apache.xerces.internal.impl.dv.xs.YearDV;
+import sun.misc.UCDecoder;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static java.util.Collections.unmodifiableMap;
 
 @SuppressWarnings({"unused", "unchecked"})
@@ -15,10 +20,6 @@ class NiceMap<T extends NiceMap> {
         for (Object instance : instances) {
             add(instance);
         }
-    }
-
-    public NiceMap(List<Map.Entry<String, Object>> entries) {
-        map.putAll(new HashMap<String, Object>());
     }
 
     public final <R> R getType(String key, Class<R> aClass) {
@@ -68,8 +69,10 @@ class NiceMap<T extends NiceMap> {
         return aClass.getSimpleName();
     }
 
-    public T  putAll(T inputMap) {
-        map.putAll(inputMap.getTypes());
+    public T  putAll(Iterable<Map.Entry<String, Object>> entries) {
+        for (Map.Entry<String, Object> entry : entries) {
+            map.put(entry.getKey(), entry.getValue());
+        }
         return (T) this;
     }
 
