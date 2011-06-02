@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.io.File;
 
+import static com.googlecode.totallylazy.Files.temporaryDirectory;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
@@ -18,7 +19,7 @@ public class ResultWriterTest {
         TestResult result = new TestResult(this.getClass());
 
         // execute
-        File file = new ResultWriter(new TemporaryDirectory()).write(result);
+        File file = new ResultWriter(temporaryDirectory()).write(result);
 
         // verify
         assertThat(Strings.toString(file), is(not(nullValue())));
