@@ -69,4 +69,11 @@ class NiceMap<T extends NiceMap> {
         return (T) this;
     }
 
+    public void clear() {
+        map.clear();
+    }
+
+    public void remove(String key) {
+        map.remove(key);
+    }   
 }
