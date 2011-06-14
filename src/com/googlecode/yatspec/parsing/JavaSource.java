@@ -9,6 +9,8 @@ import java.util.List;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class JavaSource implements Value<List<String>> {
+    private static final String COMMA_OR_OPENING_BRACKET = "(\\s*[\\(\\,\"]\\s*)";
+    private static final String COMMA_OR_CLOSING_BRACKET = "(\\s*[\\,\\)\"]\\s*)";
     private final List<String> lines;
 
     public JavaSource(List<String> lines) {
@@ -31,7 +33,7 @@ public class JavaSource implements Value<List<String>> {
                 for (int i = 0; i < oldValues.size(); i++) {
                     String header = oldValues.get(i);
                     String value = newValues.get(i);
-                    result = result.replaceAll("([^\\w\"])" + header + "([^\\w\"])", "$1" + displayValue(value) + "$2" );
+                    result = result.replaceAll(COMMA_OR_OPENING_BRACKET + header + COMMA_OR_CLOSING_BRACKET, "$1" + displayValue(value) + "$2" );
                 }
                 return result;
             }
