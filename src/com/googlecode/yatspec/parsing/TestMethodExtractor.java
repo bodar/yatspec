@@ -3,87 +3,93 @@ package com.googlecode.yatspec.parsing;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.yatspec.junit.Table;
 import com.googlecode.yatspec.state.ScenarioTable;
 import com.googlecode.yatspec.state.TestMethod;
-import net.sourceforge.pmd.ast.*;
-import org.jaxen.JaxenException;
+import com.thoughtworks.qdox.model.Annotation;
+import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaParameter;
+import com.thoughtworks.qdox.model.annotation.AnnotationValueList;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.Collections;
 import java.util.List;
 
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.Strings.empty;
 import static com.googlecode.totallylazy.Strings.lines;
-import static java.util.Arrays.asList;
+import static com.googlecode.yatspec.parsing.TestParser.name;
 
-public class TestMethodExtractor implements Callable1<Pair<ASTMethodDeclaration, Method>, TestMethod> {
-    public static TestMethodExtractor extractTestMethod(File file) throws IOException {
-        return new TestMethodExtractor(lines(file).toArray(String.class));
+public class TestMethodExtractor implements Callable1<Pair<JavaMethod, Method>, TestMethod> {
+    public static TestMethodExtractor extractTestMethod() throws IOException {
+        return new TestMethodExtractor();
     }
 
-    private final String[] lines;
-
-    public TestMethodExtractor(String[] lines) {
-        this.lines = lines;
-    }
-
-    public TestMethod call(Pair<ASTMethodDeclaration, Method> pair) {
-        ASTMethodDeclaration methodAST = pair.first();
+    public TestMethod call(Pair<JavaMethod, Method> pair) {
+        JavaMethod javaMethod = pair.first();
         Method method = pair.second();
-        final List<ASTBlockStatement> blocks = methodAST.findChildrenOfType(ASTBlockStatement.class);
 
-        final String name = methodAST.getMethodName();
+        final String name = javaMethod.getName();
 
-        final JavaSource source = blocks.isEmpty() ? JavaSource.empty() : getSourceForBlock(blocks);
-        final ScenarioTable scenarioTable = getScenarioTable(methodAST);
+        final JavaSource source = new JavaSource(lines(javaMethod.getSourceCode()));
+        final ScenarioTable scenarioTable = getScenarioTable(javaMethod);
         return new TestMethod(method, name, source, scenarioTable);
     }
 
-    private JavaSource getSourceForBlock(List<ASTBlockStatement> blocks) {
-        ASTBlockStatement firstBlock = blocks.get(0);
-        ASTBlockStatement lastBlock = blocks.get(blocks.size() - 1);
-        return new JavaSource(asList(lines).subList(firstBlock.getBeginLine() - 1, lastBlock.getEndLine()));
+    private List<String> lines(final String sourceCode) {
+        return sequence(sourceCode.split(lineSeperator())).drop(1).reverse().drop(1).reverse().toList();
+    }
+
+    private String lineSeperator() {
+        return System.getProperty("line.separator");
     }
 
     @SuppressWarnings({"unchecked"})
-    private ScenarioTable getScenarioTable(ASTMethodDeclaration method) {
-        try {
-            ScenarioTable table = new ScenarioTable();
-            final ASTMethodDeclarator declarator = method.getFirstChildOfType(ASTMethodDeclarator.class);
-            final List<ASTVariableDeclaratorId> declaratorIds = declarator.findChildrenOfType(ASTVariableDeclaratorId.class);
-            final List<String> parameters = getValues(declaratorIds);
-            table.setHeaders(parameters);
+    private ScenarioTable getScenarioTable(JavaMethod method) {
+        ScenarioTable table = new ScenarioTable();
+        table.setHeaders(getNames(method.getParameters()));
 
-            final List<ASTSingleMemberAnnotation> rows = method.findChildNodesWithXPath("preceding-sibling::Annotation/SingleMemberAnnotation[Name/@Image='Table']//Annotation/SingleMemberAnnotation[Name/@Image='Row']");
-            for (ASTSingleMemberAnnotation row : rows) {
-                final List<ASTLiteral> astLiterals = row.findChildNodesWithXPath("descendant::PrimaryExpression/descendant::Literal | descendant::PrimaryExpression/descendant::Name");
-                final List<String> values = getValues(astLiterals);
-                table.addRow(values);
-            }
-            return table;
-        } catch (JaxenException e) {
-            throw new RuntimeException(e);
+        final Sequence<Annotation> rows = getRows(method);
+        for (Annotation row : rows) {
+            List<String> values = (List<String>) row.getProperty("value").getParameterValue();
+                table.addRow(sequence(values).map(replaceQuotes()).toList());
         }
+        return table;
     }
 
-    private <T extends SimpleNode> List<String> getValues(List<T> astLiterals) {
-        return sequence(astLiterals).map(extractValue()).toList();
-    }
-
-    private <T extends SimpleNode> Callable1<T, String> extractValue() {
-        return new Callable1<T, String>() {
-            public String call(T simpleNode) {
-                return getValue(simpleNode);
+    private Callable1<? super String, String> replaceQuotes() {
+        return new Callable1<String, String>() {
+            @Override
+            public String call(String valueWithQuotes) throws Exception {
+                return valueWithQuotes.replace("\"", "");
             }
         };
     }
 
-    private String getValue(SimpleNode parameter) {
-        final String line = lines[parameter.getBeginLine() - 1];
-        final String valueWithQuotes = line.substring(parameter.getBeginColumn() - 1, parameter.getEndColumn());
-        return valueWithQuotes.replace("\"", "");
+    private Sequence<Annotation> getRows(JavaMethod method) {
+        return sequence(method.getAnnotations()).filter(where(name(), is(Table.class.getName()))).flatMap(rows());
     }
+
+    private Callable1<? super Annotation, Iterable<Annotation>> rows() {
+        return new Callable1<Annotation, Iterable<Annotation>>() {
+            @Override
+            public Iterable<Annotation> call(Annotation annotation) throws Exception {
+                return ((AnnotationValueList)annotation.getProperty("value")).getValueList();
+            }
+        };
+    }
+
+    private List<String> getNames(JavaParameter[] javaParameters) {
+        return sequence(javaParameters).map(getName()).toList();
+    }
+
+    private Callable1<JavaParameter, String> getName() {
+        return new Callable1<JavaParameter, String>() {
+            public String call(JavaParameter javaParameter) {
+                return javaParameter.getName();
+            }
+        };
+    }
+
 }
