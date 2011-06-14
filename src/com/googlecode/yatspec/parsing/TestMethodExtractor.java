@@ -38,7 +38,7 @@ public class TestMethodExtractor implements Callable1<Pair<JavaMethod, Method>, 
     }
 
     private List<String> lines(final String sourceCode) {
-        return sequence(sourceCode.split(lineSeperator())).drop(1).reverse().drop(1).reverse().toList();
+        return sequence(sourceCode.trim().split(lineSeperator())).toList();
     }
 
     private String lineSeperator() {
