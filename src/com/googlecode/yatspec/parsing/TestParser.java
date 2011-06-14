@@ -1,24 +1,26 @@
 package com.googlecode.yatspec.parsing;
 
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Strings;
 import com.googlecode.yatspec.state.TestMethod;
-import net.sourceforge.pmd.ast.ASTCompilationUnit;
-import net.sourceforge.pmd.ast.ASTMethodDeclaration;
-import net.sourceforge.pmd.parsers.Java15Parser;
-import org.jaxen.JaxenException;
+import com.thoughtworks.qdox.JavaDocBuilder;
+import com.thoughtworks.qdox.model.Annotation;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaMethod;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
 import java.lang.reflect.Method;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Files.path;
 import static com.googlecode.totallylazy.Files.recursiveFiles;
+import static com.googlecode.totallylazy.Files.workingDirectory;
 import static com.googlecode.totallylazy.Methods.annotation;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.empty;
@@ -34,30 +36,31 @@ public class TestParser {
         return collectTestMethods(aClass, methods).toList();
     }
 
-    private static Sequence<TestMethod> collectTestMethods(Class aClass, Sequence<Method> methods) throws JaxenException, IOException {
-        final Option<File> javaSource = getJavaSourceFile(aClass);
-        if (javaSource.isEmpty()) {
+    private static Sequence<TestMethod> collectTestMethods(Class aClass, Sequence<Method> methods) throws IOException {
+        final Option<JavaClass> javaClass = getJavaClass(aClass);
+        if (javaClass.isEmpty()) {
             return empty();
         }
 
-        File file = javaSource.get();
-        final ASTCompilationUnit classAST = getClassAST(file);
-        final Sequence<ASTMethodDeclaration> methodASTs = getMethodAST(classAST);
-
-        Sequence<TestMethod> myTestMethods = methodASTs.zip(methods).map(extractTestMethod(file));
+        Sequence<TestMethod> myTestMethods = getMethods(javaClass.get()).zip(methods).map(extractTestMethod());
         Sequence<TestMethod> parentTestMethods = collectTestMethods(aClass.getSuperclass(), methods);
 
         return myTestMethods.join(parentTestMethods);
     }
 
-    private static ASTCompilationUnit getClassAST(File file) throws IOException {
-        return (ASTCompilationUnit) commentIgnoringParser().parse(new StringReader(Strings.toString(file)));
+    private static Option<JavaClass> getJavaClass(final Class aClass) throws IOException {
+        return getJavaSourceFile(aClass).map(asJavaClass(aClass));
     }
 
-    private static Java15Parser commentIgnoringParser() {
-        final Java15Parser parser = new Java15Parser();
-        parser.setExcludeMarker("//");
-        return parser;
+    private static Callable1<File, JavaClass> asJavaClass(final Class aClass) {
+        return new Callable1<File, JavaClass>() {
+            @Override
+            public JavaClass call(File file) throws Exception {
+                JavaDocBuilder builder = new JavaDocBuilder();
+                builder.addSource(file);
+                return builder.getClassByName(aClass.getName());
+            }
+        };
     }
 
     private static Sequence<Method> getMethods(Class aClass) {
@@ -65,16 +68,40 @@ public class TestParser {
     }
 
     @SuppressWarnings("unchecked")
-    private static Sequence<ASTMethodDeclaration> getMethodAST(ASTCompilationUnit classAST) throws JaxenException {
-        return sequence(classAST.findChildNodesWithXPath("//MethodDeclaration[preceding-sibling::Annotation/MarkerAnnotation/Name[@Image='Test']]"));
+    private static Sequence<JavaMethod> getMethods(JavaClass javaClass) {
+        return sequence(javaClass.getMethods()).filter(where(annotations(), contains(Test.class)));
     }
 
     private static Option<File> getJavaSourceFile(Class clazz) {
-        return recursiveFiles(userDirectory()).find(where(path(), endsWith(toJavaPath(clazz))));
+        return recursiveFiles(workingDirectory()).find(where(path(), endsWith(toJavaPath(clazz))));
     }
 
-    private static File userDirectory() {
-        return new File(System.getProperty("user.dir"));
+    private static Predicate<? super Sequence<Annotation>> contains(final Class aClass) {
+        return new Predicate<Sequence<Annotation>>() {
+            @Override
+            public boolean matches(Sequence<Annotation> annotations) {
+                return annotations.exists(where(name(), is(aClass.getName())));
+            }
+        };
     }
+
+    public static Callable1<? super Annotation, String> name() {
+        return new Callable1<Annotation, String>() {
+            @Override
+            public String call(Annotation annotation) throws Exception {
+                return annotation.getType().getFullyQualifiedName();
+            }
+        };
+    }
+
+    public static Callable1<? super JavaMethod, Sequence<Annotation>> annotations() {
+        return new Callable1<JavaMethod, Sequence<Annotation>>() {
+            @Override
+            public Sequence<Annotation> call(JavaMethod javaMethod) throws Exception {
+                return sequence(javaMethod.getAnnotations());
+            }
+        };
+    }
+
 
 }

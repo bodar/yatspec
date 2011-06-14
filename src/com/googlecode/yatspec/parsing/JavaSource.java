@@ -17,10 +17,6 @@ public class JavaSource implements Value<List<String>> {
         this.lines = lines;
     }
 
-    public static JavaSource empty() {
-        return new JavaSource(Collections.<String>emptyList());
-    }
-
     @Override
     public List<String> value() {
         return lines;
