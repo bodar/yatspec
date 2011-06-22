@@ -1,5 +1,6 @@
 package com.googlecode.yatspec.junit;
 
+import com.googlecode.yatspec.plugin.sequencediagram.PlantUmlSvgMarkupMunger;
 import com.googlecode.yatspec.plugin.sequencediagram.SequenceDiagramGenerator;
 import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
 import com.googlecode.yatspec.rendering.Content;
