@@ -2,7 +2,27 @@ package com.googlecode.yatspec.state.givenwhenthen;
 
 public class SyntacticSugar {
 
+    public static <T> T a(T t) {
+        return t;
+    }
+
+    public static <T> T an(T t) {
+        return t;
+    }
+
+    public static <T> T and(T t) {
+        return t;
+    }
+
+    public static <T> T in(T t) {
+        return t;
+    }
+
     public static <T> T of(T t) {
+        return t;
+    }
+
+    public static <T> T the(T t) {
         return t;
     }
 
@@ -10,7 +30,7 @@ public class SyntacticSugar {
         return t;
     }
 
-    public static <T> T and(T t) {
+    public static <T> T with(T t) {
         return t;
     }
 }
