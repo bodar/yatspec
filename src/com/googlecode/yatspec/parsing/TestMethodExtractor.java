@@ -62,7 +62,7 @@ public class TestMethodExtractor implements Callable1<Pair<JavaMethod, Method>, 
         return new Callable1<String, String>() {
             @Override
             public String call(String valueWithQuotes) throws Exception {
-                return valueWithQuotes.replace("\"", "");
+                return valueWithQuotes.replace("\"", "").trim();
             }
         };
     }
