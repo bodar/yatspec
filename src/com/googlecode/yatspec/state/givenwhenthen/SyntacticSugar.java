@@ -18,7 +18,15 @@ public class SyntacticSugar {
         return t;
     }
 
+    public static <T> T is(T t) {
+        return t;
+    }
+
     public static <T> T of(T t) {
+        return t;
+    }
+
+    public static <T> T that(T t) {
         return t;
     }
 
