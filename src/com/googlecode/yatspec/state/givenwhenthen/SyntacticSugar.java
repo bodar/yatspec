@@ -10,7 +10,15 @@ public class SyntacticSugar {
         return t;
     }
 
-    public static <T> T and(T t) {
+    public static <T> T andA(T t) {
+        return t;
+    }
+
+    public static <T> T andAn(T t) {
+        return t;
+    }
+
+    public static <T> T andThe(T t) {
         return t;
     }
 
