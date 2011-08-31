@@ -65,7 +65,7 @@ public class PlantUmlMarkupGenerator {
 
     private String plantUmlForCapturedInputWithToOnly(String capturedInputName, List<SequenceDiagramMessage> messagesCollector, List<String> actorNamesCollector) {
         final Pair<String, String> leftAndRight = fromTo(capturedInputName, messagesCollector, actorNamesCollector, Pattern.compile(MESSAGE_SEND_WITH_DEFAULT_SENDER_REGEXP));
-        return subject + " ->> " + leftAndRight.second() + ":" + leftAndRight;
+        return subject + " ->> " + leftAndRight.second() + ":" + leftAndRight.first();
     }
 
     private Pair<String,String> fromTo(String capturedInputName, List<SequenceDiagramMessage> messagesCollector, List<String> actorNamesCollector, Pattern pattern) {
