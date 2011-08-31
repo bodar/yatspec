@@ -10,37 +10,37 @@ public class GroupHelperTest {
 
     @Test
     public void ignoresNoGroup() throws Exception {
-        String response = groupHelper.markupGroup("basdjlakjds");
+        String response = groupHelper.markupGroup("here ->> there:basdjlakjds");
 
         assertThat(response, is(""));
     }
 
     @Test
     public void marksGroupStart() throws Exception {
-        String response = groupHelper.markupGroup("(theGroup) basdjlakjds");
+        String response = groupHelper.markupGroup("here ->> there:(theGroup) basdjlakjds");
         
         assertThat(response, is(String.format("group theGroup%n")));
     }
     
     @Test
     public void ignoresIfGroupStarted() throws Exception {
-        groupHelper.markupGroup("(theGroup) basdjlakjds1");
-        String response = groupHelper.markupGroup("(theGroup) basdjlakjds2");
+        groupHelper.markupGroup("here ->> there:(theGroup) basdjlakjds1");
+        String response = groupHelper.markupGroup("here ->> there:(theGroup) basdjlakjds2");
 
         assertThat(response, is(String.format("")));
     }
 
     @Test
     public void endsGroupInSequence() throws Exception {
-        groupHelper.markupGroup("(theGroup) basdjlakjds1");
-        String response = groupHelper.markupGroup("basdjlakjds2");
+        groupHelper.markupGroup("here ->> there:(theGroup) basdjlakjds1");
+        String response = groupHelper.markupGroup("here ->> there:basdjlakjds2");
 
         assertThat(response, is(String.format("end%n")));        
     }
     
     @Test
     public void cleansUpOpenGroups() throws Exception {
-        groupHelper.markupGroup("(theGroup) basdjlakjds1");
+        groupHelper.markupGroup("here ->> there:(theGroup) basdjlakjds1");
         String response = groupHelper.cleanUpOpenGroups();
 
         assertThat(response, is(String.format("end%n")));
@@ -48,8 +48,8 @@ public class GroupHelperTest {
 
     @Test
     public void notCleanupWhenNoOpenGroups() throws Exception {
-        groupHelper.markupGroup("(theGroup) basdjlakjds1");
-        groupHelper.markupGroup("basdjlakjds2");
+        groupHelper.markupGroup("here ->> there:(theGroup) basdjlakjds1");
+        groupHelper.markupGroup("here ->> there:basdjlakjds2");
         String response = groupHelper.cleanUpOpenGroups();
 
         assertThat(response, is(String.format("")));

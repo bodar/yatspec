@@ -10,9 +10,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class PlantUmlMarkupGeneratorTest {
-    
+
     @Test
-    public void doesFromTo() throws Exception {
+    public void doesFromHereToThere() throws Exception {
         CapturedInputAndOutputs capturedInputAndOutputs = new CapturedInputAndOutputs();
         capturedInputAndOutputs.add("a message from here to there", "message body");
         String markup = new PlantUmlMarkupGenerator(capturedInputAndOutputs, "don't care").collectPlantUmlMarkup(new ArrayList<SequenceDiagramMessage>(), new ArrayList<String>());
@@ -20,11 +20,27 @@ public class PlantUmlMarkupGeneratorTest {
     }
 
     @Test
+    public void doesFromHereToDefault() throws Exception {
+        CapturedInputAndOutputs capturedInputAndOutputs = new CapturedInputAndOutputs();
+        capturedInputAndOutputs.add("a message from here", "message body");
+        String markup = new PlantUmlMarkupGenerator(capturedInputAndOutputs, "default").collectPlantUmlMarkup(new ArrayList<SequenceDiagramMessage>(), new ArrayList<String>());
+        assertThat(markup, is(markupContaining("here ->> default:a message")));
+    }
+
+    @Test
+    public void doesFromDefaultToThere() throws Exception {
+        CapturedInputAndOutputs capturedInputAndOutputs = new CapturedInputAndOutputs();
+        capturedInputAndOutputs.add("a message to there", "message body");
+        String markup = new PlantUmlMarkupGenerator(capturedInputAndOutputs, "default").collectPlantUmlMarkup(new ArrayList<SequenceDiagramMessage>(), new ArrayList<String>());
+        assertThat(markup, is(markupContaining("default ->> there:a message")));
+    }
+
+    @Test
     public void doesGroups() throws Exception {
         CapturedInputAndOutputs capturedInputAndOutputs = new CapturedInputAndOutputs();
         capturedInputAndOutputs.add("(hello) a message from here to there", "message body");
         String markup = new PlantUmlMarkupGenerator(capturedInputAndOutputs, "don't care").collectPlantUmlMarkup(new ArrayList<SequenceDiagramMessage>(), new ArrayList<String>());
-        assertThat(markup, is(markupContaining("group hello", "here ->> there:(hello) a message" ,"end")));
+        assertThat(markup, is(markupContaining("group hello", "here ->> there:(hello) a message", "end")));
     }
 
     private Matcher<? super String> markupContaining(final String... expected) {

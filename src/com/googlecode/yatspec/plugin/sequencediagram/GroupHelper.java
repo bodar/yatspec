@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 import static java.lang.String.format;
 
 public class GroupHelper {
-    public static final Pattern PATTERN = Pattern.compile("\\((.*)\\).*");
+    public static final Pattern PATTERN = Pattern.compile(":\\((.*)\\).*");
     private boolean hasGroup;
 
     public String markupGroup(String currentLine) {
