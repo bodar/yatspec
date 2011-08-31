@@ -30,11 +30,12 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
     public void bambamGetsFoodForHisDad() throws Exception {
         String testNumber = "test:1";
         given(aHungryMrFlintstone());
+        when(barney(), givesTheBurgerToBambam(testNumber));
+        then(bambam(), givesFoodToMrFlintstone(testNumber));
+
         when(heDemandsFoodFromBambam());
         then(bambam(), placesABurgerOrderWithBarney(testNumber));
 
-        when(barney(), givesTheBurgerToBambam(testNumber));
-        then(bambam(), givesFoodToMrFlintstone(testNumber));
 
         then(mrFlintstone(), sharesHisFoodWithBarneyBecauseHeLikesHim(testNumber));
     }
