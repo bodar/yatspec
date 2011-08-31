@@ -12,7 +12,6 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 public class SequenceDiagramHyperlinker {
@@ -66,7 +65,11 @@ public class SequenceDiagramHyperlinker {
     }
 
     private static boolean isSequenceDiagramLineForMessage(SequenceDiagramMessage currentMessage, String currentInputLine) {
-        return currentInputLine.startsWith("<text") && currentInputLine.matches(".*>" + currentMessage.getVisibleName() + "<.*");
+        return currentInputLine.startsWith("<text") && currentInputLine.matches(".*>" + regexGroupsSafe(currentMessage.getVisibleName()) + "<.*");
+    }
+
+    private static String regexGroupsSafe(final String visibleName) {
+        return visibleName.replace("(", "\\(").replace(")", "\\)");
     }
 
     private String join(List<String> lines, String delim) {
@@ -86,11 +89,11 @@ public class SequenceDiagramHyperlinker {
     }
 
     private String withHyperLink(String currentInputLine, SequenceDiagramMessage currentMessage) {
-        final String regexp = ".*(<text .*?>" + currentMessage.getVisibleName() + "</text>).*";
+        final String regexp = ".*(<text .*?>" + regexGroupsSafe(currentMessage.getVisibleName()) + "</text>).*";
         final Pattern pattern = Pattern.compile(regexp);
         final java.util.regex.Matcher matcher = pattern.matcher(currentInputLine);
         matcher.matches();
-        return currentInputLine.replaceFirst("(.*)(<text .*?>" + currentMessage.getVisibleName() + "</text>)(.*)", "$1<a class=\"sequence_diagram_clickable\" sequence_diagram_message_id=\"" + currentMessage.getFullyQualifiedMessageName().replaceAll(" ", "_") + "\" href=\"#\">$2</a>$3");
+        return currentInputLine.replaceFirst("(.*)(<text .*?>" + regexGroupsSafe(currentMessage.getVisibleName()) + "</text>)(.*)", "$1<a class=\"sequence_diagram_clickable\" sequence_diagram_message_id=\"" + currentMessage.getFullyQualifiedMessageName().replaceAll(" ", "_") + "\" href=\"#\">$2</a>$3");
     }
 
     private String prettyPrint(String sequenceDiagramAsSvg) {
