@@ -1,19 +1,9 @@
 package com.googlecode.yatspec.junit;
 
-import com.googlecode.yatspec.plugin.sequencediagram.PlantUmlSvgMarkupMunger;
 import com.googlecode.yatspec.plugin.sequencediagram.SequenceDiagramGenerator;
 import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
-import com.googlecode.yatspec.rendering.Content;
-import com.googlecode.yatspec.rendering.Renderer;
-import com.googlecode.yatspec.rendering.ToStringRenderer;
-import com.googlecode.yatspec.rendering.WithCustomHeaderContent;
-import com.googlecode.yatspec.rendering.WithCustomRendering;
-import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
-import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
-import com.googlecode.yatspec.state.givenwhenthen.GivensBuilder;
-import com.googlecode.yatspec.state.givenwhenthen.InterestingGivens;
-import com.googlecode.yatspec.state.givenwhenthen.StateExtractor;
-import com.googlecode.yatspec.state.givenwhenthen.TestState;
+import com.googlecode.yatspec.rendering.*;
+import com.googlecode.yatspec.state.givenwhenthen.*;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -40,11 +30,12 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
     public void bambamGetsFoodForHisDad() throws Exception {
         String testNumber = "test:1";
         given(aHungryMrFlintstone());
+        when(barney(), givesTheBurgerToBambam(testNumber));
+        then(bambam(), givesFoodToMrFlintstone(testNumber));
+
         when(heDemandsFoodFromBambam());
         then(bambam(), placesABurgerOrderWithBarney(testNumber));
 
-        when(barney(), givesTheBurgerToBambam(testNumber));
-        then(bambam(), givesFoodToMrFlintstone(testNumber));
 
         then(mrFlintstone(), sharesHisFoodWithBarneyBecauseHeLikesHim(testNumber));
     }
@@ -96,12 +87,12 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
     }
 
     private Matcher<? super Object> sharesHisFoodWithBarneyBecauseHeLikesHim(String testNumber) {
-        capturedInputAndOutputs.add("food from mrflintstone to barney", "have some of my burger because I like you (test:" + testNumber + ")");
+        capturedInputAndOutputs.add("(grouped) food from mrflintstone to barney", "have some of my burger because I like you (test:" + testNumber + ")");
         return dummyMatcher();
     }
 
     private Matcher<? super Object> givesFoodToMrFlintstone(String testNumber) {
-        capturedInputAndOutputs.add("food to mrflintstone", "here is your burger (test:" + testNumber +")");
+        capturedInputAndOutputs.add("(grouped) food to mrflintstone", "here is your burger (test:" + testNumber +")");
         return dummyMatcher();
     }
 
