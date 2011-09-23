@@ -1,11 +1,10 @@
 package com.googlecode.yatspec.parsing;
 
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.yatspec.junit.*;
-import com.googlecode.yatspec.state.Scenario;
+import com.googlecode.yatspec.junit.Notes;
+import com.googlecode.yatspec.junit.Row;
+import com.googlecode.yatspec.junit.SpecRunner;
+import com.googlecode.yatspec.junit.Table;
 import com.googlecode.yatspec.state.TestMethod;
-import com.googlecode.yatspec.state.givenwhenthen.TestState;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

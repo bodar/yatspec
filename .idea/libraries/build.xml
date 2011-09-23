@@ -6,6 +6,8 @@
     <JAVADOC />
     <SOURCES>
       <root url="file://$PROJECT_DIR$/lib/build" />
+      <root url="file://$PROJECT_DIR$/../funclate/test" />
+      <root url="file://$PROJECT_DIR$/../funclate/src" />
     </SOURCES>
     <jarDirectory url="file://$PROJECT_DIR$/lib/build" recursive="false" />
   </library>
