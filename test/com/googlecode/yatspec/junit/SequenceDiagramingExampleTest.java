@@ -77,7 +77,7 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
 
     public Map<Class, Renderer> getCustomRenderers() {
         return new HashMap<Class, Renderer>() {{
-            put(SvgWrapper.class, new ToStringRenderer());
+            put(SvgWrapper.class, new DontHighlightRenderer());
         }};
     }
 

@@ -26,6 +26,10 @@ yatspec.highlight = function(element, pairs) {
         return;
     }
 
+    if ($(element).children(".nohighlight").length > 0) {
+        return;
+    }
+
     if ($(element).hasClass(yatspec.processed)) {
         return;
     }
@@ -75,27 +79,26 @@ $(document).ready(function () {
     })
 
     $('.scenario').each(function() {
-        var interestingGivens = $('.interestingGiven', this).filter(':not(:empty)').map(function() {
-            return [
-            {pattern: '"' + $(this).text() + '"',     cssClass: "interestingGiven" },
-            {pattern: '\\b' + $(this).text() + '\\b', cssClass: "interestingGiven" },
-            ]   ;
-        }).get();
+        var interestingGivens = $('.interestingGiven', this).filter(':not(:empty)').map(
+            function() {
+                return [
+                    {pattern: '"' + $(this).text() + '"',     cssClass: "interestingGiven" },
+                    {pattern: '\\b' + $(this).text() + '\\b', cssClass: "interestingGiven" },
+                ];
+            }).get();
 
         $('.logKey', this).click(function() {
             $(this).next(".logValue").toggleClass("hide");
         });
 
         $('.logKey', this).each(function() {
-            $(this).next('.logValue.highlight.xml').each(function() {
-                if (this.children.length == 0 || this.children[0].tagName.toLowerCase() != "svg") {
-                    yatspec.highlight(this, interestingGivens.concat([
-                        {pattern: '"[^"]*"',      cssClass: "quote" },
-                        {pattern: "&lt;[^\\s&]+", cssClass: "keyword" },
-                        {pattern: "\\??&gt;",     cssClass: "keyword" },
-                        {pattern: "\\s[\\w:-]+=", cssClass: "constant" }
-                    ]));
-                }
+            $(this).next('.logValue.highlight').each(function() {
+                yatspec.highlight(this, interestingGivens.concat([
+                    {pattern: '"[^"]*"',      cssClass: "quote" },
+                    {pattern: "&lt;[^\\s&]+", cssClass: "keyword" },
+                    {pattern: "\\??&gt;",     cssClass: "keyword" },
+                    {pattern: "\\s[\\w:-]+=", cssClass: "constant" }
+                ]));
             })
         });
 
