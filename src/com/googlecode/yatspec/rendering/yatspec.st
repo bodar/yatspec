@@ -75,7 +75,6 @@ $endif$
                     <h2>Specification</h2>
                     <pre class="highlight specification">
                         $scenario.specification;separator="\n"$</pre>
-
                     <h2>Test results:</h2>
 
 
@@ -95,10 +94,9 @@ $endif$
                         </table>
                     $endif$
 
-
                     $scenario.logs.keys:{ key |
                         <h3 class="logKey" logkey="$key.valueWithSpacesReplacedByUnderscore$">$key.value$</h3>
-                        <div class="logValue highlight xml $scenario.logs.(key).class.simpleName$" >$scenario.logs.(key)$</div>
+                        <div class="logValue highlight $scenario.logs.(key).class.simpleName$" >$scenario.logs.(key)$</div>
                     }$
             </div>
             }$
