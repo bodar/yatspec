@@ -1,6 +1,7 @@
 package com.googlecode.yatspec.parsing;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Strings;
 import com.googlecode.totallylazy.Value;
 
 import java.util.Collections;
@@ -43,7 +44,17 @@ public class JavaSource implements Value<List<String>> {
         return "\"" + value + "\"";
     }
 
+    @Override
+    public String toString() {
+        return sequence(lines).map(trim()).toString("", "\n", "", Integer.MAX_VALUE);
+    }
 
-
-
+    private static Callable1<? super String, String> trim() {
+        return new Callable1<String, String>() {
+            @Override
+            public String call(String value) throws Exception {
+                return value.trim();
+            }
+        };
+    }
 }

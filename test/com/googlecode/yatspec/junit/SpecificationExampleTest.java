@@ -4,12 +4,14 @@ import com.googlecode.yatspec.rendering.html.HyperlinkRenderer;
 import com.googlecode.yatspec.rendering.NotesRenderer;
 import com.googlecode.yatspec.rendering.Renderer;
 import com.googlecode.yatspec.rendering.WithCustomRendering;
+import com.googlecode.yatspec.rendering.wiki.WikiResultRenderer;
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
 import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
 import com.googlecode.yatspec.state.givenwhenthen.GivensBuilder;
 import com.googlecode.yatspec.state.givenwhenthen.InterestingGivens;
 import com.googlecode.yatspec.state.givenwhenthen.StateExtractor;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -27,6 +29,10 @@ import static org.hamcrest.core.Is.is;
 @Notes("This is a note on the whole class\n" +
         "It will preserve space")
 public class SpecificationExampleTest extends TestState implements WithCustomRendering {
+    @Before
+    public void foo() {
+        System.setProperty(SpecRunner.RESULT_RENDER, WikiResultRenderer.class.getName());
+    }
     private static final String RADICAND = "Radicand";
     private static final String RESULT = "Result";
 
