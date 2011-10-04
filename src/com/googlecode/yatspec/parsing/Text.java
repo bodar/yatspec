@@ -11,8 +11,8 @@ import static com.googlecode.totallylazy.regex.Regex.regex;
 
 public class Text {
     private static final Regex wordDelimiter = Regex.regex(Strings.toString(Text.class.getResourceAsStream("wordDelimiter.regex")));
-    private static final Pattern spaceRemover = Pattern.compile("\\s*(\\S+\\s)");
-    private static final Regex stringIgnorer = regex("\"[^\"]+\"");
+    private static final Pattern spaceRemover = Pattern.compile("(?<!^)[\\t\\x0B\\f ]+"); // don't replace new lines
+    private static final Regex quotedStrings = regex("\"[^\"]+\"");
 
     private static final Callable1<MatchResult, CharSequence> wordDelimiterReplacer = new Callable1<MatchResult, CharSequence>() {
         public String call(MatchResult matchResult) {
@@ -41,11 +41,18 @@ public class Text {
         return value.length() == 1 ? value.toLowerCase() : value;
     }
 
-    private static final String spaceRemoverReplacer = "$1";
-
 
     public static String wordify(String value) {
-        final String wordified = stringIgnorer.findMatches(value).replace(wordifier, doNothing);
-        return Strings.capitalise(spaceRemover.matcher(wordified).replaceAll(spaceRemoverReplacer));
+        final String wordified = quotedStrings.findMatches(value).replace(wordifier, doNothing);
+        return Strings.capitalise(spaceRemover.matcher(wordified).replaceAll(" ").trim());
+    }
+
+    public static Callable1<String, String> wordify() {
+        return new Callable1<String, String>() {
+            @Override
+            public String call(String value) throws Exception {
+                return wordify(value);
+            }
+        };
     }
 }

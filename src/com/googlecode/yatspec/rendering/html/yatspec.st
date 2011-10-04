@@ -74,7 +74,7 @@ $endif$
                     <a id="$scenario.name$"></a>
                     <h2>Specification</h2>
                     <pre class="highlight specification">
-                        $scenario.specification;separator="\n"$</pre>
+                        $scenario.specification$</pre>
                     <h2>Test results:</h2>
 
 

@@ -19,11 +19,11 @@ public class JavaSourceTest {
     }
 
     private void verifyReplacement(String original, String replaced, String argument, String value) {
-        JavaSource originalSource = new JavaSource(asList(original));
+        JavaSource originalSource = new JavaSource(original);
 
         JavaSource replacedSource = originalSource.replace(asList(argument), asList(value));
 
-        assertThat(replacedSource.value().get(0), is(replaced));
+        assertThat(replacedSource.value(), is(replaced));
 
     }
 }

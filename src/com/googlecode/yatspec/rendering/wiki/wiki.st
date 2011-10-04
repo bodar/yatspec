@@ -5,12 +5,12 @@ $testResult.notes$
 
 == Contents ==
 $testResult.testMethods:{ testMethod |
-  * [#$testMethod.name$ $testMethod.displayName$]
+  * [#$testMethod.displayLinkName$ $testMethod.displayName$]
 }$
 
 $testResult.testMethods:{ testMethod |
 
-=== $testMethod.name$ ===
+=== $testMethod.displayName$ ===
 
 $testMethod.notes$
 
