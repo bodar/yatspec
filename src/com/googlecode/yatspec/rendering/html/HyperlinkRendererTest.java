@@ -1,5 +1,8 @@
-package com.googlecode.yatspec.rendering;
+package com.googlecode.yatspec.rendering.html;
 
+import com.googlecode.yatspec.rendering.Renderer;
+import com.googlecode.yatspec.rendering.ToStringRenderer;
+import com.googlecode.yatspec.rendering.html.HyperlinkRenderer;
 import org.junit.Test;
 
 import java.net.MalformedURLException;

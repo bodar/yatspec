@@ -1,5 +1,8 @@
-package com.googlecode.yatspec.rendering;
+package com.googlecode.yatspec.rendering.html;
 
+import com.googlecode.yatspec.rendering.Content;
+import com.googlecode.yatspec.rendering.Renderer;
+import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.state.Scenario;
 import com.googlecode.yatspec.state.TestResult;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
@@ -13,14 +16,14 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 
-public class ResultRendererTest {
+public class HtmlResultRendererTest {
     @Test
     public void loadsTemplateOffClassPath() throws Exception {
         // setup
         TestResult result = new TestResult(this.getClass());
 
         // execute
-        String html = new ResultRenderer().render(result);
+        String html = new HtmlResultRenderer().render(result);
 
         // verify
         assertThat(html, is(not(nullValue())));
@@ -35,7 +38,7 @@ public class ResultRendererTest {
             put(RenderedType.class, new DefaultReturningRenderer(customRenderedText));
         }});
         // execute
-        String html = new ResultRenderer().render(result);
+        String html = new HtmlResultRenderer().render(result);
 
         // verify
         assertThat(html, containsString(customRenderedText));
@@ -49,7 +52,7 @@ public class ResultRendererTest {
         result.mergeCustomHeaderContent(new Content(getClass().getResource("CustomHeaderContent.html")));
 
 
-        String html = new ResultRenderer().render(result);
+        String html = new HtmlResultRenderer().render(result);
 
         assertThat(html, containsString("walrus"));
 
