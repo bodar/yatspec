@@ -29,10 +29,6 @@ import static org.hamcrest.core.Is.is;
 @Notes("This is a note on the whole class\n" +
         "It will preserve space")
 public class SpecificationExampleTest extends TestState implements WithCustomRendering {
-    @Before
-    public void foo() {
-        System.setProperty(SpecRunner.RESULT_RENDER, WikiResultRenderer.class.getName());
-    }
     private static final String RADICAND = "Radicand";
     private static final String RESULT = "Result";
 
