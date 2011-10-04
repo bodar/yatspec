@@ -1,6 +1,6 @@
-package com.googlecode.yatspec.state;
+package com.googlecode.yatspec.rendering.html;
 
-import com.googlecode.yatspec.rendering.JavaSourceRenderer;
+import com.googlecode.yatspec.rendering.html.JavaSourceRenderer;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -17,6 +17,6 @@ public class JavaSourceRendererTest {
     }
 
     private String renderedVersionOf(String s) {
-        return JavaSourceRenderer.DOT_CLASS.matcher(s).replaceAll("$1");
+        return JavaSourceRenderer.removateDotClass(s);
     }
 }

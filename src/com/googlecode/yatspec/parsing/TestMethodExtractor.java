@@ -32,13 +32,9 @@ public class TestMethodExtractor implements Callable1<Pair<JavaMethod, Method>, 
 
         final String name = javaMethod.getName();
 
-        final JavaSource source = new JavaSource(lines(javaMethod.getSourceCode()));
+        final JavaSource source = new JavaSource(javaMethod.getSourceCode());
         final ScenarioTable scenarioTable = getScenarioTable(javaMethod);
         return new TestMethod(method, name, source, scenarioTable);
-    }
-
-    private List<String> lines(final String sourceCode) {
-        return sequence(sourceCode.trim().split(lineSeperator())).toList();
     }
 
     private String lineSeperator() {

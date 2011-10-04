@@ -62,6 +62,10 @@ public class TestMethod implements Notable {
         return Text.wordify(methodName);
     }
 
+    public String getDisplayLinkName() {
+        return getDisplayName().replace(' ', '_');
+    }
+
     public Status getStatus() {
         final Sequence<Status> statuses = sequence(getScenarios()).map(new Callable1<Scenario, Status>() {
             public Status call(Scenario scenario) {
