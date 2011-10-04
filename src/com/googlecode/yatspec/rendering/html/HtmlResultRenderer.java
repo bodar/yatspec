@@ -54,7 +54,7 @@ public class HtmlResultRenderer implements Renderer<Result> {
         return writer.toString();
     }
 
-    private Callable2<EnhancedStringTemplateGroup, Map.Entry<Class, Renderer>, EnhancedStringTemplateGroup> registerRenderer() {
+    public static Callable2<EnhancedStringTemplateGroup, Map.Entry<Class, Renderer>, EnhancedStringTemplateGroup> registerRenderer() {
         return new Callable2<EnhancedStringTemplateGroup, Map.Entry<Class, Renderer>, EnhancedStringTemplateGroup>() {
             @Override
             public EnhancedStringTemplateGroup call(EnhancedStringTemplateGroup group, Map.Entry<Class, Renderer> entry) throws Exception {
