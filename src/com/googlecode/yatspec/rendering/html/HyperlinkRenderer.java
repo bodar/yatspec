@@ -1,4 +1,6 @@
-package com.googlecode.yatspec.rendering;
+package com.googlecode.yatspec.rendering.html;
+
+import com.googlecode.yatspec.rendering.Renderer;
 
 import java.net.URL;
 

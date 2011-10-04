@@ -1,4 +1,4 @@
-package com.googlecode.yatspec.rendering;
+package com.googlecode.yatspec.rendering.html;
 
 import com.googlecode.funclate.stringtemplate.EnhancedStringTemplateGroup;
 import com.googlecode.totallylazy.Callable1;
@@ -9,6 +9,12 @@ import com.googlecode.totallylazy.Xml;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.parsing.JavaSource;
+import com.googlecode.yatspec.rendering.Content;
+import com.googlecode.yatspec.rendering.DocumentRenderer;
+import com.googlecode.yatspec.rendering.JavaSourceRenderer;
+import com.googlecode.yatspec.rendering.NotesRenderer;
+import com.googlecode.yatspec.rendering.Renderer;
+import com.googlecode.yatspec.rendering.ScenarioTableHeaderRenderer;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.ScenarioTableHeader;
 import com.googlecode.yatspec.state.Status;
@@ -25,11 +31,9 @@ import static com.googlecode.totallylazy.Callables.asString;
 import static com.googlecode.totallylazy.Predicates.always;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Predicates.not;
-import static com.googlecode.yatspec.rendering.Resources.getResourceRelativeTo;
 
 
-public class ResultRenderer implements Renderer<Result> {
-
+public class HtmlResultRenderer implements Renderer<Result> {
     public String render(Result result) throws Exception {
         final EnhancedStringTemplateGroup group = new EnhancedStringTemplateGroup(getClass());
         group.registerRenderer(instanceOf(Document.class), callable(new DocumentRenderer()));

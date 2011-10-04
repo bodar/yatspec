@@ -1,6 +1,7 @@
 package com.googlecode.yatspec.rendering;
 
 import com.googlecode.totallylazy.Strings;
+import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.state.TestResult;
 import org.junit.Test;
 
@@ -19,7 +20,7 @@ public class ResultWriterTest {
         TestResult result = new TestResult(this.getClass());
 
         // execute
-        File file = new ResultWriter(temporaryDirectory()).write(result);
+        File file = new ResultWriter(temporaryDirectory(), new HtmlResultRenderer()).write(result);
 
         // verify
         assertThat(Strings.toString(file), is(not(nullValue())));

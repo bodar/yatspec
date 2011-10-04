@@ -1,6 +1,6 @@
 package com.googlecode.yatspec.junit;
 
-import com.googlecode.yatspec.rendering.HyperlinkRenderer;
+import com.googlecode.yatspec.rendering.html.HyperlinkRenderer;
 import com.googlecode.yatspec.rendering.NotesRenderer;
 import com.googlecode.yatspec.rendering.Renderer;
 import com.googlecode.yatspec.rendering.WithCustomRendering;

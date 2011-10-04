@@ -1,9 +1,11 @@
 package com.googlecode.yatspec.junit;
 
 import com.googlecode.totallylazy.Predicate;
+import com.googlecode.yatspec.rendering.Renderer;
 import com.googlecode.yatspec.rendering.ResultWriter;
 import com.googlecode.yatspec.rendering.WithCustomHeaderContent;
 import com.googlecode.yatspec.rendering.WithCustomRendering;
+import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.Scenario;
 import com.googlecode.yatspec.state.TestResult;
@@ -16,6 +18,8 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -23,6 +27,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class SpecRunner extends TableRunner {
     public static final String OUTPUT_DIR = "yatspec.output.dir";
+    public static final String RESULT_RENDER = "yatspec.result.renderer";
     private final Result testResult;
     private Scenario currentScenario;
 
@@ -63,11 +68,17 @@ public class SpecRunner extends TableRunner {
         super.run(notifier);
         notifier.removeListener(listener);
         try {
-            new ResultWriter(getOuputDirectory()).write(testResult);
+            new ResultWriter(getOuputDirectory(), getResultRenderer()).write(testResult);
         } catch (Exception e) {
             System.out.println("Error while writing HTML");
             e.printStackTrace(System.out);
         }
+    }
+
+    private Renderer<Result> getResultRenderer() throws ClassNotFoundException, InvocationTargetException, IllegalAccessException, InstantiationException {
+        Class<?> aClass = Class.forName(System.getProperty(RESULT_RENDER, HtmlResultRenderer.class.getName()));
+        Constructor<?>[] constructors = aClass.getConstructors();
+        return (Renderer<Result>) constructors[0].newInstance();
     }
 
     private File getOuputDirectory() {
