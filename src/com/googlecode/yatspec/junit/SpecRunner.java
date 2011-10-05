@@ -1,6 +1,7 @@
 package com.googlecode.yatspec.junit;
 
 import com.googlecode.totallylazy.Predicate;
+import com.googlecode.yatspec.Creator;
 import com.googlecode.yatspec.rendering.Renderer;
 import com.googlecode.yatspec.rendering.ResultWriter;
 import com.googlecode.yatspec.rendering.WithCustomHeaderContent;
@@ -18,7 +19,6 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -76,9 +76,7 @@ public class SpecRunner extends TableRunner {
     }
 
     private Renderer<Result> getResultRenderer() throws ClassNotFoundException, InvocationTargetException, IllegalAccessException, InstantiationException {
-        Class<?> aClass = Class.forName(System.getProperty(RESULT_RENDER, HtmlResultRenderer.class.getName()));
-        Constructor<?>[] constructors = aClass.getConstructors();
-        return (Renderer<Result>) constructors[0].newInstance();
+        return Creator.create(Class.forName(System.getProperty(RESULT_RENDER, HtmlResultRenderer.class.getName())));
     }
 
     private File getOuputDirectory() {

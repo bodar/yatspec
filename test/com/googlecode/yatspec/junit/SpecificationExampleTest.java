@@ -18,7 +18,7 @@ import org.junit.runner.RunWith;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.googlecode.yatspec.state.givenwhenthen.StateExtractors.getValue;
+import static com.googlecode.yatspec.plugin.jdom.StateExtractors.getValue;
 import static java.lang.Double.valueOf;
 import static java.lang.Math.sqrt;
 import static java.util.Collections.singletonMap;

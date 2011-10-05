@@ -1,6 +1,7 @@
-package com.googlecode.yatspec.rendering;
+package com.googlecode.yatspec.plugin.jdom;
 
 import com.googlecode.totallylazy.Xml;
+import com.googlecode.yatspec.rendering.Renderer;
 import org.jdom.Document;
 import org.jdom.output.XMLOutputter;
 

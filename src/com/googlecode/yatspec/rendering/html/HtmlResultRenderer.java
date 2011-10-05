@@ -6,10 +6,10 @@ import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Xml;
+import com.googlecode.yatspec.Creator;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.parsing.JavaSource;
 import com.googlecode.yatspec.rendering.Content;
-import com.googlecode.yatspec.rendering.DocumentRenderer;
 import com.googlecode.yatspec.rendering.NotesRenderer;
 import com.googlecode.yatspec.rendering.Renderer;
 import com.googlecode.yatspec.rendering.ScenarioTableHeaderRenderer;
@@ -18,7 +18,6 @@ import com.googlecode.yatspec.state.ScenarioTableHeader;
 import com.googlecode.yatspec.state.Status;
 import org.antlr.stringtemplate.NoIndentWriter;
 import org.antlr.stringtemplate.StringTemplate;
-import org.jdom.Document;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -26,15 +25,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.googlecode.totallylazy.Callables.asString;
-import static com.googlecode.totallylazy.Predicates.always;
-import static com.googlecode.totallylazy.Predicates.instanceOf;
-import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.Predicates.*;
 
 
 public class HtmlResultRenderer implements Renderer<Result> {
     public String render(Result result) throws Exception {
         final EnhancedStringTemplateGroup group = new EnhancedStringTemplateGroup(getClass());
-        group.registerRenderer(instanceOf(Document.class), callable(new DocumentRenderer()));
+        for ( Class document : Creator.optionalClass("org.jdom.Document")){
+            group.registerRenderer(instanceOf(document), callable(Creator.<Renderer>create(Class.forName("com.googlecode.yatspec.plugin.jdom.DocumentRenderer"))));
+        }
         group.registerRenderer(instanceOf(Content.class), asString());
         group.registerRenderer(instanceOf(Notes.class), callable(new NotesRenderer()));
         group.registerRenderer(instanceOf(JavaSource.class), callable(new JavaSourceRenderer()));
