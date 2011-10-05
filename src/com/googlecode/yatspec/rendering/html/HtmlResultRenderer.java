@@ -8,10 +8,12 @@ import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Xml;
 import com.googlecode.yatspec.Creator;
 import com.googlecode.yatspec.junit.Notes;
+import com.googlecode.yatspec.parsing.Files;
 import com.googlecode.yatspec.parsing.JavaSource;
 import com.googlecode.yatspec.rendering.Content;
 import com.googlecode.yatspec.rendering.NotesRenderer;
 import com.googlecode.yatspec.rendering.Renderer;
+import com.googlecode.yatspec.rendering.ResultRenderer;
 import com.googlecode.yatspec.rendering.ScenarioTableHeaderRenderer;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.ScenarioTableHeader;
@@ -19,6 +21,7 @@ import com.googlecode.yatspec.state.Status;
 import org.antlr.stringtemplate.NoIndentWriter;
 import org.antlr.stringtemplate.StringTemplate;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -28,10 +31,10 @@ import static com.googlecode.totallylazy.Callables.asString;
 import static com.googlecode.totallylazy.Predicates.*;
 
 
-public class HtmlResultRenderer implements Renderer<Result> {
+public class HtmlResultRenderer implements ResultRenderer {
     public String render(Result result) throws Exception {
         final EnhancedStringTemplateGroup group = new EnhancedStringTemplateGroup(getClass());
-        for ( Class document : Creator.optionalClass("org.jdom.Document")){
+        for (Class document : Creator.optionalClass("org.jdom.Document")) {
             group.registerRenderer(instanceOf(document), callable(Creator.<Renderer>create(Class.forName("com.googlecode.yatspec.plugin.jdom.DocumentRenderer"))));
         }
         group.registerRenderer(instanceOf(Content.class), asString());
@@ -81,4 +84,8 @@ public class HtmlResultRenderer implements Renderer<Result> {
         }};
     }
 
+    @Override
+    public File outputFile(File outputDirectory, Class<?> testClass) {
+        return new File(outputDirectory, Files.toPath(testClass) + ".html");
+    }
 }
