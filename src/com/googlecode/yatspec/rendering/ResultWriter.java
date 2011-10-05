@@ -3,21 +3,19 @@ package com.googlecode.yatspec.rendering;
 import com.googlecode.totallylazy.Files;
 import com.googlecode.yatspec.state.Result;
 
-import java.io.*;
-
-import static com.googlecode.yatspec.parsing.Files.toHtmlPath;
+import java.io.File;
 
 public class ResultWriter {
     private final File outputDirectory;
-    private final Renderer<Result> resultRenderer;
+    private final ResultRenderer resultRenderer;
 
-    public ResultWriter(File outputDirectory, Renderer<Result> resultRenderer) {
+    public ResultWriter(File outputDirectory, ResultRenderer resultRenderer) {
         this.outputDirectory = outputDirectory;
         this.resultRenderer = resultRenderer;
     }
 
     public File write(Result result) throws Exception {
-        final File output = outputFile(result.getTestClass());
+        final File output = resultRenderer.outputFile(outputDirectory, result.getTestClass());
         output.delete();
         output.getParentFile().mkdirs();
         String content = resultRenderer.render(result);
@@ -26,7 +24,4 @@ public class ResultWriter {
         return output;
     }
 
-    private File outputFile(Class testClass) {
-        return new File(outputDirectory, toHtmlPath(testClass));
-    }
 }

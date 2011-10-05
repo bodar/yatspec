@@ -4,21 +4,24 @@ import com.googlecode.funclate.stringtemplate.EnhancedStringTemplateGroup;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.yatspec.junit.Notes;
+import com.googlecode.yatspec.parsing.Files;
 import com.googlecode.yatspec.parsing.JavaSource;
 import com.googlecode.yatspec.rendering.NotesRenderer;
 import com.googlecode.yatspec.rendering.Renderer;
+import com.googlecode.yatspec.rendering.ResultRenderer;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.state.Result;
 import org.antlr.stringtemplate.NoIndentWriter;
 import org.antlr.stringtemplate.StringTemplate;
 
+import java.io.File;
 import java.io.StringWriter;
 
 import static com.googlecode.totallylazy.Callables.asString;
 import static com.googlecode.totallylazy.Predicates.*;
 
 
-public class WikiResultRenderer implements Renderer<Result> {
+public class WikiResultRenderer implements ResultRenderer {
     public String render(Result result) throws Exception {
         final EnhancedStringTemplateGroup group = new EnhancedStringTemplateGroup(getClass());
         group.registerRenderer(instanceOf(JavaSource.class), callable(new JavaSourceRenderer()));
@@ -38,5 +41,10 @@ public class WikiResultRenderer implements Renderer<Result> {
                 return value.render(o);
             }
         };
+    }
+
+    @Override
+    public File outputFile(File outputDirectory, Class<?> testClass) {
+        return new File(outputDirectory, Files.toPath(testClass).replaceFirst("Test$", "") + ".wiki");
     }
 }
