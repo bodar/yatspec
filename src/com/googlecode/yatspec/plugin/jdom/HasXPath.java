@@ -1,4 +1,4 @@
-package com.googlecode.yatspec.matchers;
+package com.googlecode.yatspec.plugin.jdom;
 
 import org.hamcrest.*;
 import org.jdom.Document;

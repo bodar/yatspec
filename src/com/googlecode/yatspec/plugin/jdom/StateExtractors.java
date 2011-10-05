@@ -1,6 +1,8 @@
-package com.googlecode.yatspec.state.givenwhenthen;
+package com.googlecode.yatspec.plugin.jdom;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
+import com.googlecode.yatspec.state.givenwhenthen.StateExtractor;
 import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -10,8 +12,7 @@ import java.util.List;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static org.jdom.xpath.XPath.newInstance;
 
-public final class StateExtractors {
-
+public class StateExtractors {
     private StateExtractors() {
     }
 
@@ -81,5 +82,4 @@ public final class StateExtractors {
             }
         };
     }
-
 }

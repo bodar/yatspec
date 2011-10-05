@@ -1,4 +1,4 @@
-package com.googlecode.yatspec.matchers;
+package com.googlecode.yatspec.plugin.jdom;
 
 import org.jdom.Document;
 import org.jdom.Namespace;
@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 
-import static com.googlecode.yatspec.matchers.HasXPath.hasXPath;
+import static com.googlecode.yatspec.plugin.jdom.HasXPath.hasXPath;
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

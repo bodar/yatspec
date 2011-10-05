@@ -1,5 +1,6 @@
-package com.googlecode.yatspec.state.givenwhenthen;
+package com.googlecode.yatspec.plugin.jdom;
 
+import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
 import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
@@ -10,8 +11,8 @@ import java.io.StringReader;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static com.googlecode.yatspec.state.givenwhenthen.StateExtractors.getXpathValue;
-import static com.googlecode.yatspec.state.givenwhenthen.StateExtractors.getXpathValues;
+import static com.googlecode.yatspec.plugin.jdom.StateExtractors.getXpathValue;
+import static com.googlecode.yatspec.plugin.jdom.StateExtractors.getXpathValues;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
