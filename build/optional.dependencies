@@ -1,0 +1,3 @@
+mvn:net.sourceforge.plantuml:plantuml:jar:6487
+mvn:jaxen:jaxen:jar:1.1.1
+mvn:org.jdom:jdom:jar:1.1
