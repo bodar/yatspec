@@ -7,9 +7,10 @@
             <property name="release.no.libs.jar" value="${artifacts}/${release.name}-nolibs.jar"/>
             <jarjar jarfile="${release.no.libs.jar}">
                 <zipfileset src="${release.jar.path}"/>
-                <zipgroupfileset dir="${build.dependencies.dir}" includes="totallylazy-*.jar, funclate-*.jar" />
+                <zipgroupfileset dir="${build.dependencies.dir}" includes="totallylazy-*.jar, funclate-*.jar, qdox-*.jar" />
                 <rule pattern="com.googlecode.totallylazy.**" result="com.googlecode.yatspec.internal.totallylazy.@1"/>
                 <rule pattern="com.googlecode.funclate.**" result="com.googlecode.yatspec.internal.funclate.@1"/>
+                <rule pattern="com.thoughtworks.qdox.**" result="com.googlecode.yatspec.internal.qdox.@1"/>
             </jarjar>
             <delete file="${release.jar.path}"/>
             <move file="${release.no.libs.jar}" tofile="${release.jar.path}"/>
