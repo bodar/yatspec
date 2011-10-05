@@ -3,6 +3,7 @@ package com.googlecode.yatspec.junit;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.yatspec.Creator;
 import com.googlecode.yatspec.rendering.Renderer;
+import com.googlecode.yatspec.rendering.ResultRenderer;
 import com.googlecode.yatspec.rendering.ResultWriter;
 import com.googlecode.yatspec.rendering.WithCustomHeaderContent;
 import com.googlecode.yatspec.rendering.WithCustomRendering;
@@ -28,6 +29,14 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 public class SpecRunner extends TableRunner {
     public static final String OUTPUT_DIR = "yatspec.output.dir";
     public static final String RESULT_RENDER = "yatspec.result.renderer";
+
+    public static void setOutputDir(File directory){
+        System.setProperty(OUTPUT_DIR, directory.getPath());
+    }
+    public static void setResultRender(Class<? extends ResultRenderer> aClass){
+        System.setProperty(RESULT_RENDER, aClass.getName());
+    }
+
     private final Result testResult;
     private Scenario currentScenario;
 
@@ -75,7 +84,7 @@ public class SpecRunner extends TableRunner {
         }
     }
 
-    private Renderer<Result> getResultRenderer() throws ClassNotFoundException, InvocationTargetException, IllegalAccessException, InstantiationException {
+    private ResultRenderer getResultRenderer() throws ClassNotFoundException, InvocationTargetException, IllegalAccessException, InstantiationException {
         return Creator.create(Class.forName(System.getProperty(RESULT_RENDER, HtmlResultRenderer.class.getName())));
     }
 
