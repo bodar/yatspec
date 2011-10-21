@@ -16,7 +16,7 @@ import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.jdom.xpath.XPath.newInstance;
 
-final class HasXPath extends TypeSafeDiagnosingMatcher<Document> {
+public final class HasXPath extends TypeSafeDiagnosingMatcher<Document> {
     private final XPath xpath;
     private final Matcher<Iterable<?>> valueMatcher;
 
