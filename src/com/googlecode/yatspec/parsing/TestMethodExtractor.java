@@ -27,9 +27,10 @@ public class TestMethodExtractor implements Callable1<Pair<JavaMethod, Method>, 
     }
 
     public TestMethod call(Pair<JavaMethod, Method> pair) {
-        JavaMethod javaMethod = pair.first();
-        Method method = pair.second();
+        return toTestMethod(pair.first(), pair.second());
+    }
 
+    public TestMethod toTestMethod(JavaMethod javaMethod, Method method) {
         final String name = javaMethod.getName();
 
         final JavaSource source = new JavaSource(javaMethod.getSourceCode());
