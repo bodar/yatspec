@@ -14,7 +14,9 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static com.googlecode.totallylazy.Files.path;
 import static com.googlecode.totallylazy.Files.recursiveFiles;
@@ -42,10 +44,40 @@ public class TestParser {
             return empty();
         }
 
-        Sequence<TestMethod> myTestMethods = getMethods(javaClass.get()).zip(methods).map(extractTestMethod());
+        Map<String, List<JavaMethod>> sourceMethodsByName = getMethods(javaClass.get()).toMap(sourceMethodName());
+        Map<String, List<Method>> reflectionMethodsByName = methods.toMap(reflectionMethodName());
+
+        List<TestMethod> testMethods = new ArrayList<TestMethod>();
+        TestMethodExtractor extractor = new TestMethodExtractor();
+        for (String name : sourceMethodsByName.keySet()) {
+            List<JavaMethod> javaMethods = sourceMethodsByName.get(name);
+            List<Method> reflectionMethods = reflectionMethodsByName.get(name);
+            testMethods.add(extractor.toTestMethod(javaMethods.get(0), reflectionMethods.get(0)));
+            // TODO: If people overload test methods we will have to use the full name rather than the short name
+        }
+
+        Sequence<TestMethod> myTestMethods = sequence(testMethods);
         Sequence<TestMethod> parentTestMethods = collectTestMethods(aClass.getSuperclass(), methods);
 
         return myTestMethods.join(parentTestMethods);
+    }
+
+    private static Callable1<? super Method, String> reflectionMethodName() {
+        return new Callable1<Method, String>() {
+            @Override
+            public String call(Method method) throws Exception {
+                return method.getName();
+            }
+        };
+    }
+
+    private static Callable1<JavaMethod, String> sourceMethodName() {
+        return new Callable1<JavaMethod, String>() {
+            @Override
+            public String call(JavaMethod javaMethod) throws Exception {
+                return javaMethod.getName();
+            }
+        };
     }
 
     private static Option<JavaClass> getJavaClass(final Class aClass) throws IOException {
