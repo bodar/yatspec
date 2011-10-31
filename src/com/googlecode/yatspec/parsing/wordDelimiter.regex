@@ -1,0 +1,7 @@
+(?xm)                   # Enable comments and multiline
+([A-Z]*?)               # Reluctantly match a capital letter
+(?:                     # start a non capturing group so that we can do an 'or'
+(?<!^)([A-Z][a-z])
+|                       # or
+([^a-zA-Z_0-9\r\n])   # not a word character or end of line
+)                       # end non-capturing group
