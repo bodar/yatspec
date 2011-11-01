@@ -2,27 +2,28 @@ package com.googlecode.yatspec.rendering.html;
 
 import com.googlecode.yatspec.rendering.Renderer;
 
-import java.net.URL;
-
 import static java.lang.String.format;
 
-public final class HyperlinkRenderer<T> implements Renderer<T> {
-    private final String urlFormat;
-    private final Renderer<T> delegateRenderer;
-    private static final String HYPERLINK_FORMAT = "<a href=\"%s\" target=\"_blank\">%s</a>";
 
-    public HyperlinkRenderer(String urlFormat, Renderer<T> delegateRenderer) {
-        this.urlFormat = urlFormat;
-        this.delegateRenderer = delegateRenderer;
+public class HyperlinkRenderer<T> implements Renderer<T> {
+    private final Renderer<T> delegateRenderer;
+    private final String regexPattern;
+    private final String replacementPattern;
+
+    public HyperlinkRenderer(final String urlFormat, Renderer<T> delegateRenderer) {
+        this(urlFormat, "[\\w-\\s]+", delegateRenderer);
     }
+
+    public HyperlinkRenderer(final String urlFormat, final String regexPattern, Renderer<T> delegateRenderer) {
+        this.delegateRenderer = delegateRenderer;
+        this.regexPattern = regexPattern;
+        this.replacementPattern = format("<a href='%s'>$0</a>", urlFormat.replace("%s", "$0"));
+    }
+
 
     @Override
     public String render(T value) throws Exception {
-        String render = delegateRenderer.render(value);
-        return isEmpty(render) ? render : format(HYPERLINK_FORMAT, new URL(format(urlFormat, render)), render);
-    }
-
-    private static boolean isEmpty(String render) {
-        return render == null || render.isEmpty();
+        String valueStr = delegateRenderer.render(value);
+        return valueStr != null ? valueStr.replaceAll(regexPattern, replacementPattern) : null;
     }
 }
