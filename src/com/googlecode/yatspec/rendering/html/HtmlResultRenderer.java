@@ -37,11 +37,11 @@ public class HtmlResultRenderer implements ResultRenderer {
         for (Class document : Creator.optionalClass("org.jdom.Document")) {
             group.registerRenderer(instanceOf(document), callable(Creator.<Renderer>create(Class.forName("com.googlecode.yatspec.plugin.jdom.DocumentRenderer"))));
         }
+        Maps.entries(result.getCustomRenderers()).fold(group, registerRenderer());
         group.registerRenderer(instanceOf(Content.class), asString());
         group.registerRenderer(instanceOf(Notes.class), callable(new NotesRenderer()));
         group.registerRenderer(instanceOf(JavaSource.class), callable(new JavaSourceRenderer()));
         group.registerRenderer(instanceOf(ScenarioTableHeader.class), callable(new ScenarioTableHeaderRenderer()));
-        Maps.entries(result.getCustomRenderers()).fold(group, registerRenderer());
         group.registerRenderer(always().and(not(instanceOf(Number.class))), Xml.escape());
         final StringTemplate template = group.getInstanceOf("yatspec");
         template.setAttribute("script", loadContent("yatspec.js"));

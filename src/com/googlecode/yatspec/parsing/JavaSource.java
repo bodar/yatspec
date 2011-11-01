@@ -1,6 +1,5 @@
 package com.googlecode.yatspec.parsing;
 
-import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Value;
 
 import java.util.List;
