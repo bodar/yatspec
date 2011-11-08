@@ -11,9 +11,9 @@ import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,16 +22,20 @@ import static com.googlecode.totallylazy.Files.path;
 import static com.googlecode.totallylazy.Files.recursiveFiles;
 import static com.googlecode.totallylazy.Files.workingDirectory;
 import static com.googlecode.totallylazy.Methods.annotation;
+import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.endsWith;
+import static com.googlecode.totallylazy.URLs.toURL;
 import static com.googlecode.yatspec.parsing.Files.toJavaPath;
-import static com.googlecode.yatspec.parsing.TestMethodExtractor.extractTestMethod;
 
 public class TestParser {
+
+    private static final Option<URL> NO_URL = none(URL.class);
 
     public static List<TestMethod> parseTestMethods(Class aClass) throws Exception {
         final Sequence<Method> methods = getMethods(aClass);
@@ -81,15 +85,17 @@ public class TestParser {
     }
 
     private static Option<JavaClass> getJavaClass(final Class aClass) throws IOException {
-        return getJavaSourceFile(aClass).map(asJavaClass(aClass));
+        Option<URL> option = getJavaSourceFromClassPath(aClass);
+        option = !option.isEmpty() ? option : getJavaSourceFromFileSystem(aClass);
+        return option.map(asAJavaClass(aClass));
     }
 
-    private static Callable1<File, JavaClass> asJavaClass(final Class aClass) {
-        return new Callable1<File, JavaClass>() {
+    private static Callable1<URL, JavaClass> asAJavaClass(final Class aClass) {
+        return new Callable1<URL, JavaClass>() {
             @Override
-            public JavaClass call(File file) throws Exception {
+            public JavaClass call(URL url) throws Exception {
                 JavaDocBuilder builder = new JavaDocBuilder();
-                builder.addSource(file);
+                builder.addSource(url);
                 return builder.getClassByName(aClass.getName());
             }
         };
@@ -104,8 +110,16 @@ public class TestParser {
         return sequence(javaClass.getMethods()).filter(where(annotations(), contains(Test.class)));
     }
 
-    private static Option<File> getJavaSourceFile(Class clazz) {
-        return recursiveFiles(workingDirectory()).find(where(path(), endsWith(toJavaPath(clazz))));
+    private static Option<URL> getJavaSourceFromClassPath(Class aClass) {
+        return isObject(aClass) ? NO_URL : option(aClass.getClassLoader().getResource(toJavaPath(aClass)));
+    }
+
+    private static Option<URL> getJavaSourceFromFileSystem(Class aClass) {
+        return isObject(aClass) ? NO_URL : recursiveFiles(workingDirectory()).find(where(path(), endsWith(toJavaPath(aClass)))).map(toURL());
+    }
+
+    private static boolean isObject(Class aClass) {
+        return aClass.equals(Object.class);
     }
 
     private static Predicate<? super Sequence<Annotation>> contains(final Class aClass) {
