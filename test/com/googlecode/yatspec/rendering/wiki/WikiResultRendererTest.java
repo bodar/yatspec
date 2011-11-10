@@ -1,9 +1,7 @@
 package com.googlecode.yatspec.rendering.wiki;
 
-import com.googlecode.yatspec.junit.SpecRunner;
 import com.googlecode.yatspec.state.TestResult;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;

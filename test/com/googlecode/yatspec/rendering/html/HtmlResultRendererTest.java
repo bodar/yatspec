@@ -2,7 +2,6 @@ package com.googlecode.yatspec.rendering.html;
 
 import com.googlecode.yatspec.rendering.Content;
 import com.googlecode.yatspec.rendering.Renderer;
-import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.state.Scenario;
 import com.googlecode.yatspec.state.TestResult;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
