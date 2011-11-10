@@ -8,7 +8,7 @@ import com.googlecode.yatspec.parsing.Files;
 import com.googlecode.yatspec.parsing.JavaSource;
 import com.googlecode.yatspec.rendering.NotesRenderer;
 import com.googlecode.yatspec.rendering.Renderer;
-import com.googlecode.yatspec.rendering.ResultRenderer;
+import com.googlecode.yatspec.rendering.ContentRenderer;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.state.Result;
 import org.antlr.stringtemplate.NoIndentWriter;
@@ -21,7 +21,7 @@ import static com.googlecode.totallylazy.Callables.asString;
 import static com.googlecode.totallylazy.Predicates.*;
 
 
-public class WikiResultRenderer implements ResultRenderer {
+public class WikiResultRenderer implements ContentRenderer<Result> {
     public String render(Result result) throws Exception {
         final EnhancedStringTemplateGroup group = new EnhancedStringTemplateGroup(getClass());
         group.registerRenderer(instanceOf(JavaSource.class), callable(new JavaSourceRenderer()));
@@ -44,7 +44,7 @@ public class WikiResultRenderer implements ResultRenderer {
     }
 
     @Override
-    public File outputFile(File outputDirectory, Class<?> testClass) {
-        return new File(outputDirectory, Files.toPath(testClass).replaceFirst("Test$", "") + ".wiki");
+    public File outputFile(File outputDirectory, Result result) {
+        return new File(outputDirectory, Files.toPath(result.getTestClass()).replaceFirst("Test$", "") + ".wiki");
     }
 }

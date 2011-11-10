@@ -13,7 +13,7 @@ import com.googlecode.yatspec.parsing.JavaSource;
 import com.googlecode.yatspec.rendering.Content;
 import com.googlecode.yatspec.rendering.NotesRenderer;
 import com.googlecode.yatspec.rendering.Renderer;
-import com.googlecode.yatspec.rendering.ResultRenderer;
+import com.googlecode.yatspec.rendering.ContentRenderer;
 import com.googlecode.yatspec.rendering.ScenarioTableHeaderRenderer;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.ScenarioTableHeader;
@@ -31,7 +31,7 @@ import static com.googlecode.totallylazy.Callables.asString;
 import static com.googlecode.totallylazy.Predicates.*;
 
 
-public class HtmlResultRenderer implements ResultRenderer {
+public class HtmlResultRenderer implements ContentRenderer<Result> {
     public String render(Result result) throws Exception {
         final EnhancedStringTemplateGroup group = new EnhancedStringTemplateGroup(getClass());
         for (Class document : Creator.optionalClass("org.jdom.Document")) {
@@ -72,11 +72,11 @@ public class HtmlResultRenderer implements ResultRenderer {
         };
     }
 
-    private Content loadContent(final String resource) throws IOException {
-        return new Content(getClass().getResource(resource));
+    public static Content loadContent(final String resource) throws IOException {
+        return new Content(HtmlResultRenderer.class.getResource(resource));
     }
 
-    private static Map<Status, String> getCssMap() {
+    public static Map<Status, String> getCssMap() {
         return new HashMap<Status, String>() {{
             put(Status.Passed, "test-passed");
             put(Status.Failed, "test-failed");
@@ -85,7 +85,7 @@ public class HtmlResultRenderer implements ResultRenderer {
     }
 
     @Override
-    public File outputFile(File outputDirectory, Class<?> testClass) {
-        return new File(outputDirectory, Files.toPath(testClass) + ".html");
+    public File outputFile(File outputDirectory, Result result) {
+        return new File(outputDirectory, Files.toPath(result.getTestClass()) + ".html");
     }
 }
