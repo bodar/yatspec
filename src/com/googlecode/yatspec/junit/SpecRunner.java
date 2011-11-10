@@ -1,12 +1,12 @@
 package com.googlecode.yatspec.junit;
 
 import com.googlecode.totallylazy.Predicate;
-import com.googlecode.yatspec.Creator;
-import com.googlecode.yatspec.rendering.Renderer;
-import com.googlecode.yatspec.rendering.ResultRenderer;
-import com.googlecode.yatspec.rendering.ResultWriter;
+import com.googlecode.yatspec.rendering.ContentRenderer;
+import com.googlecode.yatspec.rendering.ContentWriter;
+import com.googlecode.yatspec.rendering.Index;
 import com.googlecode.yatspec.rendering.WithCustomHeaderContent;
 import com.googlecode.yatspec.rendering.WithCustomRendering;
+import com.googlecode.yatspec.rendering.html.HtmlIndexRenderer;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.Scenario;
@@ -24,19 +24,35 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.yatspec.Creator.create;
+import static java.lang.Class.forName;
+import static java.lang.System.getProperty;
 
 
 public class SpecRunner extends TableRunner {
     public static final String OUTPUT_DIR = "yatspec.output.dir";
     public static final String RESULT_RENDER = "yatspec.result.renderer";
+    public static final String INDEX_ENABLE = "yatspec.index.enable";
+    public static final String INDEX_RENDER = "yatspec.index.renderer";
 
-    public static void setOutputDir(File directory){
+    public static void setOutputDir(File directory) {
         System.setProperty(OUTPUT_DIR, directory.getPath());
     }
-    public static void setResultRender(Class<? extends ResultRenderer> aClass){
+
+    public static void setResultRenderer(Class<? extends ContentRenderer<Result>> aClass) {
         System.setProperty(RESULT_RENDER, aClass.getName());
     }
 
+    public static void setIndexRenderer(Class<? extends ContentRenderer<Index>> aClass) {
+        enableIndex();
+        System.setProperty(INDEX_RENDER, aClass.getName());
+    }
+
+    public static void enableIndex() {
+        System.setProperty(INDEX_ENABLE, "true");
+    }
+
+    private final static Index index = new Index();
     private final Result testResult;
     private Scenario currentScenario;
 
@@ -48,10 +64,10 @@ public class SpecRunner extends TableRunner {
     @Override
     protected Object createTest() throws Exception {
         final Object test = super.createTest();
-        if(test instanceof WithCustomRendering) {
+        if (test instanceof WithCustomRendering) {
             testResult.mergeCustomRenderers((((WithCustomRendering) test).getCustomRenderers()));
         }
-        if(test instanceof WithCustomHeaderContent) {
+        if (test instanceof WithCustomHeaderContent) {
             testResult.mergeCustomHeaderContent((((WithCustomHeaderContent) test).getCustomHeaderContent()));
         }
         return test;
@@ -77,19 +93,32 @@ public class SpecRunner extends TableRunner {
         super.run(notifier);
         notifier.removeListener(listener);
         try {
-            new ResultWriter(getOuputDirectory(), getResultRenderer()).write(testResult);
+            File ouputDirectory = getOuputDirectory();
+            File file = new ContentWriter<Result>(ouputDirectory, getResultRenderer(), true).write(testResult);
+            index.put(file, testResult);
+            if (indexEnabled()) {
+                new ContentWriter<Index>(ouputDirectory, getIndexRenderer(), false).write(index);
+            }
         } catch (Exception e) {
             System.out.println("Error while writing HTML");
             e.printStackTrace(System.out);
         }
     }
 
-    private ResultRenderer getResultRenderer() throws ClassNotFoundException, InvocationTargetException, IllegalAccessException, InstantiationException {
-        return Creator.create(Class.forName(System.getProperty(RESULT_RENDER, HtmlResultRenderer.class.getName())));
+    private boolean indexEnabled() {
+        return Boolean.parseBoolean(getProperty(INDEX_ENABLE));
+    }
+
+    private ContentRenderer<Result> getResultRenderer() throws ClassNotFoundException, InvocationTargetException, IllegalAccessException, InstantiationException {
+        return create(forName(getProperty(RESULT_RENDER, HtmlResultRenderer.class.getName())));
+    }
+
+    private ContentRenderer<Index> getIndexRenderer() throws ClassNotFoundException, InvocationTargetException, IllegalAccessException, InstantiationException {
+        return create(forName(getProperty(INDEX_RENDER, HtmlIndexRenderer.class.getName())));
     }
 
     private File getOuputDirectory() {
-        return new File(System.getProperty(OUTPUT_DIR, System.getProperty("java.io.tmpdir")));
+        return new File(getProperty(OUTPUT_DIR, getProperty("java.io.tmpdir")));
     }
 
     @Override
@@ -100,7 +129,7 @@ public class SpecRunner extends TableRunner {
             public void evaluate() throws Throwable {
                 currentScenario = testResult.getScenario(method.getName());
 
-                if(test instanceof WithTestState){
+                if (test instanceof WithTestState) {
                     TestState testState = ((WithTestState) test).testState();
                     currentScenario.setTestState(testState);
                 }

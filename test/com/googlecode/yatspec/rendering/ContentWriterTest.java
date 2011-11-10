@@ -13,14 +13,14 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 
-public class ResultWriterTest {
+public class ContentWriterTest {
     @Test
     public void writesFileToDirectory() throws Exception {
         // setup
         TestResult result = new TestResult(this.getClass());
 
         // execute
-        File file = new ResultWriter(temporaryDirectory(), new HtmlResultRenderer()).write(result);
+        File file = new ContentWriter(temporaryDirectory(), new HtmlResultRenderer(), true).write(result);
 
         // verify
         assertThat(Strings.toString(file), is(not(nullValue())));

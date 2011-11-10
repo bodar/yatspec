@@ -67,11 +67,14 @@ public class TestMethod implements Notable {
     }
 
     public Status getStatus() {
-        final Sequence<Status> statuses = sequence(getScenarios()).map(new Callable1<Scenario, Status>() {
+        return calculateStatus(sequence(getScenarios()).map(new Callable1<Scenario, Status>() {
             public Status call(Scenario scenario) {
                 return scenario.getStatus();
             }
-        });
+        }));
+    }
+
+    public static Status calculateStatus(final Sequence<Status> statuses) {
         if (statuses.contains(Status.Failed)) {
             return Status.Failed;
         }
@@ -115,7 +118,7 @@ public class TestMethod implements Notable {
         return methodName + "(" + sequence(scenarioData).toString(", ") + ")";
     }
 
-     public String getUid() {
+    public String getUid() {
         return Integer.toString(hashCode());
     }
 }
