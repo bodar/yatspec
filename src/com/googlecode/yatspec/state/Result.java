@@ -21,4 +21,6 @@ public interface Result extends Notable, WithCustomRendering, WithCustomHeaderCo
     void mergeCustomRenderers(Map<Class, Renderer> renderers);
 
     void mergeCustomHeaderContent(Content customHeaderContent);
+
+    String getPackageName();
 }

@@ -7,6 +7,7 @@ import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.yatspec.rendering.ContentRenderer;
 import com.googlecode.yatspec.rendering.Index;
+import com.googlecode.yatspec.rendering.IndexModel;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.Status;
 import com.googlecode.yatspec.state.TestMethod;
@@ -15,6 +16,7 @@ import org.antlr.stringtemplate.StringTemplate;
 import java.io.File;
 
 import static com.googlecode.funclate.Model.model;
+import static com.googlecode.totallylazy.Arrays.list;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.getCssMap;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.loadContent;
@@ -31,9 +33,10 @@ public class HtmlIndexRenderer implements ContentRenderer<Index>{
         EnhancedStringTemplateGroup group = new EnhancedStringTemplateGroup(getClass());
         StringTemplate template = group.getInstanceOf("index",
                 model().
+                        add("script", loadContent("index.js")).
                         add("stylesheet", loadContent("yatspec.css")).
                         add("cssClass", getCssMap()).
-                        add("results", index.entries().map(asModel()).toList()).toMap());
+                        add("packages", new IndexModel(index).asModel()).toMap());
         return template.toString();
     }
 

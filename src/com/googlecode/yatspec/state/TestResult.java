@@ -53,6 +53,11 @@ public class TestResult implements Result {
         return wordify(className);
     }
 
+    @Override
+    public String getPackageName() {
+        return getTestClass().getPackage().getName();
+    }
+
     private static String removeTestFrom(String className) {
         final int index = className.lastIndexOf("Test");
         return className.substring(0, index);
