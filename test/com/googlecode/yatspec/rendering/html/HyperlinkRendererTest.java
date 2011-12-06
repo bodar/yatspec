@@ -25,6 +25,10 @@ public class HyperlinkRendererTest {
     }
 
     @Test
+    public void allowsSpecifyingReplacementPattern() throws Exception {
+        assertRenders(new HyperlinkRenderer<String>(DELEGATE_RENDERER, "(?:#)([0-9]+)", "<a href='http://myserver.com/$1'>$1</a>"), "text #901 text", "text <a href='http://myserver.com/901'>901</a> text");
+    }
+    @Test
     public void shouldNotRenderNoUrlAsAHyperlink() throws Exception {
         assertRenders(SINGLE_REFERENCE_URL_FORMAT, "nothing", "nothing");
     }
