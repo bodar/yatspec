@@ -11,12 +11,29 @@ h1, h2, h3, h4, h5, h6, th {
     text-transform: capitalize;
 }
 
-h1 { font-size:170%; }
-h2 { font-size:150%; }
-h3 { font-size:140%; }
-h4 { font-size:130%; }
-h5 { font-size:120%; }
-h6 { font-size:110%; }
+h1 {
+    font-size: 170%;
+}
+
+h2 {
+    font-size: 150%;
+}
+
+h3 {
+    font-size: 140%;
+}
+
+h4 {
+    font-size: 130%;
+}
+
+h5 {
+    font-size: 120%;
+}
+
+h6 {
+    font-size: 110%;
+}
 
 .highlight {
     background-color: #E8EEF7;
@@ -25,16 +42,16 @@ h6 { font-size:110%; }
     font: 10pt Arial, sans-serif;
 }
 
-.highlight .literal{
-    color:#066;
+.highlight .literal {
+    color: #066;
 }
 
-.highlight .keyword{
-    color:#008;
+.highlight .keyword {
+    color: #008;
 }
 
-.highlight .constant{
-    color:#606;
+.highlight .constant {
+    color: #606;
 }
 
 .highlight .quote {
@@ -45,16 +62,16 @@ h6 { font-size:110%; }
 .highlight.specification .keyword,
 .highlight.specification .constant,
 .highlight.specification .quote {
-    font-weight:bold;
+    font-weight: bold;
 }
 
-pre.test-not-run, .test-not-run, .interestingGiven  {
+pre.test-not-run, .test-not-run, .interestingGiven {
     background-color: #FFF4CC;
     border: 2px solid #FFBB66;
 }
 
 .interestingGiven {
-    padding:0 2px;
+    padding: 0 2px;
 }
 
 pre.test-failed, .test-failed {
@@ -87,8 +104,8 @@ a:hover, table a:hover {
 table {
     background-color: #F5F9FD;
     border: 1px solid #C3D9FF;
-    border-collapse:collapse;
-    empty-cells:show;
+    border-collapse: collapse;
+    empty-cells: show;
 }
 
 th {
@@ -100,8 +117,8 @@ td {
     border: 1px solid #C3D9FF;
 }
 
-div.contents, div.testmethod  {
-    margin-bottom:40px;
+div.contents, div.testmethod {
+    margin-bottom: 40px;
 }
 
 .scenarios td {
@@ -110,13 +127,13 @@ div.contents, div.testmethod  {
 }
 
 .scenarios, .scenario {
-    margin-bottom:20px;
+    margin-bottom: 20px;
 }
 
 .scenario {
-    background-color:#F5F9FD;
-    border:1px solid #C3D9FF;
-    padding:0 10px;
+    background-color: #F5F9FD;
+    border: 1px solid #C3D9FF;
+    padding: 0 10px;
 }
 
 h2 {
@@ -156,4 +173,25 @@ div.example {
 .logValue {
     white-space: pre-wrap;
     margin-bottom: 32px;
+}
+
+.package {
+    border-right: none;
+    border-bottom: none;
+}
+
+li.package {
+    list-style: none;
+    margin-top: 0px;
+    padding-top: 0px;
+    margin-left: 0px;
+    padding-left: 20px;
+}
+
+.package-name {
+    cursor: pointer;
+}
+
+.package-name:hover {
+    text-decoration: underline;
 }
