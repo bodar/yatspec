@@ -1,1 +1,1 @@
-<li class="test-$method.status$"><a href="$method.url$">$method.name$</a></li>
+<li class="$cssClass.(method.status)$ "><a href="$method.url$">$method.name$</a></li>
