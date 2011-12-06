@@ -15,11 +15,14 @@ public class HyperlinkRenderer<T> implements Renderer<T> {
     }
 
     public HyperlinkRenderer(final String urlFormat, final String regexPattern, Renderer<T> delegateRenderer) {
-        this.delegateRenderer = delegateRenderer;
-        this.regexPattern = regexPattern;
-        this.replacementPattern = format("<a href='%s'>$0</a>", urlFormat.replace("%s", "$0"));
+        this(delegateRenderer, regexPattern, format("<a href='%s'>$0</a>", urlFormat.replace("%s", "$0")));
     }
 
+    public HyperlinkRenderer(Renderer<T> delegateRenderer, String regexPattern, String replacementPattern) {
+        this.delegateRenderer = delegateRenderer;
+        this.regexPattern = regexPattern;
+        this.replacementPattern = replacementPattern;
+    }
 
     @Override
     public String render(T value) throws Exception {
