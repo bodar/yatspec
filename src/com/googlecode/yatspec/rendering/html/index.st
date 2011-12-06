@@ -24,7 +24,7 @@
 
 <div class="contents">
     <ul>
-        $packages:indexPackage(package=it)$
+        $packages:indexPackage(package=it, cssClass=cssClass)$
     </ul>
 </div>
 </body>
