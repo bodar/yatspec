@@ -16,37 +16,40 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class TestMethodTest {
 
     @Test
-    public void createsAnInvocationNameForAMethodNameWithoutArgs() throws Exception {
+    public void createsAnInvocationNameForAScenarioNameWithoutArgs() throws Exception {
         String methodName = anyString();
         String expectedInvocationName = methodName + "()";
         List<String> noArgs = emptyList();
+        ScenarioName scenarioName = new ScenarioName(methodName, noArgs);
 
-        String actualInvocationName = invocationName(new ScenarioName(methodName, noArgs));
+        String actualInvocationName = invocationName(scenarioName);
 
         assertThat(actualInvocationName, is(expectedInvocationName));
     }
 
     @Test
-    public void createsAnInvocationNameForAMethodNameWithArgs() throws Exception {
+    public void createsAnInvocationNameForAScenarioNameWithArgs() throws Exception {
         String methodName = anyString();
         String firstArg = anyString();
         String secondArg = anyString();
         String expectedInvocationName = String.format("%s(%s, %s)", methodName, firstArg, secondArg);
         List<String> someArgs = Arrays.asList(firstArg, secondArg);
+        ScenarioName scenarioName = new ScenarioName(methodName, someArgs);
 
-        String actualInvocationName = invocationName(new ScenarioName(methodName, someArgs));
+        String actualInvocationName = invocationName(scenarioName);
 
         assertThat(actualInvocationName, is(expectedInvocationName));
     }
     
     @Ignore
     @Test
-    public void createsAMavenSurefireInvocationNameForAMethodNameWithoutArgs() throws Exception {
+    public void createsAMavenSurefireInvocationNameForAScenarioNameWithoutArgs() throws Exception {
         System.setProperty(TEST_METHOD_INVOCATION_NAME_RENDERER, "");
         String methodName = anyString();
         List<String> noArgs = emptyList();
+        ScenarioName scenarioName = new ScenarioName(methodName, noArgs);
 
-        String actualInvocationName = invocationName(new ScenarioName(methodName, noArgs));
+        String actualInvocationName = invocationName(scenarioName);
 
         assertThat(actualInvocationName, is(methodName));
     }

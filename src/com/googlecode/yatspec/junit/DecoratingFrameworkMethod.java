@@ -1,5 +1,6 @@
 package com.googlecode.yatspec.junit;
 
+import com.googlecode.yatspec.state.ScenarioName;
 import com.googlecode.yatspec.state.TestMethod;
 import org.junit.runners.model.FrameworkMethod;
 
@@ -20,6 +21,7 @@ public class DecoratingFrameworkMethod extends FrameworkMethod {
 
     @Override
     public String getName() {
-        return TestMethod.invocationName(super.getName(), asList(row.value())) ;
+        ScenarioName scenarioName = new ScenarioName(super.getName(), asList(row.value()));
+        return TestMethod.invocationName(scenarioName);
     }
 }
