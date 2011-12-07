@@ -1,0 +1,10 @@
+syntax: glob
+*.orig
+*.iws
+.idea/workspace.xml
+out
+build/artifacts
+lib/build
+lib/runtime
+lib/optional
+.DS_Store
