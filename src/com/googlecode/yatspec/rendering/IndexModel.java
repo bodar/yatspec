@@ -30,6 +30,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.startsWith;
 import static com.googlecode.totallylazy.regex.Regex.regex;
 import static com.googlecode.yatspec.parsing.Text.wordify;
+import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.getCssMap;
 import static com.googlecode.yatspec.state.Results.resultStatus;
 import static com.googlecode.yatspec.state.Results.testMethods;
 import static com.googlecode.yatspec.state.StatusPriority.statusPriority;
@@ -85,6 +86,7 @@ public class IndexModel {
                             add("package", entry.second().getPackageName()).
                             add("resultName", entry.second().getName()).
                             add("url", testMethodPath(testMethod, entry.first())).
+                            add("class", getCssMap().get(testMethod.getStatus())).
                             add("name", testMethod.getDisplayName())));
                 }
             }
