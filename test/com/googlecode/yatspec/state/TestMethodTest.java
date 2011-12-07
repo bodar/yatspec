@@ -1,5 +1,6 @@
 package com.googlecode.yatspec.state;
 
+import com.googlecode.yatspec.rendering.junit.MavenSurefireScenarioNameRenderer;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -14,7 +15,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TestMethodTest {
 
-    private static final String MAVEN_SCENARIO_NAME_RENDERER = com.googlecode.yatspec.rendering.maven.ScenarioNameRenderer.class.getName();
+    private static final String MAVEN_SCENARIO_NAME_RENDERER = MavenSurefireScenarioNameRenderer.class.getName();
 
     @Test
     public void createsAnInvocationNameForAScenarioNameWithoutArgs() throws Exception {

@@ -7,7 +7,8 @@ import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecRunner;
 import com.googlecode.yatspec.parsing.JavaSource;
 import com.googlecode.yatspec.parsing.Text;
-import com.googlecode.yatspec.rendering.junit.ScenarioNameRenderer;
+import com.googlecode.yatspec.rendering.ScenarioNameRenderer;
+import com.googlecode.yatspec.rendering.junit.HumanReadableScenarioNameRenderer;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -123,12 +124,12 @@ public class TestMethod implements Notable {
         return renderer().render(scenarioName);
     }
 
-    private static com.googlecode.yatspec.rendering.ScenarioNameRenderer renderer() {
-        com.googlecode.yatspec.rendering.ScenarioNameRenderer renderer;
+    private static ScenarioNameRenderer renderer() {
+        ScenarioNameRenderer renderer;
         try {
-            renderer = create(forName(getProperty(SpecRunner.SCENARIO_NAME_RENDERER, ScenarioNameRenderer.class.getName())));
+            renderer = create(forName(getProperty(SpecRunner.SCENARIO_NAME_RENDERER, HumanReadableScenarioNameRenderer.class.getName())));
         } catch (Exception e) {
-            renderer = new ScenarioNameRenderer();
+            renderer = new HumanReadableScenarioNameRenderer();
         }
         return renderer;
     }
