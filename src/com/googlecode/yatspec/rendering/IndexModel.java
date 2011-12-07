@@ -111,9 +111,9 @@ public class IndexModel {
     }
 
     private Iterable<String> tagsFor(TestMethod testMethod) {
-        Option<Notes> notes = testMethod.getNotes();
-        if(notes.isEmpty()) return empty();
-        return regex("#[^ ]+").findMatches(notes.get().value()).map(new Callable1<MatchResult, String>() {
+        Notes notes = testMethod.getNotes();
+        if(notes ==null) return empty();
+        return regex("#[^ ]+").findMatches(notes.value()).map(new Callable1<MatchResult, String>() {
             @Override
             public String call(MatchResult matchResult) throws Exception {
                 return matchResult.group();

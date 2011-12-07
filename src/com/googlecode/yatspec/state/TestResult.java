@@ -1,6 +1,5 @@
 package com.googlecode.yatspec.state;
 
-import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.parsing.TestParser;
@@ -78,8 +77,8 @@ public class TestResult implements Result {
     }
 
     @Override
-    public Option<Notes> getNotes() throws Exception {
-        return option(getTestClass().getAnnotation(Notes.class));
+    public Notes getNotes() throws Exception {
+        return getTestClass().getAnnotation(Notes.class);
     }
 
     @Override
