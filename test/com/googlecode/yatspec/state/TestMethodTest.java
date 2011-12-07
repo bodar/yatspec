@@ -1,6 +1,8 @@
 package com.googlecode.yatspec.state;
 
 import com.googlecode.yatspec.rendering.junit.MavenSurefireScenarioNameRenderer;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -16,9 +18,25 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class TestMethodTest {
 
     private static final String MAVEN_SCENARIO_NAME_RENDERER = MavenSurefireScenarioNameRenderer.class.getName();
+    private String originalScenarioNameRenderer;
+
+    @Before
+    public void setUp() throws Exception {
+        originalScenarioNameRenderer = System.getProperty(SCENARIO_NAME_RENDERER);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        if (null != originalScenarioNameRenderer) {
+            System.setProperty(SCENARIO_NAME_RENDERER, originalScenarioNameRenderer);
+        } else {
+            System.clearProperty(SCENARIO_NAME_RENDERER);
+        }
+    }
 
     @Test
-    public void createsAnInvocationNameForAScenarioNameWithoutArgs() throws Exception {
+    public void createsAnInvocationNameForAScenarioNameWithoutArgsWithDefaultRenderer() throws Exception {
+        System.clearProperty(SCENARIO_NAME_RENDERER);
         String methodName = anyString();
         String expectedInvocationName = methodName + "()";
         List<String> noArgs = emptyList();
@@ -42,7 +60,7 @@ public class TestMethodTest {
 
         assertThat(actualInvocationName, is(expectedInvocationName));
     }
-    
+
     @Test
     public void createsAMavenSurefireInvocationNameForAScenarioNameWithoutArgs() throws Exception {
         System.setProperty(SCENARIO_NAME_RENDERER, MAVEN_SCENARIO_NAME_RENDERER);
