@@ -11,8 +11,6 @@ import static org.hamcrest.core.Is.is;
 public class TestResultTest {
     @Test
     public void supportsNotesOnClass() throws Exception {
-        assertThat(new TestResult(getClass()).getNotes().value(), is("Some notes"));
+        assertThat(new TestResult(getClass()).getNotes().get().value(), is("Some notes"));
     }
-    
-
 }

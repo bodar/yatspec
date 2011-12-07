@@ -36,7 +36,7 @@ public class HtmlIndexRenderer implements ContentRenderer<Index>{
                         add("script", loadContent("index.js")).
                         add("stylesheet", loadContent("yatspec.css")).
                         add("cssClass", getCssMap()).
-                        add("packages", new IndexModel(index).asModel()).toMap());
+                        add("result", new IndexModel(index).asModel()).toMap());
         return template.toString();
     }
 

@@ -97,7 +97,7 @@ public class SpecRunner extends TableRunner {
             File file = new ContentWriter<Result>(ouputDirectory, getResultRenderer(), true).write(testResult);
             index.put(file, testResult);
             if (indexEnabled()) {
-                new ContentWriter<Index>(ouputDirectory, getIndexRenderer(), false).write(index);
+                new ContentWriter<Index>(ouputDirectory, getIndexRenderer(), true).write(index);
             }
         } catch (Exception e) {
             System.out.println("Error while writing HTML");

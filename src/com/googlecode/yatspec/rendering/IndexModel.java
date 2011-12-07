@@ -2,26 +2,36 @@ package com.googlecode.yatspec.rendering;
 
 import com.googlecode.funclate.Model;
 import com.googlecode.totallylazy.*;
+import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.Results;
 import com.googlecode.yatspec.state.Status;
 import com.googlecode.yatspec.state.TestMethod;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.MatchResult;
+import java.util.regex.Pattern;
 
 import static com.googlecode.funclate.Model.model;
 import static com.googlecode.totallylazy.Arrays.list;
+import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Callables.second;
+import static com.googlecode.totallylazy.Maps.asMultiValuedMap;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.startsWith;
+import static com.googlecode.totallylazy.regex.Regex.regex;
 import static com.googlecode.yatspec.parsing.Text.wordify;
 import static com.googlecode.yatspec.state.Results.resultStatus;
+import static com.googlecode.yatspec.state.Results.testMethods;
 import static com.googlecode.yatspec.state.StatusPriority.statusPriority;
 import static java.lang.String.format;
 import static java.util.regex.Pattern.quote;
@@ -29,8 +39,6 @@ import static java.util.regex.Pattern.quote;
 public class IndexModel {
     private final Sequence<Pair<File, Result>> entries;
     private final Sequence<String> packageNames;
-    private static final boolean CHILD_PACKAGES_ONLY = true;
-    private static final boolean ALL_DESCENDANT_PACKAGES = false;
 
     public IndexModel(Index index) {
         this.entries = index.entries().memorise();
@@ -67,14 +75,48 @@ public class IndexModel {
         };
     }
 
-    public List<Model> asModel() throws Exception {
-        Model model = modelOfPackage("");
-        // If the root package has no test results, don't bother displaying it
-        if (model.getValues("results").size() > 0) {
-            return list(model);
-        } else {
-            return model.getValues("packages");
+    public Model asModel() throws Exception {
+        List<Pair<String, Model>> tags = new ArrayList<Pair<String, Model>>();
+        for (Pair<File, Result> entry : entries) {
+            for (TestMethod testMethod : entry.second().getTestMethods()) {
+                Iterable<String> tagsForMethod = tagsFor(testMethod);
+                for (String tag : tagsForMethod) {
+                    tags.add(Pair.pair(tag, model().
+                            add("package", entry.second().getPackageName()).
+                            add("resultName", entry.second().getName()).
+                            add("url", testMethodPath(testMethod, entry.first())).
+                            add("name", testMethod.getDisplayName())));
+                }
+            }
         }
+        Map<String, List<Model>> resultModels = sequence(tags).fold(new HashMap<String, List<Model>>(), asMultiValuedMap(String.class, Model.class));
+        List<Model> tagModel = sequence(resultModels.keySet()).sortBy(returnArgument(String.class)).map(toTagModel(resultModels)).toList();
+        List<Model> packageModels = modelOfPackage("").getValues("packages");
+        return model().
+                add("tags", tagModel).
+                add("packages", packageModels);
+    }
+
+    private Callable1<? super String, Model> toTagModel(final Map<String, List<Model>> resultModels) {
+        return new Callable1<String, Model>() {
+            @Override
+            public Model call(String tag) throws Exception {
+                return model().
+                        add("name", tag).
+                        add("results", resultModels.get(tag));
+            }
+        };
+    }
+
+    private Iterable<String> tagsFor(TestMethod testMethod) {
+        Option<Notes> notes = testMethod.getNotes();
+        if(notes.isEmpty()) return empty();
+        return regex("#[^ ]+").findMatches(notes.get().value()).map(new Callable1<MatchResult, String>() {
+            @Override
+            public String call(MatchResult matchResult) throws Exception {
+                return matchResult.group();
+            }
+        });
     }
 
     private Model modelOfPackage(String name) throws Exception {
@@ -135,10 +177,14 @@ public class IndexModel {
             public Model call(TestMethod testMethod) throws Exception {
                 return model().
                         add("name", testMethod.getDisplayName()).
-                        add("url", format("file://%s#%s", file, testMethod.getName())).
+                        add("url", testMethodPath(testMethod, file)).
                         add("status", testMethod.getStatus());
             }
         };
+    }
+
+    private static String testMethodPath(TestMethod testMethod, File resultFile) {
+        return format("file://%s#%s", resultFile, testMethod.getName());
     }
 
     private Callable1<? super String, Model> toPackageModel() {

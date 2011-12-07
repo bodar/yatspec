@@ -1,6 +1,7 @@
 package com.googlecode.yatspec.state;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Value;
 import com.googlecode.yatspec.junit.Notes;
@@ -13,6 +14,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 
@@ -110,8 +112,8 @@ public class TestMethod implements Notable {
     }
 
     @Override
-    public Notes getNotes() throws Exception {
-        return method.getAnnotation(Notes.class);
+    public Option<Notes> getNotes() {
+        return option(method.getAnnotation(Notes.class));
     }
 
     public static String buildName(String methodName, List<String> scenarioData) {

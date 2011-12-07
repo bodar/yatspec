@@ -24,7 +24,7 @@ public class TestParserTest {
     @Notes("Some method notes")
     public void testParseTestMethods() throws Exception {
         final List<TestMethod> methods = parseTestMethods(getClass());
-        assertThat(sequence(methods).first().getNotes().value(), is("Some method notes"));
+        assertThat(sequence(methods).first().getNotes().get().value(), is("Some method notes"));
 
     }
 

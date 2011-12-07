@@ -23,8 +23,13 @@
 <h1>Index</h1>
 
 <div class="contents">
+    <h2>Tests</h2>
     <ul>
-        $packages:indexPackage(package=it, cssClass=cssClass)$
+        $result.packages:indexPackage(package=it, cssClass=cssClass)$
+    </ul>
+    <h2>Tags</h2>
+    <ul>
+        $result.tags:indexTag(tag=it, cssClass=cssClass)$
     </ul>
 </div>
 </body>

@@ -1,5 +1,6 @@
 package com.googlecode.yatspec.state;
 
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.parsing.TestParser;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.parsing.Text.wordify;
 
@@ -76,8 +78,8 @@ public class TestResult implements Result {
     }
 
     @Override
-    public Notes getNotes() throws Exception {
-        return getTestClass().getAnnotation(Notes.class);
+    public Option<Notes> getNotes() throws Exception {
+        return option(getTestClass().getAnnotation(Notes.class));
     }
 
     @Override
