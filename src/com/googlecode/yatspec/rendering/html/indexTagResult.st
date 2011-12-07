@@ -1,3 +1,3 @@
 <li class="$result.class$">
-    <a href="$result.url$">$result.resultName$/$result.name$</a>
+    <a href="$result.url$">$result.name$</a>
 </li>
