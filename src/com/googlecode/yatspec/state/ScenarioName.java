@@ -18,4 +18,8 @@ public class ScenarioName {
     public List<String> getRow() {
         return row;
     }
+
+    public boolean hasEmptyRow() {
+        return getRow().isEmpty();
+    }
 }
