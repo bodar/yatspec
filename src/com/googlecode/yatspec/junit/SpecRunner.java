@@ -28,7 +28,7 @@ import static java.lang.System.getProperty;
 public class SpecRunner extends TableRunner {
     public static final String OUTPUT_DIR = "yatspec.output.dir";
     public static final String RESULT_RENDER = "yatspec.result.renderer";
-    public static final String TEST_METHOD_INVOCATION_NAME_RENDERER = "yatspec.test.method.invocation.name.renderer";
+    public static final String SCENARIO_NAME_RENDERER = "yatspec.scenario.name.renderer";
     public static final String INDEX_ENABLE = "yatspec.index.enable";
     public static final String INDEX_RENDER = "yatspec.index.renderer";
 

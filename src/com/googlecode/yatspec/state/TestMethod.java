@@ -6,6 +6,7 @@ import com.googlecode.totallylazy.Value;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.parsing.JavaSource;
 import com.googlecode.yatspec.parsing.Text;
+import com.googlecode.yatspec.rendering.junit.ScenarioNameRenderer;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -115,7 +116,7 @@ public class TestMethod implements Notable {
     }
 
     public static String invocationName(ScenarioName scenarioName) {
-        return scenarioName.getMethodName() + "(" + sequence(scenarioName.getRow()).toString(", ") + ")";
+        return new ScenarioNameRenderer().render(scenarioName);
     }
 
     public String getUid() {
