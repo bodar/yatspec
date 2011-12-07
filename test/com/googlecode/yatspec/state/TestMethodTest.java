@@ -1,6 +1,5 @@
 package com.googlecode.yatspec.state;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -43,7 +42,6 @@ public class TestMethodTest {
         assertThat(actualInvocationName, is(expectedInvocationName));
     }
     
-    @Ignore
     @Test
     public void createsAMavenSurefireInvocationNameForAScenarioNameWithoutArgs() throws Exception {
         System.setProperty(SCENARIO_NAME_RENDERER, MAVEN_SCENARIO_NAME_RENDERER);
