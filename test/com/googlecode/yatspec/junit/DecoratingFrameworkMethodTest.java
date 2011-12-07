@@ -12,8 +12,10 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import static com.googlecode.yatspec.fixture.RandomFixtures.anyString;
+import static com.googlecode.yatspec.fixture.RandomFixtures.pickOneOf;
 import static com.googlecode.yatspec.junit.SpecRunner.SCENARIO_NAME_RENDERER;
-import static java.util.Collections.emptyList;
+import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -24,12 +26,14 @@ public class DecoratingFrameworkMethodTest {
     private List<String> args;
     private String methodName;
     private DecoratingFrameworkMethod decoratingFrameworkMethod;
+    private Method method;
 
     @Before
     public void setUp() throws Exception {
         originalScenarioNameRenderer = System.getProperty(SCENARIO_NAME_RENDERER);
-        args = emptyList();
-        methodName = method().getName();
+        args = asList(anyString(),anyString());
+        method = method();
+        methodName = method.getName();
         decoratingFrameworkMethod = new DecoratingFrameworkMethod(frameworkMethod(), row(args));
     }
 
@@ -63,11 +67,11 @@ public class DecoratingFrameworkMethodTest {
     }
 
     private Method method() throws NoSuchMethodException {
-        return Object.class.getMethod("toString");
+        return pickOneOf(Object.class.getMethods());
     }
 
     private FrameworkMethod frameworkMethod() throws NoSuchMethodException {
-        return new FrameworkMethod(method());
+        return new FrameworkMethod(method);
     }
 
     private Row row(final List<String> args) {
