@@ -1,6 +1,5 @@
 package com.googlecode.yatspec.state;
 
-import com.googlecode.yatspec.rendering.junit.ScenarioNameRenderer;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -15,6 +14,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TestMethodTest {
+
+    private static final String MAVEN_SCENARIO_NAME_RENDERER = com.googlecode.yatspec.rendering.maven.ScenarioNameRenderer.class.getName();
 
     @Test
     public void createsAnInvocationNameForAScenarioNameWithoutArgs() throws Exception {
@@ -45,7 +46,7 @@ public class TestMethodTest {
     @Ignore
     @Test
     public void createsAMavenSurefireInvocationNameForAScenarioNameWithoutArgs() throws Exception {
-        System.setProperty(SCENARIO_NAME_RENDERER, ScenarioNameRenderer.class.getName());
+        System.setProperty(SCENARIO_NAME_RENDERER, MAVEN_SCENARIO_NAME_RENDERER);
         String methodName = anyString();
         List<String> noArgs = emptyList();
         ScenarioName scenarioName = new ScenarioName(methodName, noArgs);
