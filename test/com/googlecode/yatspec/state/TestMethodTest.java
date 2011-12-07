@@ -2,6 +2,7 @@ package com.googlecode.yatspec.state;
 
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.googlecode.yatspec.fixture.RandomFixtures.anyString;
@@ -19,6 +20,19 @@ public class TestMethodTest {
         List<String> noArgs = emptyList();
 
         String actualTestMethodName = buildName(methodName, noArgs);
+
+        assertThat(actualTestMethodName, is(renderedMethodName));
+    }
+
+    @Test
+    public void rendersMethodNameWithArguments() throws Exception {
+        String methodName = anyString();
+        String firstArg = anyString();
+        String secondArg = anyString();
+        String renderedMethodName = String.format("%s(%s, %s)", methodName, firstArg, secondArg);
+        List<String> someArgs = Arrays.asList(firstArg, secondArg);
+
+        String actualTestMethodName = buildName(methodName, someArgs);
 
         assertThat(actualTestMethodName, is(renderedMethodName));
     }
