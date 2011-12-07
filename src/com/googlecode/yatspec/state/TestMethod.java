@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Value;
 import com.googlecode.yatspec.junit.Notes;
+import com.googlecode.yatspec.junit.SpecRunner;
 import com.googlecode.yatspec.parsing.JavaSource;
 import com.googlecode.yatspec.parsing.Text;
 import com.googlecode.yatspec.rendering.junit.ScenarioNameRenderer;
@@ -15,6 +16,9 @@ import java.util.List;
 import java.util.Map;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.yatspec.Creator.create;
+import static java.lang.Class.forName;
+import static java.lang.System.getProperty;
 
 
 @SuppressWarnings({"unused"})
@@ -116,7 +120,17 @@ public class TestMethod implements Notable {
     }
 
     public static String invocationName(ScenarioName scenarioName) {
-        return new ScenarioNameRenderer().render(scenarioName);
+        return renderer().render(scenarioName);
+    }
+
+    private static com.googlecode.yatspec.rendering.ScenarioNameRenderer renderer() {
+        com.googlecode.yatspec.rendering.ScenarioNameRenderer renderer;
+        try {
+            renderer = create(forName(getProperty(SpecRunner.SCENARIO_NAME_RENDERER, ScenarioNameRenderer.class.getName())));
+        } catch (Exception e) {
+            renderer = new ScenarioNameRenderer();
+        }
+        return renderer;
     }
 
     public String getUid() {
