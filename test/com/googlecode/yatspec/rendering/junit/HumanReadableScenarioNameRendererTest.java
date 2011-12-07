@@ -1,4 +1,4 @@
-package com.googlecode.yatspec.rendering.maven;
+package com.googlecode.yatspec.rendering.junit;
 
 import com.googlecode.yatspec.rendering.Renderer;
 import com.googlecode.yatspec.state.ScenarioName;
@@ -13,24 +13,25 @@ import static java.util.Collections.emptyList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class ScenarioNameRendererTest {
+public class HumanReadableScenarioNameRendererTest {
 
     private Renderer<ScenarioName> renderer;
 
     @Before
     public void setUp() throws Exception {
-        renderer = new ScenarioNameRenderer();
+        renderer = new HumanReadableScenarioNameRenderer();
     }
 
     @Test
     public void rendersAScenarioNameWithoutArgs() throws Exception {
         String methodName = anyString();
+        String expectedInvocationName = methodName + "()";
         List<String> noArgs = emptyList();
         ScenarioName scenarioName = new ScenarioName(methodName, noArgs);
 
         String actualInvocationName = renderer.render(scenarioName);
 
-        assertThat(actualInvocationName, is(methodName));
+        assertThat(actualInvocationName, is(expectedInvocationName));
     }
 
     @Test
@@ -38,7 +39,7 @@ public class ScenarioNameRendererTest {
         String methodName = anyString();
         String firstArg = anyString();
         String secondArg = anyString();
-        String expectedInvocationName = String.format("%s__%s_%s", methodName, firstArg, secondArg);
+        String expectedInvocationName = String.format("%s(%s, %s)", methodName, firstArg, secondArg);
         List<String> someArgs = Arrays.asList(firstArg, secondArg);
         ScenarioName scenarioName = new ScenarioName(methodName, someArgs);
 
