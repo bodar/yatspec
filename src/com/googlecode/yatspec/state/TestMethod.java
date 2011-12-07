@@ -4,10 +4,8 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Value;
 import com.googlecode.yatspec.junit.Notes;
-import com.googlecode.yatspec.junit.SpecRunner;
 import com.googlecode.yatspec.parsing.JavaSource;
 import com.googlecode.yatspec.parsing.Text;
-import com.googlecode.yatspec.rendering.ScenarioNameRenderer;
 import com.googlecode.yatspec.rendering.junit.HumanReadableScenarioNameRenderer;
 
 import java.lang.reflect.Method;
@@ -17,9 +15,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.yatspec.Creator.create;
-import static java.lang.Class.forName;
-import static java.lang.System.getProperty;
 
 
 @SuppressWarnings({"unused"})
@@ -44,7 +39,7 @@ public class TestMethod implements Notable {
         } else {
             for (List<String> row : scenarioTable.getRows()) {
                 ScenarioName scenarioName = new ScenarioName(methodName, row);
-                String name = invocationName(scenarioName);
+                String name = new HumanReadableScenarioNameRenderer().render(scenarioName);
                 scenarioResults.put(name, new Scenario(name,
                         specification.replace(sequence(scenarioTable.getHeaders()).map(value(String.class)).toList(), row)));
             }
@@ -118,20 +113,6 @@ public class TestMethod implements Notable {
     @Override
     public Notes getNotes() throws Exception {
         return method.getAnnotation(Notes.class);
-    }
-
-    public static String invocationName(ScenarioName scenarioName) {
-        return renderer().render(scenarioName);
-    }
-
-    private static ScenarioNameRenderer renderer() {
-        ScenarioNameRenderer renderer;
-        try {
-            renderer = create(forName(getProperty(SpecRunner.SCENARIO_NAME_RENDERER, HumanReadableScenarioNameRenderer.class.getName())));
-        } catch (Exception e) {
-            renderer = new HumanReadableScenarioNameRenderer();
-        }
-        return renderer;
     }
 
     public String getUid() {
