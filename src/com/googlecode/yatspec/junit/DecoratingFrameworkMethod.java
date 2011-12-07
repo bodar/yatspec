@@ -20,6 +20,6 @@ public class DecoratingFrameworkMethod extends FrameworkMethod {
 
     @Override
     public String getName() {
-        return TestMethod.buildName(super.getName(), asList(row.value())) ;
+        return TestMethod.invocationName(super.getName(), asList(row.value())) ;
     }
 }

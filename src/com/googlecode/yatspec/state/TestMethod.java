@@ -37,7 +37,8 @@ public class TestMethod implements Notable {
             scenarioResults.put(methodName, new Scenario("", specification));
         } else {
             for (List<String> row : scenarioTable.getRows()) {
-                String name = buildName(methodName, row);
+                ScenarioName scenarioName = new ScenarioName(methodName, row);
+                String name = invocationName(scenarioName);
                 scenarioResults.put(name, new Scenario(name,
                         specification.replace(sequence(scenarioTable.getHeaders()).map(value(String.class)).toList(), row)));
             }
@@ -52,7 +53,6 @@ public class TestMethod implements Notable {
             }
         };
     }
-
 
     public String getName() {
         return methodName;
@@ -114,8 +114,13 @@ public class TestMethod implements Notable {
         return method.getAnnotation(Notes.class);
     }
 
-    public static String buildName(String methodName, List<String> scenarioData) {
+    @Deprecated // Use invocationName(ScenarioName)
+    public static String invocationName(String methodName, List<String> scenarioData) {
         return methodName + "(" + sequence(scenarioData).toString(", ") + ")";
+    }
+
+    public static String invocationName(ScenarioName scenarioName) {
+        return scenarioName.getMethodName() + "(" + sequence(scenarioName.getRow()).toString(", ") + ")";
     }
 
     public String getUid() {
