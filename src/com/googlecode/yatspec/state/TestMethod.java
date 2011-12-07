@@ -114,11 +114,6 @@ public class TestMethod implements Notable {
         return method.getAnnotation(Notes.class);
     }
 
-    @Deprecated // Use invocationName(ScenarioName)
-    public static String invocationName(String methodName, List<String> scenarioData) {
-        return methodName + "(" + sequence(scenarioData).toString(", ") + ")";
-    }
-
     public static String invocationName(ScenarioName scenarioName) {
         return scenarioName.getMethodName() + "(" + sequence(scenarioName.getRow()).toString(", ") + ")";
     }
