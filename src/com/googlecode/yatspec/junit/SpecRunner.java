@@ -1,11 +1,7 @@
 package com.googlecode.yatspec.junit;
 
 import com.googlecode.totallylazy.Predicate;
-import com.googlecode.yatspec.rendering.ContentRenderer;
-import com.googlecode.yatspec.rendering.ContentWriter;
-import com.googlecode.yatspec.rendering.Index;
-import com.googlecode.yatspec.rendering.WithCustomHeaderContent;
-import com.googlecode.yatspec.rendering.WithCustomRendering;
+import com.googlecode.yatspec.rendering.*;
 import com.googlecode.yatspec.rendering.html.HtmlIndexRenderer;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.state.Result;
@@ -32,6 +28,7 @@ import static java.lang.System.getProperty;
 public class SpecRunner extends TableRunner {
     public static final String OUTPUT_DIR = "yatspec.output.dir";
     public static final String RESULT_RENDER = "yatspec.result.renderer";
+    public static final String TEST_METHOD_INVOCATION_NAME_RENDERER = "yatspec.test.method.invocation.name.renderer";
     public static final String INDEX_ENABLE = "yatspec.index.enable";
     public static final String INDEX_RENDER = "yatspec.index.renderer";
 
