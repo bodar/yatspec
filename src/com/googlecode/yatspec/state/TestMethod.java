@@ -6,6 +6,7 @@ import com.googlecode.totallylazy.Value;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.parsing.JavaSource;
 import com.googlecode.yatspec.parsing.Text;
+import com.googlecode.yatspec.rendering.ScenarioNameRendererFactory;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -37,7 +38,8 @@ public class TestMethod implements Notable {
             scenarioResults.put(methodName, new Scenario("", specification));
         } else {
             for (List<String> row : scenarioTable.getRows()) {
-                String name = buildName(methodName, row);
+                ScenarioName scenarioName = new ScenarioName(methodName, row);
+                String name = ScenarioNameRendererFactory.renderer().render(scenarioName);
                 scenarioResults.put(name, new Scenario(name,
                         specification.replace(sequence(scenarioTable.getHeaders()).map(value(String.class)).toList(), row)));
             }
@@ -52,7 +54,6 @@ public class TestMethod implements Notable {
             }
         };
     }
-
 
     public String getName() {
         return methodName;
@@ -112,10 +113,6 @@ public class TestMethod implements Notable {
     @Override
     public Notes getNotes() {
         return method.getAnnotation(Notes.class);
-    }
-
-    public static String buildName(String methodName, List<String> scenarioData) {
-        return methodName + "(" + sequence(scenarioData).toString(", ") + ")";
     }
 
     public String getUid() {
