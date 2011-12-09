@@ -1,15 +1,12 @@
 package com.googlecode.yatspec.junit;
 
 import com.googlecode.totallylazy.Predicate;
-import com.googlecode.yatspec.rendering.ContentRenderer;
-import com.googlecode.yatspec.rendering.ContentWriter;
-import com.googlecode.yatspec.rendering.Index;
-import com.googlecode.yatspec.rendering.WithCustomHeaderContent;
-import com.googlecode.yatspec.rendering.WithCustomRendering;
+import com.googlecode.yatspec.rendering.*;
 import com.googlecode.yatspec.rendering.html.HtmlIndexRenderer;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.Scenario;
+import com.googlecode.yatspec.state.ScenarioName;
 import com.googlecode.yatspec.state.TestResult;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import com.googlecode.yatspec.state.givenwhenthen.WithTestState;
@@ -32,6 +29,7 @@ import static java.lang.System.getProperty;
 public class SpecRunner extends TableRunner {
     public static final String OUTPUT_DIR = "yatspec.output.dir";
     public static final String RESULT_RENDER = "yatspec.result.renderer";
+    public static final String SCENARIO_NAME_RENDERER = "yatspec.scenario.name.renderer";
     public static final String INDEX_ENABLE = "yatspec.index.enable";
     public static final String INDEX_RENDER = "yatspec.index.renderer";
 
@@ -46,6 +44,10 @@ public class SpecRunner extends TableRunner {
     public static void setIndexRenderer(Class<? extends ContentRenderer<Index>> aClass) {
         enableIndex();
         System.setProperty(INDEX_RENDER, aClass.getName());
+    }
+
+    public static void setScenarioNameRenderer(Class<? extends ContentRenderer<ScenarioName>> aClass) {
+        System.setProperty(SCENARIO_NAME_RENDERER, aClass.getName());
     }
 
     public static void enableIndex() {
