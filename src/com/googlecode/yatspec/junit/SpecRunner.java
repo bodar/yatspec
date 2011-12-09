@@ -6,6 +6,7 @@ import com.googlecode.yatspec.rendering.html.HtmlIndexRenderer;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.Scenario;
+import com.googlecode.yatspec.state.ScenarioName;
 import com.googlecode.yatspec.state.TestResult;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import com.googlecode.yatspec.state.givenwhenthen.WithTestState;
@@ -43,6 +44,10 @@ public class SpecRunner extends TableRunner {
     public static void setIndexRenderer(Class<? extends ContentRenderer<Index>> aClass) {
         enableIndex();
         System.setProperty(INDEX_RENDER, aClass.getName());
+    }
+
+    public static void setScenarioNameRenderer(Class<? extends ContentRenderer<ScenarioName>> aClass) {
+        System.setProperty(SCENARIO_NAME_RENDERER, aClass.getName());
     }
 
     public static void enableIndex() {
