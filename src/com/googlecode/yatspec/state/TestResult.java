@@ -4,12 +4,8 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.parsing.TestParser;
-import com.googlecode.yatspec.rendering.Content;
-import com.googlecode.yatspec.rendering.Renderer;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
@@ -19,8 +15,6 @@ import static com.googlecode.yatspec.parsing.Text.wordify;
 public class TestResult implements Result {
     private final Class<?> klass;
     private List<TestMethod> testMethods;
-    private Map<Class, Renderer> customRenderers = new HashMap<Class, Renderer>();
-    private Content customHeaderContent;
     private Object testInstance;
 
     public TestResult(Class<?> klass) {
