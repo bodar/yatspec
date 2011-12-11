@@ -4,10 +4,8 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.yatspec.rendering.ContentRenderer;
 import com.googlecode.yatspec.rendering.ContentWriter;
 import com.googlecode.yatspec.rendering.Index;
-import com.googlecode.yatspec.rendering.WithCustomHeaderContent;
-import com.googlecode.yatspec.rendering.WithCustomRendering;
-import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
+import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.Scenario;
 import com.googlecode.yatspec.state.ScenarioName;
@@ -65,18 +63,6 @@ public class SpecRunner extends TableRunner {
     public SpecRunner(Class<?> klass) throws org.junit.runners.model.InitializationError {
         super(klass);
         testResult = new TestResult(klass);
-    }
-
-    @Override
-    protected Object createTest() throws Exception {
-        final Object test = super.createTest();
-        if (test instanceof WithCustomRendering) {
-            testResult.mergeCustomRenderers((((WithCustomRendering) test).getCustomRenderers()));
-        }
-        if (test instanceof WithCustomHeaderContent) {
-            testResult.mergeCustomHeaderContent((((WithCustomHeaderContent) test).getCustomHeaderContent()));
-        }
-        return test;
     }
 
     @Override

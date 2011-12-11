@@ -14,13 +14,13 @@ public class IndexModelTest {
                 put(new File("firstTestClass.html"), new TestResult(FirstTestClass.class));
     }
 
-    private static class FirstTestClass{
+    public static class FirstTestClass{
         @Test
         public void firstTestOfFirstTestClass(){}
         @Test
         public void secondTestOfFirstTestClass(){}
     }
-    private static class SecondTestClass{
+    public static class SecondTestClass{
         @Test
         public void firstTestOfSecondTestClass(){}
         @Test

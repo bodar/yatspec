@@ -4,6 +4,8 @@ import com.googlecode.yatspec.plugin.sequencediagram.SequenceDiagramGenerator;
 import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
 import com.googlecode.yatspec.rendering.*;
 import com.googlecode.yatspec.rendering.html.DontHighlightRenderer;
+import com.googlecode.yatspec.rendering.html.WithCustomHtmlHeaderContent;
+import com.googlecode.yatspec.rendering.html.WithCustomHtmlRendering;
 import com.googlecode.yatspec.state.givenwhenthen.*;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
@@ -17,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RunWith(SpecRunner.class)
-public class SequenceDiagramingExampleTest extends TestState implements WithCustomRendering, WithCustomHeaderContent {
+public class SequenceDiagramingExampleTest extends TestState implements WithCustomHtmlRendering, WithCustomHtmlHeaderContent {
     private static final Object ANY_THING_FOR_THE_PURPOSES_OF_THIS_TEST = new Object();
 
     private SequenceDiagramGenerator sequenceDiagramGenerator;
@@ -76,7 +78,7 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
         return SequenceDiagramGenerator.getHeaderContentForModalWindows();
     }
 
-    public Map<Class, Renderer> getCustomRenderers() {
+    public Map<Class, Renderer> getCustomHtmlRenderers() {
         return new HashMap<Class, Renderer>() {{
             put(SvgWrapper.class, new DontHighlightRenderer());
         }};

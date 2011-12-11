@@ -1,14 +1,10 @@
 package com.googlecode.yatspec.state;
 
-import com.googlecode.yatspec.rendering.Content;
-import com.googlecode.yatspec.rendering.Renderer;
-import com.googlecode.yatspec.rendering.WithCustomHeaderContent;
-import com.googlecode.yatspec.rendering.WithCustomRendering;
+import com.googlecode.totallylazy.Option;
 
 import java.util.List;
-import java.util.Map;
 
-public interface Result extends Notable, WithCustomRendering, WithCustomHeaderContent {
+public interface Result extends Notable {
 
     List<TestMethod> getTestMethods() throws Exception;
 
@@ -18,9 +14,7 @@ public interface Result extends Notable, WithCustomRendering, WithCustomHeaderCo
 
     String getName();
 
-    void mergeCustomRenderers(Map<Class, Renderer> renderers);
-
-    void mergeCustomHeaderContent(Content customHeaderContent);
-
     String getPackageName();
+
+    <T> Option<T> testInstance(Class<T> ifInstanceOf);
 }

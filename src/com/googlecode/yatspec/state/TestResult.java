@@ -1,5 +1,6 @@
 package com.googlecode.yatspec.state;
 
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.parsing.TestParser;
@@ -10,19 +11,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.googlecode.totallylazy.Option.option;
+import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.parsing.Text.wordify;
 
 public class TestResult implements Result {
-
     private final Class<?> klass;
     private List<TestMethod> testMethods;
     private Map<Class, Renderer> customRenderers = new HashMap<Class, Renderer>();
     private Content customHeaderContent;
+    private Object testInstance;
 
     public TestResult(Class<?> klass) {
         this.klass = klass;
+        try {
+            testInstance = klass.newInstance();
+        } catch (Throwable e) {
+            throw new IllegalArgumentException("Cannot create test class instance of " + klass, e);
+        }
     }
 
     @Override
@@ -32,7 +39,7 @@ public class TestResult implements Result {
 
     @Override
     public List<TestMethod> getTestMethods() throws Exception {
-        if(testMethods == null){
+        if (testMethods == null) {
             testMethods = TestParser.parseTestMethods(klass);
         }
         return testMethods;
@@ -48,7 +55,7 @@ public class TestResult implements Result {
     @Override
     public String getName() {
         String className = getTestClass().getSimpleName();
-        if(className.endsWith("Test")){
+        if (className.endsWith("Test")) {
             className = removeTestFrom(className);
         }
         return wordify(className);
@@ -57,6 +64,14 @@ public class TestResult implements Result {
     @Override
     public String getPackageName() {
         return getTestClass().getPackage().getName();
+    }
+
+    @Override
+    public <T> Option<T> testInstance(Class<T> ifInstanceOf) {
+        if (ifInstanceOf.isAssignableFrom(testInstance.getClass())) {
+            return some(ifInstanceOf.cast(testInstance));
+        }
+        return none();
     }
 
     private static String removeTestFrom(String className) {
@@ -80,26 +95,4 @@ public class TestResult implements Result {
     public Notes getNotes() throws Exception {
         return getTestClass().getAnnotation(Notes.class);
     }
-
-    @Override
-    public void mergeCustomRenderers(Map<Class, Renderer> customRenderers) {
-        this.customRenderers.putAll(customRenderers);
-    }
-
-    @Override
-    public Map<Class, Renderer> getCustomRenderers() {
-        return customRenderers;
-    }
-
-    @Override
-    public void mergeCustomHeaderContent(Content customHeaderContent) {
-        this.customHeaderContent = customHeaderContent;
-    }
-
-    @Override
-    public Content getCustomHeaderContent() {
-        return customHeaderContent;
-    }
-
-
 }
