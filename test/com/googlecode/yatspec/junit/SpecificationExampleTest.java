@@ -45,7 +45,7 @@ public class SpecificationExampleTest extends TestState implements WithCustomRen
     @Test
     @Table({@Row({"9", "3.0"}),
             @Row({"16", "4.0"})})
-    @Notes("#608 This example combines table / row tests with specification and given when then")
+    @Notes("This example combines table / row tests with specification and given when then")
     public void takeTheSquareRoot(String radicand, String result) throws Exception {
         given(theRadicand(radicand));
         when(weTakeTheSquareRoot());
@@ -53,7 +53,6 @@ public class SpecificationExampleTest extends TestState implements WithCustomRen
     }
 
     @Test
-    @Notes("#109 #608")
     public void printEmptyTestName() throws Exception {
 
     }
