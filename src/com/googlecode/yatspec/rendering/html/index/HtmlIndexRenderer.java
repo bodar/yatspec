@@ -20,10 +20,10 @@ public class HtmlIndexRenderer implements SpecResultListener {
     @Override
     public void complete(File yatspecOutputDir, Result result) throws Exception {
         index.add(result);
-        overwrite(outputFile(yatspecOutputDir), render(index, yatspecOutputDir));
+        overwrite(outputFile(yatspecOutputDir), render(yatspecOutputDir, index));
     }
 
-    public String render(Index index, File yatspecOutputDir) throws Exception {
+    private String render(File yatspecOutputDir, Index index) throws Exception {
         EnhancedStringTemplateGroup group = new EnhancedStringTemplateGroup(getClass());
         StringTemplate template = group.getInstanceOf("index",
                 model().
