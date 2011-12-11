@@ -50,7 +50,6 @@ public class HtmlResultRendererTest {
 
         result.mergeCustomHeaderContent(new Content(getClass().getResource("CustomHeaderContent.html")));
 
-
         String html = new HtmlResultRenderer().render(result);
 
         assertThat(html, containsString("walrus"));
