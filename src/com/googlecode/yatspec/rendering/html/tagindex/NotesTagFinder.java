@@ -14,7 +14,7 @@ public class NotesTagFinder implements TagFinder {
     private Regex regex;
 
     public NotesTagFinder() {
-        this("#[^ ]+");
+        this("#[^\\s]+");
     }
 
     public NotesTagFinder(String regex) {
