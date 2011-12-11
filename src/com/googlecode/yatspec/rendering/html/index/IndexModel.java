@@ -1,9 +1,9 @@
 package com.googlecode.yatspec.rendering.html.index;
 
 import com.googlecode.funclate.Model;
-import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.yatspec.rendering.Index;
-import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.Status;
 import com.googlecode.yatspec.state.TestMethod;
@@ -12,17 +12,13 @@ import java.io.File;
 
 import static com.googlecode.funclate.Model.model;
 import static com.googlecode.totallylazy.Callables.returnArgument;
-import static com.googlecode.totallylazy.Callables.second;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
-import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.startsWith;
 import static com.googlecode.yatspec.parsing.Text.wordify;
-import static com.googlecode.yatspec.rendering.PackageNames.allAncestors;
-import static com.googlecode.yatspec.rendering.PackageNames.directSubpackageOf;
-import static com.googlecode.yatspec.rendering.PackageNames.packageDisplayName;
+import static com.googlecode.yatspec.rendering.PackageNames.*;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.htmlResultFile;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.testMethodPath;
 import static com.googlecode.yatspec.state.Results.packageName;
