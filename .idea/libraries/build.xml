@@ -6,6 +6,7 @@
     <JAVADOC />
     <SOURCES>
       <root url="jar://$PROJECT_DIR$/lib/build/funclate-50-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/build/totallylazy-535-sources.jar!/" />
     </SOURCES>
     <jarDirectory url="file://$PROJECT_DIR$/lib/build" recursive="false" />
   </library>

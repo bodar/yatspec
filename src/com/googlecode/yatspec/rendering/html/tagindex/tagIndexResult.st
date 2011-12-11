@@ -1,3 +1,3 @@
-<li class="$result.class$">
+<dd class="$result.class$">
     <a href="$result.url$">$result.name$</a>
-</li>
+</dd>

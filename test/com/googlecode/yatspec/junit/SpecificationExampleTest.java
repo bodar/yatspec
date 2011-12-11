@@ -4,12 +4,14 @@ import com.googlecode.yatspec.rendering.html.HyperlinkRenderer;
 import com.googlecode.yatspec.rendering.NotesRenderer;
 import com.googlecode.yatspec.rendering.Renderer;
 import com.googlecode.yatspec.rendering.WithCustomRendering;
+import com.googlecode.yatspec.rendering.html.tagindex.HtmlTagIndexRenderer;
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
 import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
 import com.googlecode.yatspec.state.givenwhenthen.GivensBuilder;
 import com.googlecode.yatspec.state.givenwhenthen.InterestingGivens;
 import com.googlecode.yatspec.state.givenwhenthen.StateExtractor;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -30,6 +32,11 @@ public class SpecificationExampleTest extends TestState implements WithCustomRen
     private static final String RADICAND = "Radicand";
     private static final String RESULT = "Result";
 
+    @Before
+    public void setIndexRenderer() {
+        SpecRunner.setIndexRenderer(HtmlTagIndexRenderer.class);
+    }
+
     @Test
     public void reallySimpleExample() throws Exception {
         assertThat(sqrt(9), is(3.0));
@@ -38,7 +45,7 @@ public class SpecificationExampleTest extends TestState implements WithCustomRen
     @Test
     @Table({@Row({"9", "3.0"}),
             @Row({"16", "4.0"})})
-    @Notes("This example combines table / row tests with specification and given when then")
+    @Notes("#608 This example combines table / row tests with specification and given when then")
     public void takeTheSquareRoot(String radicand, String result) throws Exception {
         given(theRadicand(radicand));
         when(weTakeTheSquareRoot());
@@ -46,6 +53,7 @@ public class SpecificationExampleTest extends TestState implements WithCustomRen
     }
 
     @Test
+    @Notes("#109 #608")
     public void printEmptyTestName() throws Exception {
 
     }
