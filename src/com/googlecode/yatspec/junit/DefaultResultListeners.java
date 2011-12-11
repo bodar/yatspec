@@ -5,6 +5,7 @@ import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
 
 import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.Creator.create;
 import static java.lang.Boolean.parseBoolean;
@@ -29,6 +30,6 @@ public class DefaultResultListeners implements WithCustomResultListeners {
         if (!parseBoolean(getProperty(INDEX_ENABLE))) {
             return none();
         }
-        return create(forName(getProperty(INDEX_RENDER, HtmlIndexRenderer.class.getName())));
+        return some((SpecResultListener) create(forName(getProperty(INDEX_RENDER, HtmlIndexRenderer.class.getName()))));
     }
 }
