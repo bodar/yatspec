@@ -43,7 +43,9 @@ public class SpecificationExampleTest extends TestState implements WithCustomHtm
     @Test
     @Table({@Row({"9", "3.0"}),
             @Row({"16", "4.0"})})
-    @Notes("#tag-one #tag-two This example combines table / row tests with specification and given when then")
+    @Notes("#tag-one\n" +
+            "#tag-two\n" +
+            "This example combines table / row tests with specification and given when then")
     public void takeTheSquareRoot(String radicand, String result) throws Exception {
         given(theRadicand(radicand));
         when(weTakeTheSquareRoot());
@@ -83,7 +85,7 @@ public class SpecificationExampleTest extends TestState implements WithCustomHtm
     @SuppressWarnings({"unchecked"})
     @Override
     public Map<Class, Renderer> getCustomHtmlRenderers() {
-        return new HashMap(singletonMap(Notes.class, new HyperlinkRenderer(new NotesRenderer(), "(?:#)([^ ]+)","<a href='http://localhost:8080/pretent-issue-tracking/$1'>$1</a>")));
+        return new HashMap(singletonMap(Notes.class, new HyperlinkRenderer(new NotesRenderer(), "(?:#)([^\\s]+)","<a href='http://localhost:8080/pretent-issue-tracking/$1'>$1</a>")));
     }
 
     public Iterable<SpecResultListener> getResultListeners() throws Exception {
