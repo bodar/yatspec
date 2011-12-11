@@ -56,7 +56,7 @@ public class TestParser {
         for (String name : sourceMethodsByName.keySet()) {
             List<JavaMethod> javaMethods = sourceMethodsByName.get(name);
             List<Method> reflectionMethods = reflectionMethodsByName.get(name);
-            testMethods.add(extractor.toTestMethod(javaMethods.get(0), reflectionMethods.get(0)));
+            testMethods.add(extractor.toTestMethod(aClass, javaMethods.get(0), reflectionMethods.get(0)));
             // TODO: If people overload test methods we will have to use the full name rather than the short name
         }
 

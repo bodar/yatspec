@@ -1,9 +1,12 @@
 package com.googlecode.yatspec.junit;
 
+import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.rendering.html.HyperlinkRenderer;
 import com.googlecode.yatspec.rendering.NotesRenderer;
 import com.googlecode.yatspec.rendering.Renderer;
 import com.googlecode.yatspec.rendering.html.WithCustomHtmlRendering;
+import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
+import com.googlecode.yatspec.rendering.html.tagindex.HtmlTagIndexRenderer;
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
 import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
 import com.googlecode.yatspec.state.givenwhenthen.GivensBuilder;
@@ -16,6 +19,7 @@ import org.junit.runner.RunWith;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.plugin.jdom.StateExtractors.getValue;
 import static java.lang.Double.valueOf;
 import static java.lang.Math.sqrt;

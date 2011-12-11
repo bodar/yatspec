@@ -1,5 +1,6 @@
 package com.googlecode.yatspec.junit;
 
+import com.googlecode.yatspec.rendering.ScenarioNameRendererFactory;
 import com.googlecode.yatspec.rendering.junit.HumanReadableScenarioNameRenderer;
 import com.googlecode.yatspec.rendering.junit.MavenSurefireScenarioNameRenderer;
 import com.googlecode.yatspec.state.ScenarioName;
@@ -14,13 +15,12 @@ import java.util.List;
 
 import static com.googlecode.yatspec.fixture.RandomFixtures.anyString;
 import static com.googlecode.yatspec.fixture.RandomFixtures.pickOneOf;
-import static com.googlecode.yatspec.junit.SpecRunner.SCENARIO_NAME_RENDERER;
+import static com.googlecode.yatspec.rendering.ScenarioNameRendererFactory.SCENARIO_NAME_RENDERER;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class DecoratingFrameworkMethodTest {
-
     private static final String MAVEN_SCENARIO_NAME_RENDERER = MavenSurefireScenarioNameRenderer.class.getName();
     private String originalScenarioNameRenderer;
     private List<String> args;

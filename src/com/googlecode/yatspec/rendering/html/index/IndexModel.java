@@ -3,10 +3,8 @@ package com.googlecode.yatspec.rendering.html.index;
 import com.googlecode.funclate.Model;
 import com.googlecode.totallylazy.*;
 import com.googlecode.yatspec.rendering.Index;
-import com.googlecode.yatspec.rendering.PackageNames;
-import com.googlecode.yatspec.rendering.html.TestMethodPath;
+import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.state.Result;
-import com.googlecode.yatspec.state.Results;
 import com.googlecode.yatspec.state.Status;
 import com.googlecode.yatspec.state.TestMethod;
 
@@ -25,18 +23,22 @@ import static com.googlecode.yatspec.parsing.Text.wordify;
 import static com.googlecode.yatspec.rendering.PackageNames.allAncestors;
 import static com.googlecode.yatspec.rendering.PackageNames.directSubpackageOf;
 import static com.googlecode.yatspec.rendering.PackageNames.packageDisplayName;
+import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.htmlResultFile;
+import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.testMethodPath;
+import static com.googlecode.yatspec.state.Results.packageName;
 import static com.googlecode.yatspec.state.Results.resultStatus;
 import static com.googlecode.yatspec.state.StatusPriority.statusPriority;
 
 public class IndexModel {
-    private final Sequence<Pair<File, Result>> entries;
+    private final Sequence<Result> entries;
     private final Sequence<String> packageNames;
+    private final File yatspecOutputDir;
 
-    public IndexModel(Index index) {
+    public IndexModel(Index index, File yatspecOutputDir) {
+        this.yatspecOutputDir = yatspecOutputDir;
         this.entries = index.entries().memorise();
         this.packageNames = entries.
-                map(second(Result.class)).
-                map(Results.packageName()).
+                map(packageName()).
                 unique().
                 flatMap(allAncestors()).
                 unique();
@@ -61,18 +63,16 @@ public class IndexModel {
                         toList());
     }
 
-    private static Callable1<? super Pair<File, Result>, Model> modelOfResult() {
-        return new Callable1<Pair<File, Result>, Model>() {
+    private Callable1<? super Result, Model> modelOfResult() {
+        return new Callable1<Result, Model>() {
             @Override
-            public Model call(Pair<File, Result> fileAndResult) throws Exception {
-                Result result = fileAndResult.second();
-                File file = fileAndResult.first();
+            public Model call(Result result) throws Exception {
                 return model().
                         add("name", result.getName()).
-                        add("url", "file://" + file).
+                        add("url", htmlResultFile(yatspecOutputDir, result.getTestClass())).
                         add("status", some(result).map(resultStatus()).get()).
                         add("methods", sequence(result.getTestMethods()).
-                                map(testMethodModel(file)).
+                                map(testMethodModel()).
                                 toList());
             }
         };
@@ -81,20 +81,19 @@ public class IndexModel {
     private Status statusOfPackage(String name) throws Exception {
         return entries.
                 filter(where(packageName(), startsWith(name))).
-                map(second(Result.class)).
                 map(resultStatus()).
                 sortBy(statusPriority()).
                 headOption().
                 getOrElse(Status.Passed);
     }
 
-    private static Callable1<? super TestMethod, Model> testMethodModel(final File file) {
+    private Callable1<? super TestMethod, Model> testMethodModel() {
         return new Callable1<TestMethod, Model>() {
             @Override
             public Model call(TestMethod testMethod) throws Exception {
                 return model().
                         add("name", testMethod.getDisplayName()).
-                        add("url", TestMethodPath.testMethodPath(testMethod, file)).
+                        add("url", testMethodPath(yatspecOutputDir, testMethod)).
                         add("status", testMethod.getStatus());
             }
         };
@@ -105,15 +104,6 @@ public class IndexModel {
             @Override
             public Model call(String packageName) throws Exception {
                 return modelOfPackage(packageName);
-            }
-        };
-    }
-
-    private Callable1<? super Pair<File, Result>, String> packageName() {
-        return new Callable1<Pair<File, Result>, String>() {
-            @Override
-            public String call(Pair<File, Result> result) throws Exception {
-                return result.second().getPackageName();
             }
         };
     }

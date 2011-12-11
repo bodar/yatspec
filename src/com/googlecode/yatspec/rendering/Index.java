@@ -1,25 +1,22 @@
 package com.googlecode.yatspec.rendering;
 
-import com.googlecode.totallylazy.Maps;
-import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.yatspec.state.Result;
-import com.googlecode.yatspec.state.TestResult;
 
-import java.io.File;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Index {
-    private final Map<File, Result> files = new ConcurrentHashMap<File, Result>();
+    private final List<Result> files = new CopyOnWriteArrayList<Result>();
 
-    public Index put(File file, Result result) {
-        files.put(file, result);
+    public Index add(Result result) {
+        files.add(result);
         return this;
     }
 
-    public Sequence<Pair<File, Result>> entries() {
-        return Maps.pairs(files);
+    public Sequence<Result> entries() {
+        return sequence(files);
     }
 }

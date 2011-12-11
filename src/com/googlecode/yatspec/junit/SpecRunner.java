@@ -1,14 +1,8 @@
 package com.googlecode.yatspec.junit;
 
 import com.googlecode.totallylazy.Predicate;
-import com.googlecode.yatspec.rendering.ContentRenderer;
-import com.googlecode.yatspec.rendering.ContentWriter;
-import com.googlecode.yatspec.rendering.Index;
-import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
-import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.Scenario;
-import com.googlecode.yatspec.state.ScenarioName;
 import com.googlecode.yatspec.state.TestResult;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import com.googlecode.yatspec.state.givenwhenthen.WithTestState;
@@ -19,44 +13,13 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.yatspec.Creator.create;
-import static java.lang.Class.forName;
 import static java.lang.System.getProperty;
-
 
 public class SpecRunner extends TableRunner {
     public static final String OUTPUT_DIR = "yatspec.output.dir";
-    public static final String RESULT_RENDER = "yatspec.result.renderer";
-    public static final String SCENARIO_NAME_RENDERER = "yatspec.scenario.name.renderer";
-    public static final String INDEX_ENABLE = "yatspec.index.enable";
-    public static final String INDEX_RENDER = "yatspec.index.renderer";
-
-    public static void setOutputDir(File directory) {
-        System.setProperty(OUTPUT_DIR, directory.getPath());
-    }
-
-    public static void setResultRenderer(Class<? extends ContentRenderer<Result>> aClass) {
-        System.setProperty(RESULT_RENDER, aClass.getName());
-    }
-
-    public static void setIndexRenderer(Class<? extends ContentRenderer<Index>> aClass) {
-        enableIndex();
-        System.setProperty(INDEX_RENDER, aClass.getName());
-    }
-
-    public static void setScenarioNameRenderer(Class<? extends ContentRenderer<ScenarioName>> aClass) {
-        System.setProperty(SCENARIO_NAME_RENDERER, aClass.getName());
-    }
-
-    public static void enableIndex() {
-        System.setProperty(INDEX_ENABLE, "true");
-    }
-
-    private final static Index index = new Index();
     private final Result testResult;
     private Scenario currentScenario;
 
@@ -85,28 +48,17 @@ public class SpecRunner extends TableRunner {
         super.run(notifier);
         notifier.removeListener(listener);
         try {
-            File ouputDirectory = getOuputDirectory();
-            File file = new ContentWriter<Result>(ouputDirectory, getResultRenderer(), true).write(testResult);
-            index.put(file, testResult);
-            if (indexEnabled()) {
-                new ContentWriter<Index>(ouputDirectory, getIndexRenderer(), true).write(index);
+            WithCustomResultListeners listeners = testResult.
+                    testInstance(WithCustomResultListeners.class).
+                    getOrElse(new DefaultResultListeners());
+
+            for (SpecResultListener resultListener : listeners.getResultListeners()) {
+                resultListener.complete(getOuputDirectory(), testResult);
             }
         } catch (Exception e) {
-            System.out.println("Error while writing HTML");
+            System.out.println("Error while writing yatspec output");
             e.printStackTrace(System.out);
         }
-    }
-
-    private boolean indexEnabled() {
-        return Boolean.parseBoolean(getProperty(INDEX_ENABLE));
-    }
-
-    private ContentRenderer<Result> getResultRenderer() throws ClassNotFoundException, InvocationTargetException, IllegalAccessException, InstantiationException {
-        return create(forName(getProperty(RESULT_RENDER, HtmlResultRenderer.class.getName())));
-    }
-
-    private ContentRenderer<Index> getIndexRenderer() throws ClassNotFoundException, InvocationTargetException, IllegalAccessException, InstantiationException {
-        return create(forName(getProperty(INDEX_RENDER, HtmlIndexRenderer.class.getName())));
     }
 
     private static File getOuputDirectory() {
