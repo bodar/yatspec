@@ -175,23 +175,40 @@ div.example {
     margin-bottom: 32px;
 }
 
-.package {
-    border-right: none;
-    border-bottom: none;
-}
-
-li.package {
-    list-style: none;
-    margin-top: 0px;
-    padding-top: 0px;
-    margin-left: 0px;
-    padding-left: 20px;
-}
-
 .package-name {
     cursor: pointer;
 }
 
 .package-name:hover {
     text-decoration: underline;
+}
+
+dt {
+    font-weight: bold;
+    margin: 0px;
+    padding: 2px;
+}
+
+dd {
+    font-weight: normal;
+    margin-top:  0px;
+    margin-bottom:  1px;
+    margin-left:  20px;
+    margin-right:  0px;
+    padding: 2px;
+    padding-right: 0px;
+}
+
+dl {
+    margin: 0px;
+}
+dl.index-result {
+    padding: 10px;
+}
+.index-result dt {
+    margin-bottom: 5px;
+}
+.index-result dd {
+    margin-left: 0px;
+    margin-right: 5px;
 }

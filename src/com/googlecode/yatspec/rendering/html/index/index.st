@@ -4,18 +4,19 @@
     <title>Yatspec Index</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
     $stylesheet:{
-        <style type="text/css">
+    <style type="text/css">
             /* <![CDATA[ */
-            $it$
+        $it$
+
             /* ]]> */
-        </style>
+    </style>
     }$
     $script:{
-        <script type="text/javascript">
+    <script type="text/javascript">
         // <![CDATA[
-            $it$
+        $it$
         // ]]>
-        </script>
+    </script>
     }$
 </head>
 <body>
@@ -23,14 +24,7 @@
 <h1>Index</h1>
 
 <div class="contents">
-    <h2>Tests</h2>
-    <ul>
-        $result.packages:indexPackage(package=it, cssClass=cssClass)$
-    </ul>
-    <h2>Tags</h2>
-    <ul>
-        $result.tags:indexTag(tag=it, cssClass=cssClass)$
-    </ul>
+    $result.packages:indexPackage(package=it, cssClass=cssClass)$
 </div>
 </body>
 </html>

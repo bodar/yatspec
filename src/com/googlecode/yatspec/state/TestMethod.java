@@ -118,4 +118,8 @@ public class TestMethod implements Notable {
     public String getUid() {
         return Integer.toString(hashCode());
     }
+
+    public String getPackageName() {
+        return method.getDeclaringClass().getPackage().getName();
+    }
 }
