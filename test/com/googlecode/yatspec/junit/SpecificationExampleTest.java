@@ -32,11 +32,6 @@ public class SpecificationExampleTest extends TestState implements WithCustomRen
     private static final String RADICAND = "Radicand";
     private static final String RESULT = "Result";
 
-    @Before
-    public void setIndexRenderer() {
-        SpecRunner.setIndexRenderer(HtmlTagIndexRenderer.class);
-    }
-
     @Test
     public void reallySimpleExample() throws Exception {
         assertThat(sqrt(9), is(3.0));
