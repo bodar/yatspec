@@ -1,7 +1,6 @@
 package com.googlecode.yatspec.parsing;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.yatspec.junit.Table;
 import com.googlecode.yatspec.state.ScenarioTable;
@@ -18,28 +17,15 @@ import java.util.List;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.Strings.lines;
 import static com.googlecode.yatspec.parsing.TestParser.name;
 
-public class TestMethodExtractor implements Callable1<Pair<JavaMethod, Method>, TestMethod> {
-    public static TestMethodExtractor extractTestMethod() throws IOException {
-        return new TestMethodExtractor();
-    }
-
-    public TestMethod call(Pair<JavaMethod, Method> pair) {
-        return toTestMethod(pair.first(), pair.second());
-    }
-
-    public TestMethod toTestMethod(JavaMethod javaMethod, Method method) {
+public class TestMethodExtractor {
+    public TestMethod toTestMethod(Class aClass, JavaMethod javaMethod, Method method) {
         final String name = javaMethod.getName();
 
         final JavaSource source = new JavaSource(javaMethod.getSourceCode());
         final ScenarioTable scenarioTable = getScenarioTable(javaMethod);
-        return new TestMethod(method, name, source, scenarioTable);
-    }
-
-    private String lineSeperator() {
-        return System.getProperty("line.separator");
+        return new TestMethod(aClass, method, name, source, scenarioTable);
     }
 
     @SuppressWarnings({"unchecked"})
@@ -50,7 +36,7 @@ public class TestMethodExtractor implements Callable1<Pair<JavaMethod, Method>, 
         final Sequence<Annotation> rows = getRows(method);
         for (Annotation row : rows) {
             List<String> values = (List<String>) row.getProperty("value").getParameterValue();
-                table.addRow(sequence(values).map(replaceQuotes()).toList());
+            table.addRow(sequence(values).map(replaceQuotes()).toList());
         }
         return table;
     }
@@ -72,7 +58,7 @@ public class TestMethodExtractor implements Callable1<Pair<JavaMethod, Method>, 
         return new Callable1<Annotation, Iterable<Annotation>>() {
             @Override
             public Iterable<Annotation> call(Annotation annotation) throws Exception {
-                return ((AnnotationValueList)annotation.getProperty("value")).getValueList();
+                return ((AnnotationValueList) annotation.getProperty("value")).getValueList();
             }
         };
     }

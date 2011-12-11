@@ -19,13 +19,15 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 
 @SuppressWarnings({"unused"})
 public class TestMethod implements Notable {
+    private final Class testClass;
     private final Method method;
     private final String methodName;
     private final ScenarioTable scenarioTable;
     private final JavaSource specification;
     private final Map<String, Scenario> scenarioResults = new LinkedHashMap<String, Scenario>();
 
-    public TestMethod(Method method, String methodName, JavaSource methodBody, ScenarioTable scenarioTable) {
+    public TestMethod(Class testClass, Method method, String methodName, JavaSource methodBody, ScenarioTable scenarioTable) {
+        this.testClass = testClass;
         this.method = method;
         this.methodName = methodName;
         this.scenarioTable = scenarioTable;
@@ -120,6 +122,10 @@ public class TestMethod implements Notable {
     }
 
     public String getPackageName() {
-        return method.getDeclaringClass().getPackage().getName();
+        return testClass.getPackage().getName();
+    }
+
+    public Class getTestClass() {
+        return testClass;
     }
 }

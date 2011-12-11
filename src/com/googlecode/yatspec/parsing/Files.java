@@ -5,9 +5,17 @@ import com.googlecode.totallylazy.Strings;
 
 import java.io.File;
 
+import static com.googlecode.totallylazy.Files.write;
 import static com.googlecode.totallylazy.Sequences.characters;
 
 public class Files {
+
+    public static void overwrite(File output, String content) throws Exception {
+        output.delete();
+        output.getParentFile().mkdirs();
+        write(content.getBytes("UTF-8"), output);
+        System.out.println("Yatspec output:\n" + output);
+    }
 
     public static String toJavaPath(Class testClass) {
         return toPath(testClass) + ".java";
