@@ -30,7 +30,7 @@ import static org.hamcrest.core.Is.is;
 @RunWith(SpecRunner.class)
 @Notes("This is a note on the whole class\n" +
         "It will preserve space")
-public class SpecificationExampleTest extends TestState implements WithCustomHtmlRendering {
+public class SpecificationExampleTest extends TestState implements WithCustomHtmlRendering, WithCustomResultListeners {
     private static final String RADICAND = "Radicand";
     private static final String RESULT = "Result";
 
@@ -42,7 +42,7 @@ public class SpecificationExampleTest extends TestState implements WithCustomHtm
     @Test
     @Table({@Row({"9", "3.0"}),
             @Row({"16", "4.0"})})
-    @Notes("This example combines table / row tests with specification and given when then")
+    @Notes("#608 This example combines table / row tests with specification and given when then")
     public void takeTheSquareRoot(String radicand, String result) throws Exception {
         given(theRadicand(radicand));
         when(weTakeTheSquareRoot());
@@ -82,6 +82,13 @@ public class SpecificationExampleTest extends TestState implements WithCustomHtm
     @SuppressWarnings({"unchecked"})
     @Override
     public Map<Class, Renderer> getCustomHtmlRenderers() {
-        return new HashMap(singletonMap(Notes.class, new HyperlinkRenderer("http://localhost:8080", new NotesRenderer())));
+        return new HashMap(singletonMap(Notes.class, new HyperlinkRenderer(new NotesRenderer(), "(?:#)([^ ]+)","http://localhost:8080/$1")));
+    }
+
+    public Iterable<SpecResultListener> getResultListeners() throws Exception {
+        return sequence(
+                new HtmlResultRenderer(),
+                new HtmlIndexRenderer(),
+                new HtmlTagIndexRenderer());
     }
 }

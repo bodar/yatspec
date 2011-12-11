@@ -6,7 +6,6 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Group;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecResultListener;
 import com.googlecode.yatspec.rendering.Index;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
@@ -16,12 +15,11 @@ import com.googlecode.yatspec.state.TestMethod;
 import org.antlr.stringtemplate.StringTemplate;
 
 import java.io.File;
-import java.util.regex.MatchResult;
 
 import static com.googlecode.funclate.Model.model;
 import static com.googlecode.totallylazy.Callables.first;
-import static com.googlecode.totallylazy.Sequences.*;
-import static com.googlecode.totallylazy.regex.Regex.regex;
+import static com.googlecode.totallylazy.Sequences.repeat;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.parsing.Files.overwrite;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.getCssMap;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.testMethodPath;
@@ -29,6 +27,15 @@ import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.testMetho
 public class HtmlTagIndexRenderer implements SpecResultListener {
     public static final String TAG_NAME = "tag";
     private final static Index index = new Index();
+    private final TagFinder tagFinder;
+
+    public HtmlTagIndexRenderer() {
+        this(new NotesTagFinder());
+    }
+
+    public HtmlTagIndexRenderer(TagFinder tagFinder) {
+        this.tagFinder = tagFinder;
+    }
 
     @Override
     public void complete(File yatspecOutputDir, Result result) throws Exception {
@@ -48,7 +55,7 @@ public class HtmlTagIndexRenderer implements SpecResultListener {
         return template.toString();
     }
 
-    private static Sequence<Model> tagModels(Index index, File yatspecOutputDir) {
+    private Sequence<Model> tagModels(Index index, File yatspecOutputDir) {
         return index.
                 entries().
                 flatMap(testMethods()).
@@ -58,11 +65,11 @@ public class HtmlTagIndexRenderer implements SpecResultListener {
                 map(toTagModel(yatspecOutputDir));
     }
 
-    private static Callable1<? super TestMethod, ? extends Iterable<Pair<String, TestMethod>>> methodTags() {
+    private Callable1<? super TestMethod, ? extends Iterable<Pair<String, TestMethod>>> methodTags() {
         return new Callable1<TestMethod, Iterable<Pair<String, TestMethod>>>() {
             @Override
             public Iterable<Pair<String, TestMethod>> call(TestMethod resultFileAndTestMethod) throws Exception {
-                return tagsFor(resultFileAndTestMethod).zip(repeat(resultFileAndTestMethod));
+                return sequence(tagFinder.tags(resultFileAndTestMethod)).zip(repeat(resultFileAndTestMethod));
             }
         };
     }
@@ -110,17 +117,6 @@ public class HtmlTagIndexRenderer implements SpecResultListener {
                         add("results", tagGroup.map(tagModel(outputDirectory)).toList());
             }
         };
-    }
-
-    private static Sequence<String> tagsFor(TestMethod testMethod) {
-        Notes notes = testMethod.getNotes();
-        if (notes == null) return empty();
-        return regex("#[^ ]+").findMatches(notes.value()).map(new Callable1<MatchResult, String>() {
-            @Override
-            public String call(MatchResult matchResult) throws Exception {
-                return matchResult.group();
-            }
-        });
     }
 
     private static File outputFile(File outputDirectory) {
