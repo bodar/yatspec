@@ -9,7 +9,8 @@ import com.googlecode.yatspec.parsing.JavaSource;
 import com.googlecode.yatspec.rendering.NotesRenderer;
 import com.googlecode.yatspec.rendering.Renderer;
 import com.googlecode.yatspec.rendering.ContentRenderer;
-import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
+import com.googlecode.yatspec.rendering.Renderers;
+import com.googlecode.yatspec.rendering.html.WithCustomHtmlRendering;
 import com.googlecode.yatspec.state.Result;
 import org.antlr.stringtemplate.NoIndentWriter;
 import org.antlr.stringtemplate.StringTemplate;
@@ -18,15 +19,19 @@ import java.io.File;
 import java.io.StringWriter;
 
 import static com.googlecode.totallylazy.Callables.asString;
+import static com.googlecode.totallylazy.Maps.entries;
 import static com.googlecode.totallylazy.Predicates.*;
+import static com.googlecode.yatspec.rendering.Renderers.registerRenderer;
 
 
 public class WikiResultRenderer implements ContentRenderer<Result> {
     public String render(Result result) throws Exception {
         final EnhancedStringTemplateGroup group = new EnhancedStringTemplateGroup(getClass());
+        for(WithCustomWikiRendering withCustomRendering : result.testInstance(WithCustomWikiRendering.class)){
+            entries(withCustomRendering.getCustomWikiRenderers()).fold(group, registerRenderer());
+        }
         group.registerRenderer(instanceOf(JavaSource.class), callable(new JavaSourceRenderer()));
         group.registerRenderer(instanceOf(Notes.class), callable(new NotesRenderer()));
-        Maps.entries(result.getCustomRenderers()).fold(group, HtmlResultRenderer.registerRenderer());
         final StringTemplate template = group.getInstanceOf("wiki");
         template.setAttribute("testResult", result);
         StringWriter writer = new StringWriter();
