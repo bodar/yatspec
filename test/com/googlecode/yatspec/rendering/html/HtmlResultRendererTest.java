@@ -17,7 +17,7 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 
-public class HtmlResultRendererTest implements WithCustomHtmlHeaderContent {
+public class HtmlResultRendererTest {
 
     public static final String CUSTOM_RENDERED_TEXT = "some crazy and likely random string that wouldn't appear in the html";
 
@@ -51,7 +51,9 @@ public class HtmlResultRendererTest implements WithCustomHtmlHeaderContent {
 
         TestResult result = new TestResult(getClass());
 
-        String html = new HtmlResultRenderer().render(result);
+        String html = new HtmlResultRenderer().
+                withCustomHeaderContent(new Content(getClass().getResource("CustomHeaderContent.html"))).
+                render(result);
 
         assertThat(html, containsString(Strings.toString(getClass().getResource("CustomHeaderContent.html").openStream())));
     }
@@ -67,11 +69,6 @@ public class HtmlResultRendererTest implements WithCustomHtmlHeaderContent {
         TestState testState = new TestState();
         testState.capturedInputAndOutputs.add("custom rendered thing", thingToBeCustomRendered);
         scenario.setTestState(testState);
-    }
-
-    @Override
-    public Content getCustomHeaderContent() {
-        return new Content(getClass().getResource("CustomHeaderContent.html"));
     }
 
     private static class RenderedType {

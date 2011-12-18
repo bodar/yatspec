@@ -5,7 +5,6 @@ import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
 import com.googlecode.yatspec.rendering.Content;
 import com.googlecode.yatspec.rendering.html.DontHighlightRenderer;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
-import com.googlecode.yatspec.rendering.html.WithCustomHtmlHeaderContent;
 import com.googlecode.yatspec.state.givenwhenthen.*;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
@@ -18,7 +17,7 @@ import org.junit.runner.RunWith;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 @RunWith(SpecRunner.class)
-public class SequenceDiagramingExampleTest extends TestState implements WithCustomResultListeners, WithCustomHtmlHeaderContent {
+public class SequenceDiagramingExampleTest extends TestState implements WithCustomResultListeners {
     private static final Object ANY_THING_FOR_THE_PURPOSES_OF_THIS_TEST = new Object();
 
     private SequenceDiagramGenerator sequenceDiagramGenerator;
@@ -73,14 +72,11 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
         then(mrFlintstone(), sharesHisFoodWithBarneyBecauseHeLikesHim(testName));
     }
 
-    public Content getCustomHeaderContent() {
-        return SequenceDiagramGenerator.getHeaderContentForModalWindows();
-    }
-
     @Override
     public Iterable<SpecResultListener> getResultListeners() throws Exception {
         return sequence(
                 new HtmlResultRenderer().
+                        withCustomHeaderContent(SequenceDiagramGenerator.getHeaderContentForModalWindows()).
                         withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer())).
                 safeCast(SpecResultListener.class);
     }
