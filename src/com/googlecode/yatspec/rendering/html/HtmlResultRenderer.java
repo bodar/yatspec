@@ -39,6 +39,8 @@ import static java.lang.String.format;
 
 public class HtmlResultRenderer implements SpecResultListener {
     private final List<Pair<Predicate, Renderer>> customRenderers = new ArrayList<Pair<Predicate, Renderer>>();
+    private Content customHeaderContent;
+
     @Override
     public void complete(File yatspecOutputDir, Result result) throws Exception {
         overwrite(htmlResultFile(yatspecOutputDir, result.getTestClass()), render(result));
@@ -50,8 +52,6 @@ public class HtmlResultRenderer implements SpecResultListener {
             group.registerRenderer(instanceOf(document), callable(Creator.<Renderer>create(Class.forName("com.googlecode.yatspec.plugin.jdom.DocumentRenderer"))));
         }
         sequence(customRenderers).fold(group, registerRenderer());
-        Content customHeaderContent = result.testInstance(WithCustomHtmlHeaderContent.class).map(getCustomHeader()).getOrNull();
-
         group.registerRenderer(instanceOf(Content.class), asString());
         group.registerRenderer(instanceOf(Notes.class), callable(new NotesRenderer()));
         group.registerRenderer(instanceOf(JavaSource.class), callable(new JavaSourceRenderer()));
@@ -68,7 +68,7 @@ public class HtmlResultRenderer implements SpecResultListener {
         return writer.toString();
     }
 
-    public <T> HtmlResultRenderer withCustomRenderer(Class<T> klazz, Renderer<T> renderer){
+    public <T> HtmlResultRenderer withCustomRenderer(Class<T> klazz, Renderer<T> renderer) {
         return withCustomRenderer((Predicate) instanceOf(klazz), renderer);
     }
 
@@ -82,15 +82,6 @@ public class HtmlResultRenderer implements SpecResultListener {
             @Override
             public String call(T o) throws Exception {
                 return value.render(o);
-            }
-        };
-    }
-
-    private static Callable1<? super WithCustomHtmlHeaderContent, Content> getCustomHeader() {
-        return new Callable1<WithCustomHtmlHeaderContent, Content>() {
-            @Override
-            public Content call(WithCustomHtmlHeaderContent withCustomHtmlHeaderContent) throws Exception {
-                return withCustomHtmlHeaderContent.getCustomHeaderContent();
             }
         };
     }
@@ -117,4 +108,8 @@ public class HtmlResultRenderer implements SpecResultListener {
                 testMethod.getName());
     }
 
+    public HtmlResultRenderer withCustomHeaderContent(Content content) {
+        this.customHeaderContent = content;
+        return this;
+    }
 }
