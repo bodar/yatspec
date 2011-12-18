@@ -2,6 +2,8 @@ package com.googlecode.yatspec.rendering.html;
 
 import com.googlecode.funclate.stringtemplate.EnhancedStringTemplateGroup;
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Xml;
 import com.googlecode.yatspec.Creator;
 import com.googlecode.yatspec.junit.Notes;
@@ -22,18 +24,21 @@ import org.antlr.stringtemplate.StringTemplate;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.googlecode.totallylazy.Callables.asString;
-import static com.googlecode.totallylazy.Maps.entries;
 import static com.googlecode.totallylazy.Predicates.*;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.parsing.Files.overwrite;
 import static com.googlecode.yatspec.rendering.Renderers.registerRenderer;
 import static java.lang.String.format;
 
 
 public class HtmlResultRenderer implements SpecResultListener {
+    private final List<Pair<Predicate, Renderer>> customRenderers = new ArrayList<Pair<Predicate, Renderer>>();
     @Override
     public void complete(File yatspecOutputDir, Result result) throws Exception {
         overwrite(htmlResultFile(yatspecOutputDir, result.getTestClass()), render(result));
@@ -44,9 +49,7 @@ public class HtmlResultRenderer implements SpecResultListener {
         for (Class document : Creator.optionalClass("org.jdom.Document")) {
             group.registerRenderer(instanceOf(document), callable(Creator.<Renderer>create(Class.forName("com.googlecode.yatspec.plugin.jdom.DocumentRenderer"))));
         }
-        for (WithCustomHtmlRendering withCustomHtmlRendering : result.testInstance(WithCustomHtmlRendering.class)) {
-            entries(withCustomHtmlRendering.getCustomHtmlRenderers()).fold(group, registerRenderer());
-        }
+        sequence(customRenderers).fold(group, registerRenderer());
         Content customHeaderContent = result.testInstance(WithCustomHtmlHeaderContent.class).map(getCustomHeader()).getOrNull();
 
         group.registerRenderer(instanceOf(Content.class), asString());
@@ -63,6 +66,15 @@ public class HtmlResultRenderer implements SpecResultListener {
         StringWriter writer = new StringWriter();
         template.write(new NoIndentWriter(writer));
         return writer.toString();
+    }
+
+    public <T> HtmlResultRenderer withCustomRenderer(Class<T> klazz, Renderer<T> renderer){
+        return withCustomRenderer((Predicate) instanceOf(klazz), renderer);
+    }
+
+    public <T> HtmlResultRenderer withCustomRenderer(Predicate<T> predicate, Renderer<T> renderer) {
+        customRenderers.add(Pair.<Predicate, Renderer>pair(predicate, renderer));
+        return this;
     }
 
     public static <T> Callable1<T, String> callable(final Renderer<T> value) {

@@ -1,6 +1,8 @@
 package com.googlecode.yatspec.rendering.html;
 
 import com.googlecode.totallylazy.Strings;
+import com.googlecode.yatspec.junit.SpecResultListener;
+import com.googlecode.yatspec.junit.WithCustomResultListeners;
 import com.googlecode.yatspec.rendering.Content;
 import com.googlecode.yatspec.rendering.Renderer;
 import com.googlecode.yatspec.state.Scenario;
@@ -8,16 +10,14 @@ import com.googlecode.yatspec.state.TestResult;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 
-public class HtmlResultRendererTest implements WithCustomHtmlRendering, WithCustomHtmlHeaderContent{
+public class HtmlResultRendererTest implements WithCustomHtmlHeaderContent {
 
     public static final String CUSTOM_RENDERED_TEXT = "some crazy and likely random string that wouldn't appear in the html";
 
@@ -38,7 +38,9 @@ public class HtmlResultRendererTest implements WithCustomHtmlRendering, WithCust
         // setup
         TestResult result = aTestResultWithCustomRenderTypeAddedToScenarioLogs();
         // execute
-        String html = new HtmlResultRenderer().render(result);
+        String html = new HtmlResultRenderer().
+                withCustomRenderer(RenderedType.class, new DefaultReturningRenderer(CUSTOM_RENDERED_TEXT)).
+                render(result);
 
         // verify
         assertThat(html, containsString(CUSTOM_RENDERED_TEXT));
@@ -65,13 +67,6 @@ public class HtmlResultRendererTest implements WithCustomHtmlRendering, WithCust
         TestState testState = new TestState();
         testState.capturedInputAndOutputs.add("custom rendered thing", thingToBeCustomRendered);
         scenario.setTestState(testState);
-    }
-
-    @Override
-    public Map<Class, Renderer> getCustomHtmlRenderers() {
-        return new HashMap<Class, Renderer>(){{
-            put(RenderedType.class, new DefaultReturningRenderer(CUSTOM_RENDERED_TEXT));
-        }};
     }
 
     @Override
