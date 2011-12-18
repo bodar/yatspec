@@ -3,8 +3,6 @@ package com.googlecode.yatspec.junit;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.rendering.html.HyperlinkRenderer;
 import com.googlecode.yatspec.rendering.NotesRenderer;
-import com.googlecode.yatspec.rendering.Renderer;
-import com.googlecode.yatspec.rendering.html.WithCustomHtmlRendering;
 import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
 import com.googlecode.yatspec.rendering.html.tagindex.HtmlTagIndexRenderer;
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
@@ -16,21 +14,17 @@ import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.plugin.jdom.StateExtractors.getValue;
 import static java.lang.Double.valueOf;
 import static java.lang.Math.sqrt;
-import static java.util.Collections.singletonMap;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 @RunWith(SpecRunner.class)
 @Notes("This is a note on the whole class\n" +
         "It will preserve space")
-public class SpecificationExampleTest extends TestState implements WithCustomHtmlRendering, WithCustomResultListeners {
+public class SpecificationExampleTest extends TestState implements WithCustomResultListeners {
     private static final String RADICAND = "Radicand";
     private static final String RESULT = "Result";
 
@@ -82,15 +76,10 @@ public class SpecificationExampleTest extends TestState implements WithCustomHtm
         return getValue(RESULT, Double.class);
     }
 
-    @SuppressWarnings({"unchecked"})
-    @Override
-    public Map<Class, Renderer> getCustomHtmlRenderers() {
-        return new HashMap(singletonMap(Notes.class, new HyperlinkRenderer(new NotesRenderer(), "(?:#)([^\\s]+)","<a href='http://localhost:8080/pretent-issue-tracking/$1'>$1</a>")));
-    }
-
     public Iterable<SpecResultListener> getResultListeners() throws Exception {
         return sequence(
-                new HtmlResultRenderer(),
+                new HtmlResultRenderer().
+                        withCustomRenderer(Notes.class, new HyperlinkRenderer(new NotesRenderer(), "(?:#)([^\\s]+)", "<a href='http://localhost:8080/pretent-issue-tracking/$1'>$1</a>")),
                 new HtmlIndexRenderer(),
                 new HtmlTagIndexRenderer());
     }

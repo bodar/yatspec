@@ -2,10 +2,10 @@ package com.googlecode.yatspec.junit;
 
 import com.googlecode.yatspec.plugin.sequencediagram.SequenceDiagramGenerator;
 import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
-import com.googlecode.yatspec.rendering.*;
+import com.googlecode.yatspec.rendering.Content;
 import com.googlecode.yatspec.rendering.html.DontHighlightRenderer;
+import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.rendering.html.WithCustomHtmlHeaderContent;
-import com.googlecode.yatspec.rendering.html.WithCustomHtmlRendering;
 import com.googlecode.yatspec.state.givenwhenthen.*;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
@@ -15,11 +15,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.HashMap;
-import java.util.Map;
+import static com.googlecode.totallylazy.Sequences.sequence;
 
 @RunWith(SpecRunner.class)
-public class SequenceDiagramingExampleTest extends TestState implements WithCustomHtmlRendering, WithCustomHtmlHeaderContent {
+public class SequenceDiagramingExampleTest extends TestState implements WithCustomResultListeners, WithCustomHtmlHeaderContent {
     private static final Object ANY_THING_FOR_THE_PURPOSES_OF_THIS_TEST = new Object();
 
     private SequenceDiagramGenerator sequenceDiagramGenerator;
@@ -58,12 +57,12 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
 
 
     @Table({
-            @Row({"row_a"}), 
+            @Row({"row_a"}),
             @Row({"row_b"})
     })
     @Test
     public void bambamGetsFoodForHisDadRepeatedSoWeCanCheckMultipleScenariosPerTestMethod(String scenarioName) throws Exception {
-        String testName = "test:3 scenario: "+scenarioName;
+        String testName = "test:3 scenario: " + scenarioName;
         given(aHungryMrFlintstone());
         when(heDemandsFoodFromBambam());
         then(bambam(), placesABurgerOrderWithBarney(testName));
@@ -78,10 +77,12 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
         return SequenceDiagramGenerator.getHeaderContentForModalWindows();
     }
 
-    public Map<Class, Renderer> getCustomHtmlRenderers() {
-        return new HashMap<Class, Renderer>() {{
-            put(SvgWrapper.class, new DontHighlightRenderer());
-        }};
+    @Override
+    public Iterable<SpecResultListener> getResultListeners() throws Exception {
+        return sequence(
+                new HtmlResultRenderer().
+                        withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer())).
+                safeCast(SpecResultListener.class);
     }
 
     @After
@@ -95,17 +96,17 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
     }
 
     private Matcher<? super Object> givesFoodToMrFlintstone(String testNumber) {
-        capturedInputAndOutputs.add("(grouped) food to mrflintstone", "here is your burger (test:" + testNumber +")");
+        capturedInputAndOutputs.add("(grouped) food to mrflintstone", "here is your burger (test:" + testNumber + ")");
         return dummyMatcher();
     }
 
     private Object givesTheBurgerToBambam(String testNumber) {
-        capturedInputAndOutputs.add("burger from barney", "1 burger here u go (test:" + testNumber +")");
+        capturedInputAndOutputs.add("burger from barney", "1 burger here u go (test:" + testNumber + ")");
         return ANY_THING_FOR_THE_PURPOSES_OF_THIS_TEST;
     }
 
     private Matcher<? super Object> placesABurgerOrderWithBarney(String testNumber) {
-        capturedInputAndOutputs.add("burger order to barney", "Get me a burger (test:" + testNumber +")");
+        capturedInputAndOutputs.add("burger order to barney", "Get me a burger (test:" + testNumber + ")");
         interestingGivens.add("burger");
         return dummyMatcher();
     }
@@ -152,12 +153,17 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
         };
     }
 
-    public void when(Object o, Object oo) {}
+    public void when(Object o, Object oo) {
+    }
 
     private BaseMatcher<Object> dummyMatcher() {
         return new BaseMatcher<Object>() {
-            public boolean matches(Object o) { return true; }
-            public void describeTo(Description description) {}
+            public boolean matches(Object o) {
+                return true;
+            }
+
+            public void describeTo(Description description) {
+            }
         };
     }
 
