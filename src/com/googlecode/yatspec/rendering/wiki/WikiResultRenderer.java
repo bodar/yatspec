@@ -50,7 +50,7 @@ public class WikiResultRenderer implements SpecResultListener {
         return withCustomRenderer((Predicate)instanceOf(klazz), renderer);
     }
 
-    public <T> WikiResultRenderer withCustomRenderer(Predicate<T> predicate, Renderer<T> renderer) {
+    private <T> WikiResultRenderer withCustomRenderer(Predicate<T> predicate, Renderer<T> renderer) {
         customRenderers.add(Pair.<Predicate, Renderer>pair(predicate, renderer));
         return this;
     }
