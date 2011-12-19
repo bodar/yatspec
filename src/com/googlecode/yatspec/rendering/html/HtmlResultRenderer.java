@@ -72,7 +72,7 @@ public class HtmlResultRenderer implements SpecResultListener {
         return withCustomRenderer((Predicate) instanceOf(klazz), renderer);
     }
 
-    public <T> HtmlResultRenderer withCustomRenderer(Predicate<T> predicate, Renderer<T> renderer) {
+    private <T> HtmlResultRenderer withCustomRenderer(Predicate<T> predicate, Renderer<T> renderer) {
         customRenderers.add(Pair.<Predicate, Renderer>pair(predicate, renderer));
         return this;
     }
