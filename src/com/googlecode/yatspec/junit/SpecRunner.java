@@ -49,7 +49,7 @@ public class SpecRunner extends TableRunner {
         notifier.removeListener(listener);
         try {
             WithCustomResultListeners listeners = testResult.
-                    testInstance(WithCustomResultListeners.class).
+                    safeCastTestInstanceTo(WithCustomResultListeners.class).
                     getOrElse(new DefaultResultListeners());
 
             for (SpecResultListener resultListener : listeners.getResultListeners()) {

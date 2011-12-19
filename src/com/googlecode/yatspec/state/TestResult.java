@@ -61,7 +61,7 @@ public class TestResult implements Result {
     }
 
     @Override
-    public <T> Option<T> testInstance(Class<T> ifInstanceOf) {
+    public <T> Option<T> safeCastTestInstanceTo(Class<T> ifInstanceOf) {
         if (ifInstanceOf.isAssignableFrom(testInstance.getClass())) {
             return some(ifInstanceOf.cast(testInstance));
         }
