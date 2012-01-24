@@ -22,7 +22,7 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.parsing.Files.overwrite;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.getCssMap;
-import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.testMethodPath;
+import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.testMethodRelativePath;
 
 public class HtmlTagIndexRenderer implements SpecResultListener {
     public static final String TAG_NAME = "tag";
@@ -40,29 +40,29 @@ public class HtmlTagIndexRenderer implements SpecResultListener {
     @Override
     public void complete(File yatspecOutputDir, Result result) throws Exception {
         index.add(result);
-        overwrite(outputFile(yatspecOutputDir), render(yatspecOutputDir, index));
+        overwrite(outputFile(yatspecOutputDir), render(index));
     }
 
-    public String render(File yatspecOutputDir, Index index) throws Exception {
+    public String render(Index index) throws Exception {
         EnhancedStringTemplateGroup group = new EnhancedStringTemplateGroup(getClass());
         StringTemplate template = group.getInstanceOf("index",
                 model().
                         add("script", null).
                         add("stylesheet", HtmlResultRenderer.loadContent("yatspec.css")).
                         add("cssClass", getCssMap()).
-                        add("tags", tagModels(index, yatspecOutputDir).toList()).
+                        add("tags", tagModels(index).toList()).
                         toMap());
         return template.toString();
     }
 
-    private Sequence<Model> tagModels(Index index, File yatspecOutputDir) {
+    private Sequence<Model> tagModels(Index index) {
         return index.
                 entries().
                 flatMap(testMethods()).
                 flatMap(methodTags()).
                 groupBy(first(String.class)).
                 sortBy(groupKey(String.class)).
-                map(toTagModel(yatspecOutputDir));
+                map(toTagModel());
     }
 
     private Callable1<? super TestMethod, ? extends Iterable<Pair<String, TestMethod>>> methodTags() {
@@ -83,7 +83,7 @@ public class HtmlTagIndexRenderer implements SpecResultListener {
         };
     }
 
-    private static Callable1<Pair<String, TestMethod>, Model> tagModel(final File yatspecOutputDir) {
+    private static Callable1<Pair<String, TestMethod>, Model> tagModel() {
         return new Callable1<Pair<String, TestMethod>, Model>() {
             @Override
             public Model call(Pair<String, TestMethod> tagAndTestMethod) throws Exception {
@@ -92,7 +92,7 @@ public class HtmlTagIndexRenderer implements SpecResultListener {
                         add(TAG_NAME, tagAndTestMethod.first()).
                         add("package", testMethod.getPackageName()).
                         add("resultName", testMethod.getName()).
-                        add("url", testMethodPath(yatspecOutputDir, testMethod)).
+                        add("url", testMethodRelativePath(testMethod)).
                         add("class", getCssMap().get(testMethod.getStatus())).
                         add("name", testMethod.getDisplayName());
             }
@@ -108,13 +108,13 @@ public class HtmlTagIndexRenderer implements SpecResultListener {
         };
     }
 
-    private static Callable1<Group<String, Pair<String, TestMethod>>, Model> toTagModel(final File outputDirectory) {
+    private static Callable1<Group<String, Pair<String, TestMethod>>, Model> toTagModel() {
         return new Callable1<Group<String, Pair<String, TestMethod>>, Model>() {
             @Override
             public Model call(Group<String, Pair<String, TestMethod>> tagGroup) throws Exception {
                 return model().
                         add("name", tagGroup.key()).
-                        add("results", tagGroup.map(tagModel(outputDirectory)).toList());
+                        add("results", tagGroup.map(tagModel()).toList());
             }
         };
     }
