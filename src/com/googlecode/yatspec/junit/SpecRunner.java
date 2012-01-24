@@ -53,7 +53,7 @@ public class SpecRunner extends TableRunner {
                     getOrElse(new DefaultResultListeners());
 
             for (SpecResultListener resultListener : listeners.getResultListeners()) {
-                resultListener.complete(getOuputDirectory(), testResult);
+                resultListener.complete(outputDirectory(), testResult);
             }
         } catch (Exception e) {
             System.out.println("Error while writing yatspec output");
@@ -61,7 +61,7 @@ public class SpecRunner extends TableRunner {
         }
     }
 
-    private static File getOuputDirectory() {
+    public static File outputDirectory() {
         return new File(getProperty(OUTPUT_DIR, getProperty("java.io.tmpdir")));
     }
 
