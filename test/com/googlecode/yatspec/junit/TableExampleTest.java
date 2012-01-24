@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@RunWith(TableRunner.class)
+@RunWith(SpecRunner.class)
 public class TableExampleTest {
     @Test
     @Table({@Row({"The quick brown fox jumps over the lazy dog", "fox"}),
