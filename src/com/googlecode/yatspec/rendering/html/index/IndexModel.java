@@ -19,8 +19,8 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.startsWith;
 import static com.googlecode.yatspec.parsing.Text.wordify;
 import static com.googlecode.yatspec.rendering.PackageNames.*;
-import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.htmlResultFile;
-import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.testMethodPath;
+import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.htmlResultRelativePath;
+import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.testMethodRelativePath;
 import static com.googlecode.yatspec.state.Results.packageName;
 import static com.googlecode.yatspec.state.Results.resultStatus;
 import static com.googlecode.yatspec.state.StatusPriority.statusPriority;
@@ -65,7 +65,7 @@ public class IndexModel {
             public Model call(Result result) throws Exception {
                 return model().
                         add("name", result.getName()).
-                        add("url", htmlResultFile(yatspecOutputDir, result.getTestClass())).
+                        add("url", htmlResultRelativePath(result.getTestClass())).
                         add("status", some(result).map(resultStatus()).get()).
                         add("methods", sequence(result.getTestMethods()).
                                 map(testMethodModel()).
@@ -89,7 +89,7 @@ public class IndexModel {
             public Model call(TestMethod testMethod) throws Exception {
                 return model().
                         add("name", testMethod.getDisplayName()).
-                        add("url", testMethodPath(yatspecOutputDir, testMethod)).
+                        add("url", testMethodRelativePath(testMethod)).
                         add("status", testMethod.getStatus());
             }
         };

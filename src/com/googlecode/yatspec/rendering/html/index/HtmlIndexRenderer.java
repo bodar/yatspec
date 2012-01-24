@@ -34,7 +34,7 @@ public class HtmlIndexRenderer implements SpecResultListener {
         return template.toString();
     }
 
-    private static File outputFile(File outputDirectory) {
+    public static File outputFile(File outputDirectory) {
         return new File(outputDirectory, "index.html");
     }
 

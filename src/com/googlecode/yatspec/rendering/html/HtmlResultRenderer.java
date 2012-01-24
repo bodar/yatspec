@@ -98,13 +98,17 @@ public class HtmlResultRenderer implements SpecResultListener {
         }};
     }
 
-    public static File htmlResultFile(File outputDirectory, Class resultClass) {
-        return new File(outputDirectory, Files.toPath(resultClass) + ".html");
+    public static String htmlResultRelativePath(Class resultClass) {
+        return Files.toPath(resultClass) + ".html";
     }
 
-    public static String testMethodPath(File yatspecOutputDir, TestMethod testMethod) {
+    public static File htmlResultFile(File outputDirectory, Class resultClass) {
+        return new File(outputDirectory, htmlResultRelativePath(resultClass));
+    }
+
+    public static String testMethodRelativePath(TestMethod testMethod) {
         return format("%s#%s",
-                htmlResultFile(yatspecOutputDir, testMethod.getTestClass()),
+                htmlResultRelativePath(testMethod.getTestClass()),
                 testMethod.getName());
     }
 

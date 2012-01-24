@@ -1,8 +1,6 @@
 package com.googlecode.yatspec.rendering.html;
 
 import com.googlecode.totallylazy.Strings;
-import com.googlecode.yatspec.junit.SpecResultListener;
-import com.googlecode.yatspec.junit.WithCustomResultListeners;
 import com.googlecode.yatspec.rendering.Content;
 import com.googlecode.yatspec.rendering.Renderer;
 import com.googlecode.yatspec.state.Scenario;
@@ -10,7 +8,8 @@ import com.googlecode.yatspec.state.TestResult;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.Sequences.sequence;
+import java.io.File;
+
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -20,6 +19,13 @@ import static org.hamcrest.core.IsNull.nullValue;
 public class HtmlResultRendererTest {
 
     public static final String CUSTOM_RENDERED_TEXT = "some crazy and likely random string that wouldn't appear in the html";
+
+    @Test
+    public void providesLinksToResultOutputRelativeToOutputDirectory() throws Exception {
+        assertThat(
+                HtmlResultRenderer.htmlResultRelativePath(this.getClass()),
+                is("com/googlecode/yatspec/rendering/html/HtmlResultRendererTest.html"));
+    }
 
     @Test
     public void loadsTemplateOffClassPath() throws Exception {
