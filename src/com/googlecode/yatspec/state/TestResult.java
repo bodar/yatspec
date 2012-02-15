@@ -15,15 +15,9 @@ import static com.googlecode.yatspec.parsing.Text.wordify;
 public class TestResult implements Result {
     private final Class<?> klass;
     private List<TestMethod> testMethods;
-    private Object testInstance;
 
     public TestResult(Class<?> klass) {
         this.klass = klass;
-        try {
-            testInstance = klass.newInstance();
-        } catch (Throwable e) {
-            throw new IllegalArgumentException("Cannot create test class instance of " + klass, e);
-        }
     }
 
     @Override
@@ -58,14 +52,6 @@ public class TestResult implements Result {
     @Override
     public String getPackageName() {
         return getTestClass().getPackage().getName();
-    }
-
-    @Override
-    public <T> Option<T> safeCastTestInstanceTo(Class<T> ifInstanceOf) {
-        if (ifInstanceOf.isAssignableFrom(testInstance.getClass())) {
-            return some(ifInstanceOf.cast(testInstance));
-        }
-        return none();
     }
 
     private static String removeTestFrom(String className) {

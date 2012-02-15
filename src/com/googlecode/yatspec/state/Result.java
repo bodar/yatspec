@@ -16,5 +16,4 @@ public interface Result extends Notable {
 
     String getPackageName();
 
-    <T> Option<T> safeCastTestInstanceTo(Class<T> ifInstanceOf);
 }

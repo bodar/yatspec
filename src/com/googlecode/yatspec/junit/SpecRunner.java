@@ -41,6 +41,19 @@ public class SpecRunner extends TableRunner {
         };
     }
 
+    private WithCustomResultListeners listeners;
+
+    @Override
+    protected Object createTest() throws Exception {
+        Object instance = super.createTest();
+        if(instance instanceof WithCustomResultListeners){
+            listeners = (WithCustomResultListeners) instance;
+        } else {
+            listeners = new DefaultResultListeners();
+        }
+        return instance;
+    }
+
     @Override
     public void run(RunNotifier notifier) {
         final SpecListener listener = new SpecListener();
@@ -48,10 +61,6 @@ public class SpecRunner extends TableRunner {
         super.run(notifier);
         notifier.removeListener(listener);
         try {
-            WithCustomResultListeners listeners = testResult.
-                    safeCastTestInstanceTo(WithCustomResultListeners.class).
-                    getOrElse(new DefaultResultListeners());
-
             for (SpecResultListener resultListener : listeners.getResultListeners()) {
                 resultListener.complete(outputDirectory(), testResult);
             }
