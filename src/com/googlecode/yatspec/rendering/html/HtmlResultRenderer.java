@@ -58,6 +58,7 @@ public class HtmlResultRenderer implements SpecResultListener {
         group.registerRenderer(instanceOf(ScenarioTableHeader.class), callable(new ScenarioTableHeaderRenderer()));
         group.registerRenderer(always().and(not(instanceOf(Number.class))), Xml.escape());
         final StringTemplate template = group.getInstanceOf("yatspec");
+        template.setAttribute("script", loadContent("xregexp.js"));
         template.setAttribute("script", loadContent("yatspec.js"));
         template.setAttribute("customHeaderContent", customHeaderContent);
         template.setAttribute("stylesheet", loadContent("yatspec.css"));

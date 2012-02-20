@@ -6,14 +6,6 @@
 
     $customHeaderContent$
 
-    $script:{
-        <script type="text/javascript">
-        // <![CDATA[
-            $it$
-        // ]]>
-        </script>
-    }$
-
     $stylesheet:{
         <style type="text/css">
             /* <![CDATA[ */
@@ -103,6 +95,14 @@ $endif$
 
         </div>
     }$
-
+    <div class="footer">
+        $script:{
+        <script type="text/javascript">
+            // <![CDATA[
+            $it$
+            // ]]>
+        </script>
+        }$
+    </div>
 </body>
 </html>
