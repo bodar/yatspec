@@ -79,11 +79,15 @@ $(document).ready(function () {
     })
 
     $('.scenario').each(function() {
+        var escapeRegExp = function(str) {
+            return str.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
+        };
+
         var interestingGivens = $('.interestingGiven', this).filter(':not(:empty)').map(
             function() {
                 return [
-                    {pattern: '"' + $(this).text() + '"',     cssClass: "interestingGiven" },
-                    {pattern: '\\b' + $(this).text() + '\\b', cssClass: "interestingGiven" },
+                    {pattern: '"' + escapeRegExp($(this).text()) + '"',     cssClass: "interestingGiven" },
+                    {pattern: '\\b' + escapeRegExp($(this).text()) + "\\b", cssClass: "interestingGiven" },
                 ];
             }).get();
 

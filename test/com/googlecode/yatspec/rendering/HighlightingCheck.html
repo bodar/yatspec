@@ -2,10 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <title></title>
-    <link rel=StyleSheet href="../../../../../src/com/googlecode/yatspec/rendering/yatspec.css" type="text/css"/>
+    <link rel=StyleSheet href="../../../../../src/com/googlecode/yatspec/rendering/html/yatspec.css" type="text/css"/>
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
-    <script src="../../../../../src/com/googlecode/yatspec/rendering/yatspec.js" TYPE="text/javascript" MEDIA=screen></script>
+    <script src="../../../../../src/com/googlecode/yatspec/rendering/html/yatspec.js" TYPE="text/javascript" MEDIA=screen></script>
 
 </head>
 <body>
@@ -16,7 +16,8 @@
 
         <ul class="contents">
                 <li class='test-passed'><a href="#reallySimpleExample">Really simple  example</a></li>
-		<li class='test-passed'><a href="#nullInterestingGiven">Null interesting given</a></li>
+		        <li class='test-passed'><a href="#nullInterestingGiven">Null interesting given</a></li>
+		        <li class='test-passed'><a href="#xmlInterestingGiven">Interesting given containing XML characters</a></li>
         </ul>
     </div>
 
@@ -77,6 +78,31 @@
             <h3 class="logKey" logkey="Result">Xml Output</h3>
             <div class="logValue highlight xml">
         &lt;xml&gt;
+        &lt;/xml&gt;
+            </div>
+        </div>
+    </div>
+    <div class="testmethod" id="xmlInterestingGiven">
+            <div class="scenario" id="1584283620_747585198">
+            <h2>Specification</h2>
+            <h2>Test results:</h2>
+
+
+            <pre class='highlight results test-passed'> Test passed</pre>
+
+            <h3 class="logKey">Interesting Givens</h3>
+
+            <table class="interestingGivens logValue">
+                <tr>
+                    <th class="key">An identifier</th>
+                    <td class="interestingGiven">+1234567@website.com</td>
+                </tr>
+            </table>
+
+            <h3 class="logKey" logkey="Result">Xml Output</h3>
+            <div class="logValue highlight xml">
+        &lt;xml&gt;
+                &lt;someAddress&gt;+1234567@website.com&lt;/someAddress&gt;
         &lt;/xml&gt;
             </div>
         </div>
