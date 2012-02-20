@@ -1,6 +1,13 @@
+// Add support for escape sequences: \Q⋯\E and \Q⋯
+XRegExp.addToken(
+    /\\Q([\s\S]*?)(?:\\E|$)/,
+    function (match) {return XRegExp.escape(match[1])},
+    XRegExp.INSIDE_CLASS | XRegExp.OUTSIDE_CLASS
+);
+
 RegExp.prototype.replace = function(str, replacer, nonMatchedReplacer) {
     nonMatchedReplacer = nonMatchedReplacer || function(value) {
-        return value
+        return value;
     };
     var result = [];
 
@@ -17,6 +24,12 @@ RegExp.prototype.replace = function(str, replacer, nonMatchedReplacer) {
 }
 
 function yatspec() {
+}
+
+yatspec.regex = function(expression, flags) {
+    var result =  new XRegExp(expression, flags);
+    result.replace = RegExp.prototype.replace;
+    return result;
 }
 
 yatspec.processed = 'highlighted';
@@ -41,7 +54,7 @@ yatspec.highlight = function(element, pairs) {
         classes.push(this.cssClass);
     });
     matchGroups.pop();
-    var regex = new RegExp(matchGroups.join(""), "g");
+    var regex = yatspec.regex(matchGroups.join(""), "g");
 
     $(element).html(regex.replace($(element).html(), function(match) {
         var matches = match.slice(1);
@@ -86,8 +99,8 @@ $(document).ready(function () {
         var interestingGivens = $('.interestingGiven', this).filter(':not(:empty)').map(
             function() {
                 return [
-                    {pattern: '"' + escapeRegExp($(this).text()) + '"',     cssClass: "interestingGiven" },
-                    {pattern: '\\b' + escapeRegExp($(this).text()) + "\\b", cssClass: "interestingGiven" },
+                    {pattern: '\\Q"' + $(this).text() + '"\\E',     cssClass: "interestingGiven" },
+                    {pattern: '\\Q' + $(this).text() + "\\E", cssClass: "interestingGiven" },
                 ];
             }).get();
 
