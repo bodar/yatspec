@@ -8,10 +8,11 @@ import com.googlecode.yatspec.state.TestMethod;
 import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
+import com.thoughtworks.qdox.model.annotation.AnnotationValue;
 import com.thoughtworks.qdox.model.annotation.AnnotationValueList;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Predicates.is;
@@ -35,10 +36,19 @@ public class TestMethodExtractor {
 
         final Sequence<Annotation> rows = getRows(method);
         for (Annotation row : rows) {
-            List<String> values = (List<String>) row.getProperty("value").getParameterValue();
+            List<String> values = getRowValues(row);
             table.addRow(sequence(values).map(replaceQuotes()).toList());
         }
         return table;
+    }
+
+    private List<String> getRowValues(Annotation row) {
+        Object parameterValue = row.getProperty("value").getParameterValue();
+        if (parameterValue instanceof List) {
+            return (List<String>) parameterValue;
+        } else {
+            return Arrays.asList(parameterValue.toString());
+        }
     }
 
     private Callable1<? super String, String> replaceQuotes() {
