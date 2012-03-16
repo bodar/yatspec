@@ -1,5 +1,6 @@
 package com.googlecode.yatspec.state.givenwhenthen;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -7,7 +8,7 @@ import static java.util.Collections.unmodifiableMap;
 
 @SuppressWarnings({"unused", "unchecked"})
 class NiceMap<T extends NiceMap> {
-    private final Map<String, Object> map = new LinkedHashMap<String, Object>();
+    private final Map<String, Object> map = Collections.synchronizedMap(new LinkedHashMap<String, Object>());
 
     public NiceMap(Object... instances) {
         for (Object instance : instances) {
