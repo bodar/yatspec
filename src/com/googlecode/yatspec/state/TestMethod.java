@@ -16,7 +16,6 @@ import java.util.Map;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-
 @SuppressWarnings({"unused"})
 public class TestMethod implements Notable {
     private final Class testClass;
