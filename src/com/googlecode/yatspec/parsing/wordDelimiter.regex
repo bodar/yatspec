@@ -1,7 +1,9 @@
-(?xm)                   # Enable comments and multiline
-([A-Z]*?)               # Reluctantly match a capital letter
-(?:                     # start a non capturing group so that we can do an 'or'
+(?xm)                       # Enable comments and multiline
+([A-Z]*?)                   # Reluctantly match a capital letter
+(?:                         # start a non capturing group so that we can do an 'or'
 (?<!^)([A-Z][a-z])
-|                       # or
-([^a-zA-Z_0-9\r\n])   # not a word character or end of line
-)                       # end non-capturing group
+|                           # or
+([^a-zA-Z_0-9\r\n\.])       # not a word character, end of line or full stop
+|                           # or
+((?=[^\d]+)\.(?=[^\d]+))    # a period not surrounded by digits
+)                           # end non-capturing group
