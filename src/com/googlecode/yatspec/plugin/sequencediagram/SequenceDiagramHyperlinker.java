@@ -10,91 +10,52 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.Pattern;
+
+import static java.util.Arrays.asList;
 
 public class SequenceDiagramHyperlinker {
+
     public String hyperlinkSequenceDiagram(List<String> actorNames, List<SequenceDiagramMessage> messages, String sequenceDiagramAsSvg) {
-        List<String> remainingInputLines = new ArrayList<String>(Arrays.asList(prettyPrint(sequenceDiagramAsSvg).split("\n")));
-        dropTheXmlHeaderAndTrailingEmptyLine(remainingInputLines);
+        List<String> inputLines = dropTheXmlHeaderAndTrailingEmptyLine(asList(prettyPrint(sequenceDiagramAsSvg).split("\n")));
         List<String> outputLines = new ArrayList<String>();
-        for (String actorName : actorNames) {
-            addHyperlinkForActor(actorName, outputLines, remainingInputLines);
+
+        ActorLineDecorator actorLineDecorator = new ActorLineDecorator(actorNames);
+        MessageLineDecorator messageLineDecorator = new MessageLineDecorator(messages);
+
+        for (String line : inputLines) {
+            String currentLine = line.trim();
+
+            currentLine = actorLineDecorator.decorate(currentLine);
+            currentLine = messageLineDecorator.decorate(currentLine);
+
+            outputLines.add(currentLine);
         }
-        for (SequenceDiagramMessage currentMessage : messages) {
-            addHyperlinkForMessage(currentMessage, outputLines, remainingInputLines);
-        }
-        outputLines.addAll(remainingInputLines);
-        return join(outputLines, "\n").trim();
+
+        return join(outputLines, "\n");
     }
 
-    private void addHyperlinkForActor(String actorName, List<String> outputLines, List<String> remainingInputLines) {
-        while (!remainingInputLines.isEmpty()) {
-            String currentInputLine = remainingInputLines.get(0).trim();
-            remainingInputLines.remove(0);
-            if (isActorLine(actorName, currentInputLine)) {
-                outputLines.add(withActorHyperLink(currentInputLine, actorName));
-                break;
-            } else {
-                outputLines.add(currentInputLine);
-            }
-        }
+    private List<String> dropTheXmlHeaderAndTrailingEmptyLine(List<String> inputLines) {
+        List<String> outputLinesWithoutHeaders = new ArrayList<String>(inputLines);
+
+        outputLinesWithoutHeaders.remove(0);
+        outputLinesWithoutHeaders.remove(outputLinesWithoutHeaders.size() - 1);
+
+        return outputLinesWithoutHeaders;
     }
 
-    private void addHyperlinkForMessage(SequenceDiagramMessage currentMessage, List<String> outputLines, List<String> remainingInputLines) {
-        while (!remainingInputLines.isEmpty()) {
-            String currentInputLine = remainingInputLines.get(0).trim();
-            remainingInputLines.remove(0);
-            if (isSequenceDiagramLineForMessage(currentMessage, currentInputLine)) {
-                outputLines.add(withHyperLink(currentInputLine, currentMessage));
-                break;
-            } else {
-                outputLines.add(currentInputLine);
-            }
-        }
-    }
-
-    private void dropTheXmlHeaderAndTrailingEmptyLine(List<String> remainingInputLines) {
-        remainingInputLines.remove(0);
-        remainingInputLines.remove(remainingInputLines.size() - 1);
-    }
-
-    private static boolean isActorLine(String actorName, String currentInputLine) {
-        return currentInputLine.startsWith("<text") && currentInputLine.matches(".*>" + actorName + "<.*");
-    }
-
-    private static boolean isSequenceDiagramLineForMessage(SequenceDiagramMessage currentMessage, String currentInputLine) {
-        return currentInputLine.startsWith("<text") && currentInputLine.matches(".*>" + regexGroupsSafe(currentMessage.getVisibleName()) + "<.*");
-    }
-
-    private static String regexGroupsSafe(final String visibleName) {
-        return visibleName.replace("(", "\\(").replace(")", "\\)");
-    }
 
     private String join(List<String> lines, String delim) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
+
         for (String line : lines) {
             result.append(line.trim()).append(delim);
         }
-        return result.toString();
+
+        return result.toString().trim();
     }
 
-    private String withActorHyperLink(String currentInputLine, String actorName) {
-        final String regexp = ".*(<text .*?>" + actorName + "</text>).*";
-        final Pattern pattern = Pattern.compile(regexp);
-        final java.util.regex.Matcher matcher = pattern.matcher(currentInputLine);
-        matcher.matches();
-        return currentInputLine.replaceFirst("(.*)(<text .*?>" + actorName + "</text>)(.*)", "$1<a class=\"sequence_diagram_actor\" sequence_diagram_actor_id=\"" + actorName + "\" href=\"#\">$2</a>$3");
-    }
-
-    private String withHyperLink(String currentInputLine, SequenceDiagramMessage currentMessage) {
-        final String regexp = ".*(<text .*?>" + regexGroupsSafe(currentMessage.getVisibleName()) + "</text>).*";
-        final Pattern pattern = Pattern.compile(regexp);
-        final java.util.regex.Matcher matcher = pattern.matcher(currentInputLine);
-        matcher.matches();
-        return currentInputLine.replaceFirst("(.*)(<text .*?>" + regexGroupsSafe(currentMessage.getVisibleName()) + "</text>)(.*)", "$1<a class=\"sequence_diagram_clickable\" sequence_diagram_message_id=\"" + currentMessage.getFullyQualifiedMessageName().replaceAll(" ", "_") + "\" href=\"#\">$2</a>$3");
-    }
 
     private String prettyPrint(String sequenceDiagramAsSvg) {
         try {
@@ -110,4 +71,70 @@ public class SequenceDiagramHyperlinker {
         }
     }
 
+
+    private static class ActorLineDecorator {
+        private final List<String> actors;
+
+        public ActorLineDecorator(List<String> actors) {
+            this.actors = new ArrayList<String>(actors);
+        }
+
+        public String decorate(String line) {
+            String actorNameFound = findActor(line);
+
+            if (actorNameFound != null) {
+                actors.remove(actorNameFound);
+                return withActorHyperLink(line, actorNameFound);
+            }
+
+            return line;
+        }
+
+        private String findActor(String line) {
+            for (String actorName : actors) {
+                if (isActorLine(actorName, line))
+                    return actorName;
+            }
+            return null;
+        }
+
+        private String withActorHyperLink(String currentInputLine, String actorName) {
+            return currentInputLine.replaceFirst("(.*)(<text .*?>" + actorName + "</text>)(.*)", "$1<a class=\"sequence_diagram_actor\" sequence_diagram_actor_id=\"" + actorName + "\" href=\"#\">$2</a>$3");
+        }
+
+        private static boolean isActorLine(String actorName, String currentInputLine) {
+            return currentInputLine.startsWith("<text") && currentInputLine.matches(".*>" + actorName + "<.*");
+        }
+    }
+
+
+    private static class MessageLineDecorator {
+        private LinkedList<SequenceDiagramMessage> messages;
+
+        public MessageLineDecorator(List<SequenceDiagramMessage> messages) {
+            this.messages = new LinkedList<SequenceDiagramMessage>(messages);
+        }
+
+        public String decorate(String currentLine) {
+            if (!messages.isEmpty()) {
+                if (isSequenceDiagramLineForMessage(messages.peek(), currentLine)) {
+                    return withHyperLink(currentLine, messages.poll());
+                }
+            }
+
+            return currentLine;
+        }
+
+        private String withHyperLink(String currentInputLine, SequenceDiagramMessage currentMessage) {
+            return currentInputLine.replaceFirst("(.*)(<text .*?>" + regexGroupsSafe(currentMessage.getVisibleName()) + "</text>)(.*)", "$1<a class=\"sequence_diagram_clickable\" sequence_diagram_message_id=\"" + currentMessage.getFullyQualifiedMessageName().replaceAll(" ", "_") + "\" href=\"#\">$2</a>$3");
+        }
+
+        private static boolean isSequenceDiagramLineForMessage(SequenceDiagramMessage currentMessage, String currentInputLine) {
+            return currentInputLine.startsWith("<text") && currentInputLine.matches(".*>" + regexGroupsSafe(currentMessage.getVisibleName()) + "<.*");
+        }
+
+        private static String regexGroupsSafe(final String visibleName) {
+            return visibleName.replace("(", "\\(").replace(")", "\\)");
+        }
+    }
 }
