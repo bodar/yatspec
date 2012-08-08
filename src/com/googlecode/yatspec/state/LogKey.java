@@ -13,7 +13,7 @@ public class LogKey {
     }
 
     public String getValueWithSpacesReplacedByUnderscore() {
-        return value.replaceAll(" ", "_");
+        return value.replaceAll(" ", "_").replaceAll("\\(", "_").replaceAll("\\)","_");
     }
 
     @Override

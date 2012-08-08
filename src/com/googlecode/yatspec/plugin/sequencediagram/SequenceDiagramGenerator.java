@@ -1,49 +1,51 @@
 package com.googlecode.yatspec.plugin.sequencediagram;
 
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.yatspec.rendering.Content;
-import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
+import org.jdom.Document;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.StringReader;
+import java.io.StringWriter;
 
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static net.sourceforge.plantuml.FileFormat.SVG;
 
 public class SequenceDiagramGenerator {
 
-    private final CapturedInputAndOutputs capturedInputAndOutputs;
-    private final PlantUmlSvgMarkupMunger svgMarkupMunger = new PlantUmlSvgMarkupMunger();
-    private final SequenceDiagramHyperlinker sequenceDiagramHyperlinker = new SequenceDiagramHyperlinker();
-
     private StringBuffer optionalPlantUmlCollector;
 
-    private PlantUmlMarkupGenerator plantUmlMarkupGenerator;
+    public SvgWrapper generateSequenceDiagram(Iterable<SequenceDiagramMessage> messages) {
+        String plantUmlMarkup = new PlantUmlMarkupGenerator().generateMarkup(sequence(messages));
+        makePlantUmlAvailableToAnyRegisteredCollector(plantUmlMarkup);
 
-    public SequenceDiagramGenerator(CapturedInputAndOutputs capturedInputAndOutputs) {
-        this(capturedInputAndOutputs, PlantUmlMarkupGenerator.DEFAULT_SUBJECT);
+        return new SvgWrapper(prettyPrint(createSvg(plantUmlMarkup)));
     }
 
-    public SequenceDiagramGenerator(CapturedInputAndOutputs capturedInputAndOutputs, String subject) {
-        this.capturedInputAndOutputs = capturedInputAndOutputs;
-        plantUmlMarkupGenerator = new PlantUmlMarkupGenerator(capturedInputAndOutputs, subject);
+    private String prettyPrint(String xml) {
+        try {
+            SAXBuilder sb = new SAXBuilder();
+            Document doc = sb.build(new StringReader(xml));
+            StringWriter stringWriter = new StringWriter();
+            new XMLOutputter(Format.getPrettyFormat()).output(doc, stringWriter);
+            return stringWriter.toString();
+        } catch (JDOMException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
+
 
     public void logPlantUmlMarkupTo(StringBuffer plantUmlCollector) {
         this.optionalPlantUmlCollector = plantUmlCollector;
-    }
-
-    public void generateSequenceDiagram() {
-        List<SequenceDiagramMessage> messagesCollector = new ArrayList<SequenceDiagramMessage>();
-        List<String> actorNamesCollector = new ArrayList<String>();
-        String plantUmlMarkup = plantUmlMarkupGenerator.collectPlantUmlMarkup(messagesCollector, actorNamesCollector);
-        makePlantUmlAvailableToAnyRegisteredCollector(plantUmlMarkup);
-
-        String svg = svgMarkupMunger.munge(createSvg(plantUmlMarkup));
-        svg = sequenceDiagramHyperlinker.hyperlinkSequenceDiagram(actorNamesCollector, messagesCollector, svg);
-        capturedInputAndOutputs.add("Sequence diagram", new SvgWrapper(svg));
     }
 
     private void makePlantUmlAvailableToAnyRegisteredCollector(String plantUmlMarkup) {
