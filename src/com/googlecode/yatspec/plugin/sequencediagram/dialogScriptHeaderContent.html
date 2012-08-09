@@ -12,10 +12,7 @@
             var scenarioUid = myScenario.attr("id");
             var sequenceDiagramMessageId = sequenceDiagramMessage.attr("sequence_diagram_message_id");
 
-            var dialogContent = myScenario.children().filter(function() {
-                return this.tagName === "H3" && sequenceDiagramMessageId === $(this).attr("logkey");
-
-            }).next("div").clone();
+            var dialogContent = myScenario.find('H3[logKey="' + sequenceDiagramMessageId + '"]').next("div").clone();
 
             var capturedInputAndOutputsName = sequenceDiagramMessage.text();
             sequenceDiagramMessageId = "" + sequenceDiagramMessageId + "_" + scenarioUid;
