@@ -11,7 +11,7 @@ import static org.hamcrest.core.Is.is;
 
 public class FilesTest {
 
-    private static final String LONG_NAME = repeat('A').take(101).toString(EMPTY, EMPTY, EMPTY, Long.MAX_VALUE);
+    private static final String LONG_NAME = repeat('A').take(101).toString(EMPTY, EMPTY, EMPTY);
 
     @Test
     public void supportsLongFileNames() throws Exception {

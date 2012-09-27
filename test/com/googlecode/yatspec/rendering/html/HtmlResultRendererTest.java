@@ -29,32 +29,26 @@ public class HtmlResultRendererTest {
 
     @Test
     public void loadsTemplateOffClassPath() throws Exception {
-        // setup
         TestResult result = new TestResult(this.getClass());
 
-        // execute
         String html = new HtmlResultRenderer().render(result);
 
-        // verify
         assertThat(html, is(not(nullValue())));
     }
 
     @Test
     public void supportsCustomRenderingOfScenarioLogs() throws Exception {
-        // setup
         TestResult result = aTestResultWithCustomRenderTypeAddedToScenarioLogs();
-        // execute
+
         String html = new HtmlResultRenderer().
                 withCustomRenderer(RenderedType.class, new DefaultReturningRenderer(CUSTOM_RENDERED_TEXT)).
                 render(result);
 
-        // verify
         assertThat(html, containsString(CUSTOM_RENDERED_TEXT));
     }
 
     @Test
     public void supportsCustomHeaderContent() throws Exception {
-
         TestResult result = new TestResult(getClass());
 
         String html = new HtmlResultRenderer().
@@ -77,7 +71,7 @@ public class HtmlResultRendererTest {
         scenario.setTestState(testState);
     }
 
-    private static class RenderedType {
+    public static class RenderedType {
     }
 
     private class DefaultReturningRenderer implements Renderer<RenderedType> {
