@@ -10,7 +10,7 @@ import org.antlr.stringtemplate.StringTemplate;
 
 import java.io.File;
 
-import static com.googlecode.funclate.Model.model;
+import static com.googlecode.funclate.Model.mutable.model;
 import static com.googlecode.yatspec.parsing.Files.overwrite;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.getCssMap;
 

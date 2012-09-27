@@ -16,7 +16,7 @@ import org.antlr.stringtemplate.StringTemplate;
 
 import java.io.File;
 
-import static com.googlecode.funclate.Model.model;
+import static com.googlecode.funclate.Model.mutable.model;
 import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;

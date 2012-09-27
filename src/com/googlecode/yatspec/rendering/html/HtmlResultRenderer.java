@@ -30,7 +30,9 @@ import java.util.List;
 import java.util.Map;
 
 import static com.googlecode.totallylazy.Callables.asString;
-import static com.googlecode.totallylazy.Predicates.*;
+import static com.googlecode.totallylazy.Predicates.always;
+import static com.googlecode.totallylazy.Predicates.instanceOf;
+import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.parsing.Files.overwrite;
 import static com.googlecode.yatspec.rendering.Renderers.registerRenderer;
@@ -48,15 +50,16 @@ public class HtmlResultRenderer implements SpecResultListener {
 
     public String render(Result result) throws Exception {
         final EnhancedStringTemplateGroup group = new EnhancedStringTemplateGroup(getClass());
+        group.registerRenderer(always().and(not(instanceOf(Number.class))), Xml.escape());
+        group.registerRenderer(instanceOf(ScenarioTableHeader.class), callable(new ScenarioTableHeaderRenderer()));
+        group.registerRenderer(instanceOf(JavaSource.class), callable(new JavaSourceRenderer()));
+        group.registerRenderer(instanceOf(Notes.class), callable(new NotesRenderer()));
+        group.registerRenderer(instanceOf(Content.class), asString());
+        sequence(customRenderers).fold(group, registerRenderer());
         for (Class document : Creator.optionalClass("org.jdom.Document")) {
             group.registerRenderer(instanceOf(document), callable(Creator.<Renderer>create(Class.forName("com.googlecode.yatspec.plugin.jdom.DocumentRenderer"))));
         }
-        sequence(customRenderers).fold(group, registerRenderer());
-        group.registerRenderer(instanceOf(Content.class), asString());
-        group.registerRenderer(instanceOf(Notes.class), callable(new NotesRenderer()));
-        group.registerRenderer(instanceOf(JavaSource.class), callable(new JavaSourceRenderer()));
-        group.registerRenderer(instanceOf(ScenarioTableHeader.class), callable(new ScenarioTableHeaderRenderer()));
-        group.registerRenderer(always().and(not(instanceOf(Number.class))), Xml.escape());
+
         final StringTemplate template = group.getInstanceOf("yatspec");
         template.setAttribute("script", loadContent("xregexp.js"));
         template.setAttribute("script", loadContent("yatspec.js"));

@@ -30,7 +30,7 @@ public class Files {
     }
 
     public static String replaceDotsWithSlashes(final String name) {
-        return characters(name).map(dotsToSlashes()).toString(Strings.EMPTY, Strings.EMPTY, Strings.EMPTY, Long.MAX_VALUE);
+        return characters(name).map(dotsToSlashes()).toString(Strings.EMPTY, Strings.EMPTY, Strings.EMPTY);
     }
 
     private static Callable1<? super Character, Character> dotsToSlashes() {

@@ -10,7 +10,7 @@ import com.googlecode.yatspec.state.TestMethod;
 
 import java.io.File;
 
-import static com.googlecode.funclate.Model.model;
+import static com.googlecode.funclate.Model.mutable.model;
 import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.is;
