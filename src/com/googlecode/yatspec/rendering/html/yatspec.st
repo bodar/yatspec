@@ -54,7 +54,14 @@ $endif$
                     <tbody>
                     $testMethod.scenarios, testMethod.scenarioTable.rows: { scenario, row |
                         <tr>
-                            $row: { value | <td class='$cssClass.(scenario.status)$'><a href="#$scenario.name$">$value$</a></td> }$
+                            $row: { value |
+                                <td class='$cssClass.(scenario.status)$'><a href="#$scenario.name$">
+                                    $if(value.empty)$
+                                        (empty)
+                                    $else$
+                                        $value$
+                                    $endif$
+                                </a></td> }$
                         </tr>
                      }$
                     </tbody>
