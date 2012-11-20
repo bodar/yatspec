@@ -41,7 +41,7 @@ public class SpecRunner extends TableRunner {
         };
     }
 
-    private WithCustomResultListeners listeners;
+    private WithCustomResultListeners listeners = new DefaultResultListeners();
 
     @Override
     protected Object createTest() throws Exception {
