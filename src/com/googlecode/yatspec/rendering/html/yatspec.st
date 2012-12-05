@@ -18,9 +18,9 @@
 
 <h1>$testResult.name$</h1>
 
-$if(testResult.notes)$
-    <pre class="notes">$testResult.notes$</pre>
-$endif$
+$testResult.annotations:{ annotation |
+<pre class="notes">$annotation$</pre>
+}$
 
 <div class="contents">
     <h2>Contents</h2>
@@ -38,9 +38,9 @@ $endif$
         <a id="$testMethod.name$"></a>
         <h2>$testMethod.displayName$</h2>
 
-            $if(testMethod.notes)$
-                <pre class="notes">$testMethod.notes$</pre>
-            $endif$
+            $testMethod.annotations:{ annotation |
+                <pre class="notes">$annotation$</pre>
+            }$
             
             $if(!testMethod.scenarioTable.empty)$
                 <h3>Scenarios</h3>
