@@ -5,12 +5,14 @@ import com.googlecode.yatspec.junit.Row;
 import com.googlecode.yatspec.junit.SpecRunner;
 import com.googlecode.yatspec.junit.Table;
 import com.googlecode.yatspec.state.TestMethod;
+import com.googlecode.yatspec.state.TestResult;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.yatspec.junit.Notes.methods.firstNote;
 import static com.googlecode.yatspec.parsing.TestParser.parseTestMethods;
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -24,8 +26,7 @@ public class TestParserTest {
     @Notes("Some method notes")
     public void testParseTestMethods() throws Exception {
         final List<TestMethod> methods = parseTestMethods(getClass());
-        assertThat(sequence(methods).first().getNotes().value(), is("Some method notes"));
-
+        assertThat(firstNote(sequence(methods).first().getAnnotations()).get().value(), is("Some method notes"));
     }
 
     private static final Object thisShouldntInterfereWithTheBelowTableTest = null;

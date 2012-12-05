@@ -1,8 +1,8 @@
 package com.googlecode.yatspec.state;
 
-import com.googlecode.totallylazy.Option;
-import com.googlecode.yatspec.junit.Notes;
+import java.lang.annotation.Annotation;
+import java.util.List;
 
 public interface Notable {
-    Notes getNotes() throws Exception;
+    List<Annotation> getAnnotations() throws Exception;
 }
