@@ -1,7 +1,7 @@
 #summary $testResult.name$
 
 = $testResult.name$ =
-$testResult.notes$
+$testResult.annotations$
 
 == Contents ==
 $testResult.testMethods:{ testMethod |
@@ -12,7 +12,7 @@ $testResult.testMethods:{ testMethod |
 
 === $testMethod.displayName$ ===
 
-$testMethod.notes$
+$testResult.annotations$
 
 $testMethod.scenarios: { scenario |
 

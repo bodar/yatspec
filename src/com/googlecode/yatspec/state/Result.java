@@ -1,10 +1,8 @@
 package com.googlecode.yatspec.state;
 
-import com.googlecode.totallylazy.Option;
-
 import java.util.List;
 
-public interface Result extends Notable {
+public interface Result {
 
     List<TestMethod> getTestMethods() throws Exception;
 

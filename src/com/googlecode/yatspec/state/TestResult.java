@@ -1,19 +1,17 @@
 package com.googlecode.yatspec.state;
 
-import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
-import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.parsing.TestParser;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
 
-import static com.googlecode.totallylazy.Option.none;
-import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.yatspec.junit.YatspecAnnotation.methods.filter;
+import static com.googlecode.yatspec.junit.YatspecAnnotation.methods.yatspecAnnotations;
 import static com.googlecode.yatspec.parsing.Text.wordify;
+import static java.util.Arrays.asList;
 
+@SuppressWarnings({"unused"})
 public class TestResult implements Result {
     private final Class<?> klass;
     private List<TestMethod> testMethods;
@@ -73,8 +71,7 @@ public class TestResult implements Result {
         };
     }
 
-    @Override
     public List<Annotation> getAnnotations() {
-        return filter(getTestClass().getAnnotations());
+        return yatspecAnnotations(asList(getTestClass().getAnnotations()));
     }
 }

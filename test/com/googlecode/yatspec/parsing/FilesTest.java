@@ -1,7 +1,5 @@
 package com.googlecode.yatspec.parsing;
 
-import com.googlecode.totallylazy.Sequences;
-import com.googlecode.totallylazy.Strings;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Sequences.repeat;
