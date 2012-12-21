@@ -2,10 +2,7 @@ package com.googlecode.yatspec.state;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Value;
-import com.googlecode.yatspec.junit.Notes;
-import com.googlecode.yatspec.junit.YatspecAnnotation;
 import com.googlecode.yatspec.parsing.JavaSource;
 import com.googlecode.yatspec.parsing.Text;
 import com.googlecode.yatspec.rendering.ScenarioNameRendererFactory;
@@ -18,10 +15,10 @@ import java.util.List;
 import java.util.Map;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.yatspec.junit.YatspecAnnotation.methods.filter;
+import static com.googlecode.yatspec.junit.YatspecAnnotation.methods.yatspecAnnotations;
 
 @SuppressWarnings({"unused"})
-public class TestMethod implements Notable {
+public class TestMethod {
     private final Class testClass;
     private final Method method;
     private final String methodName;
@@ -115,9 +112,8 @@ public class TestMethod implements Notable {
         return scenarioResults.get(name) != null;
     }
 
-    @Override
     public List<Annotation> getAnnotations() {
-        return filter(method.getAnnotations());
+        return yatspecAnnotations(sequence(method.getAnnotations()));
     }
 
     public String getUid() {
