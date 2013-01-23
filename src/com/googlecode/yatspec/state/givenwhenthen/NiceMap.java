@@ -28,7 +28,9 @@ class NiceMap<T extends NiceMap> {
     }
 
     public final Map<String, Object> getTypes() {
-        return unmodifiableMap(map);
+        synchronized (map) {
+            return unmodifiableMap(new LinkedHashMap<String, Object>(map));
+        }
     }
 
     public final <R> R getType(Class<R> aClass) {
@@ -76,5 +78,5 @@ class NiceMap<T extends NiceMap> {
 
     public void remove(String key) {
         map.remove(key);
-    }   
+    }
 }
