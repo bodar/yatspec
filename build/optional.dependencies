@@ -1,3 +1,5 @@
 mvn:net.sourceforge.plantuml:plantuml:jar:7933
 mvn:jaxen:jaxen:jar:1.1.1
 mvn:org.jdom:jdom:jar:1.1
+
+s3://repo.bodar.com/com.googlecode.yadic:yadic:jar|sources:160
