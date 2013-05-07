@@ -7,5 +7,5 @@ mvn:org.antlr:stringtemplate:jar:3.2.1
 mvn:com.thoughtworks.qdox:qdox:jar:1.12
 http://jarjar.googlecode.com/files/jarjar-1.1.jar
 
-s3://repo.bodar.com/com.googlecode.totallylazy:totallylazy:jar|sources:927
+s3://repo.bodar.com/com.googlecode.totallylazy:totallylazy:jar|sources:1086
 s3://repo.bodar.com/com.googlecode.funclate:funclate:jar|sources:94
