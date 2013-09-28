@@ -54,9 +54,9 @@ public class PackageNames {
                                 sortBy(returnArgument(String.class)).
                                 lastOption();
                         if (longestPath.isEmpty())
-                            return allPaths.add(name);
+                            return allPaths.append(name);
                         else
-                            return allPaths.add(longestPath.get() + "." + name);
+                            return allPaths.append(longestPath.get() + "." + name);
                     }
                 };
             }

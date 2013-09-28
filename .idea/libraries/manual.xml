@@ -2,11 +2,9 @@
   <library name="manual">
     <CLASSES>
       <root url="file://$PROJECT_DIR$/lib/manual" />
-      <root url="file://$PROJECT_DIR$/lib/manual" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="file://$PROJECT_DIR$/lib/manual" />
       <root url="file://$PROJECT_DIR$/lib/manual" />
     </SOURCES>
     <jarDirectory url="file://$PROJECT_DIR$/lib/manual" recursive="false" />
