@@ -26,7 +26,7 @@ public class ByNamingConventionMessageProducer {
                 final String what = matcher.group(1).trim();
                 final String from = matcher.group(2).trim();
                 final String to = matcher.group(3).trim();
-                result = result.add(new SequenceDiagramMessage(from, to, what, key.replaceAll(" ","_").replaceAll("\\(","_").replaceAll("\\)","_")));
+                result = result.append(new SequenceDiagramMessage(from, to, what, key.replaceAll(" ","_").replaceAll("\\(","_").replaceAll("\\)","_")));
             }
         }
         return result;
