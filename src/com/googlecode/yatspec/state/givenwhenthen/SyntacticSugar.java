@@ -22,6 +22,10 @@ public class SyntacticSugar {
         return t;
     }
 
+    public static <T> T does(T t) {
+        return t;
+    }
+
     public static <T> T in(T t) {
         return t;
     }
