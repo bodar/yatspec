@@ -39,6 +39,22 @@ public class TestParserTest {
     }
 
     @Test
+    @Table({
+            @Row({"string with\" quotes"})
+    })
+    public void supportsQuotationMarksInParameters(String value) throws Exception {
+        assertThat(value, is("string with\" quotes"));
+    }
+//    This breaks the parsing
+//    @Test
+//    @Table({
+//            @Row({"string with\\ escape chars"})
+//    })
+//    public void supportsEscapedCharactersInParameters(String value) throws Exception {
+//        assertThat(value, is("string with\\ escape chars"));
+//    }
+
+    @Test
     public void shouldParseTestMethodsFromClassFoundInClassPathRatherThanFileSystem() throws Exception {
         assertExistsInClassLoader("com/googlecode/yatspec/parsing/test/TestSource.java", "TestParserTest-sources.jar");
         assertExistsInClassLoader("com/googlecode/yatspec/parsing/test/TestSource.class", "TestParserTest.jar");
