@@ -5,6 +5,7 @@ import com.googlecode.yadic.Container;
 import com.googlecode.yadic.Containers;
 import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
 import com.googlecode.yatspec.state.givenwhenthen.InterestingGivens;
+import com.googlecode.yatspec.state.givenwhenthen.TestLogger;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.junit.After;
 import org.junit.Before;
@@ -29,6 +30,7 @@ public class ContainerTestState extends TestState {
     public void startupApp() {
         container = Containers.closeableContainer();
         container.addInstance(TestState.class, this);
+        container.addInstance(TestLogger.class, this);
         container.addInstance(InterestingGivens.class, this.interestingGivens);
         container.addInstance(CapturedInputAndOutputs.class, this.capturedInputAndOutputs);
     }
