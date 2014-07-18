@@ -16,12 +16,18 @@ public class DecoratingFrameworkMethod extends FrameworkMethod {
 
     @Override
     public Object invokeExplosively(Object target, Object... params) throws Throwable {
-        return super.invokeExplosively(target, (Object[]) row.value());
+        Object[] actualParams = isMethodParameterArray() ? new Object[]{row.value()} : row.value();
+        return super.invokeExplosively(target, actualParams);
     }
 
     @Override
     public String getName() {
         ScenarioName scenarioName = new ScenarioName(super.getName(), asList(row.value()));
         return ScenarioNameRendererFactory.renderer().render(scenarioName);
+    }
+
+    private boolean isMethodParameterArray() {
+        Class<?>[] methodParameters = getMethod().getParameterTypes();
+        return methodParameters.length == 1 && methodParameters[0].equals(String[].class);
     }
 }
