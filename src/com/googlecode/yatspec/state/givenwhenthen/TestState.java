@@ -28,7 +28,7 @@ public class TestState implements TestLogger, WithTestState {
         return this;
     }
 
-    public void log(String name, Object value) {
+    public synchronized void log(String name, Object value) {
         int count = 1;
         String keyName = name;
         while (capturedInputAndOutputs.contains(keyName)) {
