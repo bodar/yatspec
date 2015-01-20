@@ -123,3 +123,15 @@ $(document).ready(function () {
     })
 
 }, false);
+
+$(".section-header").click(function () {
+    $sheader = $(this);
+    $sbody = $sheader.siblings(".section-body");
+    $sbody.slideToggle(150);
+});
+
+$('ul.contents > li > a').click(function () {
+    $link = $(this);
+    $('div.testmethod > ' + $link.attr('href')).siblings('.section-body').slideDown(150);
+});
+
