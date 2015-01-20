@@ -212,3 +212,16 @@ dl.index-result {
     margin-left: 0px;
     margin-right: 5px;
 }
+
+.section div {
+    width:100%;
+}
+.section .section-header {
+    padding: 2px;
+    cursor: pointer;
+}
+
+.section .section-body {
+    display: block;
+    padding : 5px;
+}
