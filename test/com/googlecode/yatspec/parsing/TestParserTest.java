@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.List;
+import java.util.Locale;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.junit.Notes.methods.notes;
@@ -17,10 +18,13 @@ import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpecRunner.class)
 public class TestParserTest {
+    private static final String A_SIMPLE_STRING = "aString";
+
     @Test
     @Notes("Some method notes")
     public void testParseTestMethods() throws Exception {
@@ -63,8 +67,15 @@ public class TestParserTest {
         assertThat(sequence(testMethods).first().getName(), equalTo("testParseMethodWithSrcJar"));
     }
 
+    @Test
+    @Table({
+            @Row(A_SIMPLE_STRING)
+    })
+    public void shouldParseParametersDeclaredAsConstants(String param) throws Exception {
+        assertEquals(format(Locale.ENGLISH, "failed to parse parameter [%s]", param), "aString", param);
+    }
+
     private static void assertExistsInClassLoader(String resource, String location) {
         assertNotNull(format("Resource '%s' not found, check location '%s' is in classpath?", resource, location), Thread.currentThread().getContextClassLoader().getResource(resource));
     }
-
 }
