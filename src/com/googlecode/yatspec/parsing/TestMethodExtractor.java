@@ -6,50 +6,14 @@ import com.googlecode.totallylazy.Strings;
 import com.googlecode.yatspec.junit.Table;
 import com.googlecode.yatspec.state.ScenarioTable;
 import com.googlecode.yatspec.state.TestMethod;
-import com.thoughtworks.qdox.model.Annotation;
-import com.thoughtworks.qdox.model.JavaField;
-import com.thoughtworks.qdox.model.JavaMethod;
-import com.thoughtworks.qdox.model.JavaParameter;
-import com.thoughtworks.qdox.model.annotation.AnnotationAdd;
-import com.thoughtworks.qdox.model.annotation.AnnotationAnd;
-import com.thoughtworks.qdox.model.annotation.AnnotationCast;
-import com.thoughtworks.qdox.model.annotation.AnnotationConstant;
-import com.thoughtworks.qdox.model.annotation.AnnotationDivide;
-import com.thoughtworks.qdox.model.annotation.AnnotationEquals;
-import com.thoughtworks.qdox.model.annotation.AnnotationExclusiveOr;
-import com.thoughtworks.qdox.model.annotation.AnnotationFieldRef;
-import com.thoughtworks.qdox.model.annotation.AnnotationGreaterEquals;
-import com.thoughtworks.qdox.model.annotation.AnnotationGreaterThan;
-import com.thoughtworks.qdox.model.annotation.AnnotationLessEquals;
-import com.thoughtworks.qdox.model.annotation.AnnotationLessThan;
-import com.thoughtworks.qdox.model.annotation.AnnotationLogicalAnd;
-import com.thoughtworks.qdox.model.annotation.AnnotationLogicalNot;
-import com.thoughtworks.qdox.model.annotation.AnnotationLogicalOr;
-import com.thoughtworks.qdox.model.annotation.AnnotationMinusSign;
-import com.thoughtworks.qdox.model.annotation.AnnotationMultiply;
-import com.thoughtworks.qdox.model.annotation.AnnotationNot;
-import com.thoughtworks.qdox.model.annotation.AnnotationNotEquals;
-import com.thoughtworks.qdox.model.annotation.AnnotationOr;
-import com.thoughtworks.qdox.model.annotation.AnnotationParenExpression;
-import com.thoughtworks.qdox.model.annotation.AnnotationPlusSign;
-import com.thoughtworks.qdox.model.annotation.AnnotationQuery;
-import com.thoughtworks.qdox.model.annotation.AnnotationRemainder;
-import com.thoughtworks.qdox.model.annotation.AnnotationShiftLeft;
-import com.thoughtworks.qdox.model.annotation.AnnotationShiftRight;
-import com.thoughtworks.qdox.model.annotation.AnnotationSubtract;
-import com.thoughtworks.qdox.model.annotation.AnnotationTypeRef;
-import com.thoughtworks.qdox.model.annotation.AnnotationUnsignedShiftRight;
+import com.thoughtworks.qdox.model.*;
 import com.thoughtworks.qdox.model.annotation.AnnotationValue;
 import com.thoughtworks.qdox.model.annotation.AnnotationValueList;
-import com.thoughtworks.qdox.model.annotation.AnnotationVisitor;
 import com.thoughtworks.qdox.model.annotation.EvaluatingVisitor;
-import com.thoughtworks.qdox.model.annotation.RecursiveAnnotationVisitor;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
@@ -80,12 +44,15 @@ public class TestMethodExtractor {
 
     private List<String> getRowValues(Annotation row) {
         final AnnotationValue value = row.getProperty("value");
-
         final EvaluatingVisitor annotationVisitor = new EvaluatingVisitor() {
             @Override
             protected Object getFieldReferenceValue(JavaField javaField) {
-                //TODO Use reflection to get the constant
-                return null;
+                Type type = javaField.getType();
+                if (type.isA(new Type(String.class.getName()))) {
+                    return javaField.getInitializationExpression().replace("\"", "");
+                } else {
+                    return value.getParameterValue();
+                }
             }
         };
 
@@ -122,5 +89,4 @@ public class TestMethodExtractor {
             }
         };
     }
-
 }
