@@ -74,31 +74,26 @@
                             <pre class="highlight specification">
                                 $scenario.specification$</pre>
                             <h3 class="logKey">Test results:</h3>
-                            <table class="testResults logValue">
-                            <tr>
+                                    <pre class='highlight results $cssClass.(scenario.status)$'>
+                                        $scenario.message$</pre>
 
-                            <pre class='highlight results $cssClass.(scenario.status)$'>
-                                $scenario.message$</pre>
+                                     $if(!scenario.interestingGivens.keys.empty)$
+                                         <h3 class="logKey">Interesting Givens</h3>
 
-                             $if(!scenario.interestingGivens.keys.empty)$
-                                 <h3 class="logKey">Interesting Givens</h3>
+                                        <table class="interestingGivens logValue">
+                                        $scenario.interestingGivens.keys:{ key |
+                                            <tr>
+                                                <th class="key">$key$</th>
+                                                <td class="interestingGiven">$scenario.interestingGivens.(key)$</td>
+                                            </tr>
+                                        }$
+                                        </table>
+                                    $endif$
 
-                                <table class="interestingGivens logValue">
-                                $scenario.interestingGivens.keys:{ key |
-                                    <tr>
-                                        <th class="key">$key$</th>
-                                        <td class="interestingGiven">$scenario.interestingGivens.(key)$</td>
-                                    </tr>
-                                }$
-                                </table>
-                            $endif$
-
-                            $scenario.logs.keys:{ key |
-                                <h3 class="logKey" logkey="$key.valueWithSpacesReplacedByUnderscore$">$key.value$</h3>
-                                <div class="logValue highlight $scenario.logs.(key).class.simpleName$" >$scenario.logs.(key)$</div>
-                            }$
-                            </tr>
-                            </table>
+                                    $scenario.logs.keys:{ key |
+                                        <h3 class="logKey" logkey="$key.valueWithSpacesReplacedByUnderscore$">$key.value$</h3>
+                                        <div class="logValue highlight $scenario.logs.(key).class.simpleName$" >$scenario.logs.(key)$</div>
+                                    }$
                     </div>
                     }$
                 </div>
