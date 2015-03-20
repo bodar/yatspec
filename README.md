@@ -3,12 +3,12 @@ This library replaces test tools like Concordion and Fit by allowing your tests 
 Currently this library supports 3 levels of usage:
 
   * TableRowTest support for JUnit Methods (like in MBUnit / NUnit)
-  * Specification support for Junit. Produces readable [Html](http://yatspec.googlecode.com/files/example.html) from your [test](http://code.google.com/p/yatspec/source/browse/test/com/googlecode/yatspec/junit/SpecificationExampleTest.java)
+  * Specification support for Junit. Produces readable [Html](http://yatspec.googlecode.com/files/example.html) from your [test](/test/com/googlecode/yatspec/junit/SpecificationExampleTest.java)
   * "Given / When / Then" support with automatic capturing and display of "givens" and captured inputs and output.
 
 ### Example ###
 
-The simplest example would be to add the JUnit [@RunWith](http://junit.sourceforge.net/javadoc/org/junit/runner/RunWith.html) attribute specifying the [SpecRunner](http://code.google.com/p/yatspec/source/browse/src/com/googlecode/yatspec/junit/SpecRunner.java) class to your Test class.
+The simplest example would be to add the JUnit [@RunWith](http://junit.sourceforge.net/javadoc/org/junit/runner/RunWith.html) attribute specifying the [SpecRunner](/src/com/googlecode/yatspec/junit/SpecRunner.java) class to your Test class.
 
 ```
 @RunWith(SpecRunner.class)
