@@ -1,4 +1,4 @@
-<h1 style="background: url("https://raw.githubusercontent.com/wiki/bodar/yatspec/logo.jpg") no-repeat; padding-left: 70px;">YatSpec</h1>
+<h1><img src="https://raw.githubusercontent.com/wiki/bodar/yatspec/logo.jpg"/>YatSpec</h1>
 
 
 
