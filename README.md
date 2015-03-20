@@ -29,7 +29,7 @@ Html output:
 
 If you opened the HTML file you would see:
 
-![https://github.com/bodar/yatspec/raw/wiki/yatspec.png](https://github.com/bodar/yatspec/raw/wiki/yatspec.png)
+![https://raw.githubusercontent.com/wiki/bodar/yatspec/yatspec.png](https://raw.githubusercontent.com/wiki/bodar/yatspec/yatspec.png)
 
 So lets quickly explain what has happened:
 
