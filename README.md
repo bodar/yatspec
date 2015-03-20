@@ -1,4 +1,4 @@
-![Logo](https://raw.githubusercontent.com/wiki/bodar/yatspec/logo.jpg)
+# ![Logo](https://raw.githubusercontent.com/wiki/bodar/yatspec/logo.jpg) YatSpec #
 
 This library replaces test tools like Concordion and Fit by allowing your tests to stay maintainable (i.e refactoring support in you favourite IDE) while still producing human readable documentation.
 
