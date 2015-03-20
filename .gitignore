@@ -1,4 +1,3 @@
-syntax: glob
 *.orig
 *.iws
 .idea/workspace.xml
@@ -7,4 +6,3 @@ build/artifacts
 lib/build
 lib/runtime
 lib/optional
-.DS_Store
