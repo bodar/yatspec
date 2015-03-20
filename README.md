@@ -1,4 +1,4 @@
-<h1><img src="https://raw.githubusercontent.com/wiki/bodar/yatspec/logo.jpg"/>YatSpec</h1>
+<h1><img src="https://raw.githubusercontent.com/wiki/bodar/yatspec/logo.jpg" align="middle"/>YatSpec</h1>
 
 
 
