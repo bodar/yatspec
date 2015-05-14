@@ -13,7 +13,9 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static java.lang.System.getProperty;
@@ -21,7 +23,7 @@ import static java.lang.System.getProperty;
 public class SpecRunner extends TableRunner {
     public static final String OUTPUT_DIR = "yatspec.output.dir";
     private final Result testResult;
-    private Scenario currentScenario;
+    private Map<String, Scenario> currentScenario = new HashMap<String, Scenario>();
 
     public SpecRunner(Class<?> klass) throws org.junit.runners.model.InitializationError {
         super(klass);
@@ -46,7 +48,7 @@ public class SpecRunner extends TableRunner {
     @Override
     protected Object createTest() throws Exception {
         Object instance = super.createTest();
-        if(instance instanceof WithCustomResultListeners){
+        if (instance instanceof WithCustomResultListeners) {
             listeners = (WithCustomResultListeners) instance;
         } else {
             listeners = new DefaultResultListeners();
@@ -80,28 +82,24 @@ public class SpecRunner extends TableRunner {
         return new Statement() {
             @Override
             public void evaluate() throws Throwable {
-                currentScenario = testResult.getScenario(method.getName());
+                final String fullyQualifiedTestMethod = test.getClass().getCanonicalName() + "." + method.getName();
+                final Scenario scenario = testResult.getScenario(method.getName());
+                currentScenario.put(fullyQualifiedTestMethod, scenario);
 
                 if (test instanceof WithTestState) {
                     TestState testState = ((WithTestState) test).testState();
-                    currentScenario.setTestState(testState);
+                    currentScenario.get(fullyQualifiedTestMethod).setTestState(testState);
                 }
                 statement.evaluate();
             }
         };
     }
 
-    private boolean isInTest() {
-        return currentScenario != null;
-    }
-
     private final class SpecListener extends RunListener {
-
         @Override
         public void testFailure(Failure failure) throws Exception {
-            if (isInTest()) {
-                currentScenario.setException(failure.getException());
-            }
+            String fullyQualifiedTestMethod = failure.getDescription().getClassName() + "." + failure.getDescription().getMethodName();
+            if (currentScenario.get(fullyQualifiedTestMethod) != null) currentScenario.get(fullyQualifiedTestMethod).setException(failure.getException());
         }
     }
 }
