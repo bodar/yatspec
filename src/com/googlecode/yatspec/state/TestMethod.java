@@ -16,6 +16,7 @@ import java.util.Map;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.junit.YatspecAnnotation.methods.yatspecAnnotations;
+import static java.lang.System.lineSeparator;
 
 @SuppressWarnings({"unused"})
 public class TestMethod {
@@ -93,7 +94,7 @@ public class TestMethod {
 
     @Override
     public String toString() {
-        return getName() + System.getProperty("line.separator") + getSpecification();
+        return getName() + lineSeparator() + getSpecification();
     }
 
     public ScenarioTable getScenarioTable() {

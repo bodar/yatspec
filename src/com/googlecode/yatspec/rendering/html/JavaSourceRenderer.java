@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Xml.escape;
 import static com.googlecode.yatspec.parsing.Text.wordify;
+import static java.lang.System.lineSeparator;
 
 public class JavaSourceRenderer implements Renderer<JavaSource> {
     private static final Pattern DOT_CLASS = Pattern.compile("\\.class(\\W|$)");
@@ -19,11 +20,7 @@ public class JavaSourceRenderer implements Renderer<JavaSource> {
     }
 
     public static Sequence<String> lines(final String sourceCode) {
-        return sequence(sourceCode.split(lineSeperator()));
-    }
-
-    public static String lineSeperator() {
-        return System.getProperty("line.separator");
+        return sequence(sourceCode.split(lineSeparator()));
     }
 
     public static String removateDotClass(String s) {
