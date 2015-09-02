@@ -47,6 +47,12 @@ public class SpecificationExampleTest extends TestState implements WithCustomRes
     }
 
     @Test
+    @LinkingNote(message = "The details of how the Linking Note works can be seen in the %s", links = {LinkingNoteRendererTest.class})
+    public void testWithALinkingNote() throws Exception {
+
+    }
+
+    @Test
     public void printEmptyTestName() throws Exception {
 
     }

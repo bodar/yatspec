@@ -6,14 +6,12 @@ import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Xml;
 import com.googlecode.yatspec.Creator;
+import com.googlecode.yatspec.junit.LinkingNote;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecResultListener;
 import com.googlecode.yatspec.parsing.Files;
 import com.googlecode.yatspec.parsing.JavaSource;
-import com.googlecode.yatspec.rendering.Content;
-import com.googlecode.yatspec.rendering.NotesRenderer;
-import com.googlecode.yatspec.rendering.Renderer;
-import com.googlecode.yatspec.rendering.ScenarioTableHeaderRenderer;
+import com.googlecode.yatspec.rendering.*;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.ScenarioTableHeader;
 import com.googlecode.yatspec.state.Status;
@@ -54,6 +52,7 @@ public class HtmlResultRenderer implements SpecResultListener {
         group.registerRenderer(instanceOf(ScenarioTableHeader.class), callable(new ScenarioTableHeaderRenderer()));
         group.registerRenderer(instanceOf(JavaSource.class), callable(new JavaSourceRenderer()));
         group.registerRenderer(instanceOf(Notes.class), callable(new NotesRenderer()));
+        group.registerRenderer(instanceOf(LinkingNote.class), callable(new LinkingNoteRenderer()));
         group.registerRenderer(instanceOf(Content.class), asString());
         sequence(customRenderers).fold(group, registerRenderer());
         for (Class document : Creator.optionalClass("org.jdom.Document")) {
