@@ -8,7 +8,7 @@ import com.googlecode.yatspec.state.TestResult;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.junit.Test;
 
-import java.io.File;
+import java.nio.file.Paths;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -24,7 +24,7 @@ public class HtmlResultRendererTest {
     public void providesLinksToResultOutputRelativeToOutputDirectory() throws Exception {
         assertThat(
                 HtmlResultRenderer.htmlResultRelativePath(this.getClass()),
-                is("com/googlecode/yatspec/rendering/html/HtmlResultRendererTest.html"));
+                is(Paths.get("com/googlecode/yatspec/rendering/html/HtmlResultRendererTest.html").toString()));
     }
 
     @Test

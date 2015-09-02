@@ -32,6 +32,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.endsWith;
 import static com.googlecode.totallylazy.URLs.toURL;
 import static com.googlecode.yatspec.parsing.Files.toJavaPath;
+import static com.googlecode.yatspec.parsing.Files.toJavaResourcePath;
 
 public class TestParser {
 
@@ -111,7 +112,7 @@ public class TestParser {
     }
 
     private static Option<URL> getJavaSourceFromClassPath(Class aClass) {
-        return isObject(aClass) ? NO_URL : option(aClass.getClassLoader().getResource(toJavaPath(aClass)));
+        return isObject(aClass) ? NO_URL : option(aClass.getClassLoader().getResource(toJavaResourcePath(aClass)));
     }
 
     private static Option<URL> getJavaSourceFromFileSystem(Class aClass) {

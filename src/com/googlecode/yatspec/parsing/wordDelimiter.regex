@@ -3,7 +3,7 @@
 (?:                         # start a non capturing group so that we can do an 'or'
 (?<!^)([A-Z][a-z])
 |                           # or
-([^a-zA-Z_0-9\r\n\.])       # not a word character, end of line or full stop
+([^a-zA-Z_\-0-9\r\n\.])       # not a word character, end of line or full stop
 |                           # or
 ((?=[^\d]+)\.(?=[^\d]+))    # a period not surrounded by digits
 )                           # end non-capturing group
