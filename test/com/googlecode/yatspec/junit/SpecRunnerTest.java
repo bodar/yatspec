@@ -1,14 +1,19 @@
 package com.googlecode.yatspec.junit;
 
 import com.googlecode.totallylazy.StringPrintStream;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assume;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.junit.runner.notification.RunNotifier;
 
 import java.io.PrintStream;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
 
 public class SpecRunnerTest {
     private StringPrintStream standardOutStream;
