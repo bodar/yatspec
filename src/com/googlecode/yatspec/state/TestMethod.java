@@ -43,10 +43,21 @@ public class TestMethod {
             for (List<String> row : scenarioTable.getRows()) {
                 ScenarioName scenarioName = new ScenarioName(methodName, row);
                 String name = ScenarioNameRendererFactory.renderer().render(scenarioName);
+                final List<String> oldValues = sequence(scenarioTable.getHeaders()).map(value(String.class)).toList();
                 scenarioResults.put(name, new Scenario(name,
-                        specification.replace(sequence(scenarioTable.getHeaders()).map(value(String.class)).toList(), row)));
+                        specification.replace(oldValues, createPossiblyVarargValueFrom(row, oldValues))));
             }
         }
+    }
+
+    private List<String> createPossiblyVarargValueFrom(List<String> newValues, List<String> oldValues) {
+        Sequence<String> actualValues = sequence(newValues);
+        if (oldValues.size() > newValues.size()) {
+            actualValues = sequence(newValues).join(sequence("[]").cycle()).take(oldValues.size());
+        } else if (newValues.size() > oldValues.size()) {
+            actualValues = actualValues.take(oldValues.size() - 1).append(actualValues.drop(oldValues.size() - 1).toString("[", ", ", "]"));
+        }
+        return actualValues.toList();
     }
 
     private static <T> Callable1<? super Value<T>, T> value(Class<T> aClass) {

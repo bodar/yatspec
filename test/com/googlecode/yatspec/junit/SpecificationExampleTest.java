@@ -1,8 +1,8 @@
 package com.googlecode.yatspec.junit;
 
+import com.googlecode.yatspec.rendering.NotesRenderer;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.rendering.html.HyperlinkRenderer;
-import com.googlecode.yatspec.rendering.NotesRenderer;
 import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
 import com.googlecode.yatspec.rendering.html.tagindex.HtmlTagIndexRenderer;
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
@@ -11,6 +11,7 @@ import com.googlecode.yatspec.state.givenwhenthen.GivensBuilder;
 import com.googlecode.yatspec.state.givenwhenthen.InterestingGivens;
 import com.googlecode.yatspec.state.givenwhenthen.StateExtractor;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -55,6 +56,13 @@ public class SpecificationExampleTest extends TestState implements WithCustomRes
     @Test
     public void printEmptyTestName() throws Exception {
 
+    }
+
+    @Test
+    @Table({@Row({"someParam", "varargA", "varargB"}),
+            @Row({"anotherParam"})})
+    public void callMethodsWithTrailingVarargs(String firstParam, String... otherParams) throws Exception {
+        assertThat(firstParam, Matchers.not(Matchers.isIn(otherParams)));
     }
 
     private GivensBuilder theRadicand(final String number) {

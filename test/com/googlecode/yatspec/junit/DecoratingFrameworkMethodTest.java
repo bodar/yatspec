@@ -1,6 +1,5 @@
 package com.googlecode.yatspec.junit;
 
-import com.googlecode.yatspec.rendering.ScenarioNameRendererFactory;
 import com.googlecode.yatspec.rendering.junit.HumanReadableScenarioNameRenderer;
 import com.googlecode.yatspec.rendering.junit.MavenSurefireScenarioNameRenderer;
 import com.googlecode.yatspec.state.ScenarioName;
@@ -74,7 +73,7 @@ public class DecoratingFrameworkMethodTest {
         return new FrameworkMethod(method);
     }
 
-    private Row row(final List<String> args) {
+    static Row row(final List<String> args) {
         return new Row() {
             @Override
             public String[] value() {
