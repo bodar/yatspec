@@ -52,7 +52,7 @@ public class HtmlResultRenderer implements SpecResultListener {
         group.registerRenderer(instanceOf(ScenarioTableHeader.class), callable(new ScenarioTableHeaderRenderer()));
         group.registerRenderer(instanceOf(JavaSource.class), callable(new JavaSourceRenderer()));
         group.registerRenderer(instanceOf(Notes.class), callable(new NotesRenderer()));
-        group.registerRenderer(instanceOf(LinkingNote.class), callable(new LinkingNoteRenderer()));
+        group.registerRenderer(instanceOf(LinkingNote.class), callable(new LinkingNoteRenderer(result.getTestClass())));
         group.registerRenderer(instanceOf(Content.class), asString());
         sequence(customRenderers).fold(group, registerRenderer());
         for (Class document : Creator.optionalClass("org.jdom.Document")) {
