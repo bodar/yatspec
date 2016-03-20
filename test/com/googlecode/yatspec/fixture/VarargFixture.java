@@ -3,7 +3,15 @@ package com.googlecode.yatspec.fixture;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class VarargFixture {
+
+    public Map<String, Object> arrayOnly(String[] lotsOfParams) {
+        Map<String, Object> recordedParams = new HashMap<String, Object>();
+        recordedParams.put("lotsOfParams", lotsOfParams);
+        return recordedParams;
+    }
+
     public Map<String, Object> varargsOnly(String... lotsOfParams) {
         Map<String, Object> recordedParams = new HashMap<String, Object>();
         recordedParams.put("lotsOfParams", lotsOfParams);
