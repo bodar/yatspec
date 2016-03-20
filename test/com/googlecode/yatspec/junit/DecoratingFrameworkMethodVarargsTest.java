@@ -14,6 +14,7 @@ import java.util.Map;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.junit.DecoratingFrameworkMethodTest.row;
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayContaining;
@@ -36,8 +37,13 @@ public class DecoratingFrameworkMethodVarargsTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void shouldFailIfLastArgumentIsAnArray() throws Throwable {
+        checkNonVarargs(getMethod("arrayOnly"), singletonList("someParam"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void shouldFailOnMissingParams() throws Throwable {
-        checkNonVarargs(getMethod("someParamsAndVarargs"), asList("someParam"));
+        checkNonVarargs(getMethod("someParamsAndVarargs"), singletonList("someParam"));
     }
 
     private void testFixtureMethodCalled(String methodName) throws Throwable {

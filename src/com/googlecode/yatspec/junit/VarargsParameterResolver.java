@@ -13,7 +13,7 @@ public class VarargsParameterResolver implements ParameterResolver {
         final Object[] suppliedParams = row.value();
         final Class<?>[] requiredParams = testMethod.getParameterTypes();
 
-        if (requiresNoVarArgs(requiredParams)) {
+        if (!testMethod.isVarArgs()) {
             return suppliedParams;
         }
 
@@ -22,10 +22,6 @@ public class VarargsParameterResolver implements ParameterResolver {
         }
 
         return sequence(suppliedParams).take(Math.min(requiredParams.length - 1, suppliedParams.length)).append(getVarargsFrom(suppliedParams, requiredParams)).toArray();
-    }
-
-    private boolean requiresNoVarArgs(Class<?>[] methodParams) {
-        return !methodParams[methodParams.length - 1].isArray();
     }
 
     private boolean isMissingRequiredArguments(Object[] input, Class<?>[] expected) {
