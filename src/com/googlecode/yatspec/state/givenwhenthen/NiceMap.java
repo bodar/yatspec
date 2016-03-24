@@ -16,7 +16,7 @@ class NiceMap<T extends NiceMap> {
         }
     }
 
-    public final <R> R getType(String key, Class<R> aClass) {
+    public <R> R getType(String key, Class<R> aClass) {
         Object value = map.get(key);
         if(value == null) {
             return null;
@@ -27,37 +27,37 @@ class NiceMap<T extends NiceMap> {
         return (R) value;
     }
 
-    public final Map<String, Object> getTypes() {
+    public Map<String, Object> getTypes() {
         synchronized (map) {
             return unmodifiableMap(new LinkedHashMap<String, Object>(map));
         }
     }
 
-    public final <R> R getType(Class<R> aClass) {
+    public <R> R getType(Class<R> aClass) {
         return getType(defaultName(aClass), aClass);
     }
 
-    public final T add(String key, Object instance){
+    public T add(String key, Object instance){
         map.put(key, instance);
         return (T) this;
     }
 
-    public final boolean isEmpty() {
+    public boolean isEmpty() {
         return map.isEmpty();
     }
 
-    public final T add(Object instance){
+    public T add(Object instance){
         if(instance == null) {
             return (T) this;
         }
         return add(defaultName(instance.getClass()), instance);
     }
 
-    public final boolean contains(Class aClass){
+    public boolean contains(Class aClass){
         return contains(defaultName(aClass));
     }
 
-    public final boolean contains(String name) {
+    public boolean contains(String name) {
         return map.containsKey(name);
     }
 
