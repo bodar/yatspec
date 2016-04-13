@@ -22,10 +22,7 @@ import org.antlr.stringtemplate.StringTemplate;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.googlecode.totallylazy.Callables.asString;
 import static com.googlecode.totallylazy.Predicates.always;
@@ -39,6 +36,8 @@ import static java.lang.String.format;
 
 public class HtmlResultRenderer implements SpecResultListener {
     private final List<Pair<Predicate, Renderer>> customRenderers = new ArrayList<Pair<Predicate, Renderer>>();
+
+    private List<Content> customScripts = Collections.emptyList();
     private Content customHeaderContent;
 
     @Override
@@ -62,6 +61,9 @@ public class HtmlResultRenderer implements SpecResultListener {
         final StringTemplate template = group.getInstanceOf("yatspec");
         template.setAttribute("script", loadContent("xregexp.js"));
         template.setAttribute("script", loadContent("yatspec.js"));
+        for (Content customScript : customScripts) {
+            template.setAttribute("script", customScript);
+        }
         template.setAttribute("customHeaderContent", customHeaderContent);
         template.setAttribute("stylesheet", loadContent("yatspec.css"));
         template.setAttribute("cssClass", getCssMap());
@@ -117,6 +119,11 @@ public class HtmlResultRenderer implements SpecResultListener {
 
     public HtmlResultRenderer withCustomHeaderContent(Content content) {
         this.customHeaderContent = content;
+        return this;
+    }
+
+    public HtmlResultRenderer withCustomScripts(Content... scripts) {
+        this.customScripts = Arrays.asList(scripts);
         return this;
     }
 }

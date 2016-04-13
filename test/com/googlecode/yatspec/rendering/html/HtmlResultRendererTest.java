@@ -58,6 +58,17 @@ public class HtmlResultRendererTest {
         assertThat(html, containsString(Strings.toString(getClass().getResource("CustomHeaderContent.html").openStream())));
     }
 
+    @Test
+    public void supportsCustomJavaScript() throws Exception {
+        TestResult result = new TestResult(getClass());
+
+        String html = new HtmlResultRenderer().
+                withCustomScripts(new Content(getClass().getResource("customJavaScript.js"))).
+                render(result);
+
+        assertThat(html, containsString(Strings.toString(getClass().getResource("customJavaScript.js").openStream())));
+    }
+
     private TestResult aTestResultWithCustomRenderTypeAddedToScenarioLogs() throws Exception {
         TestResult result = new TestResult(getClass());
         addToCapturedInputsAndOutputs(result, new RenderedType());
