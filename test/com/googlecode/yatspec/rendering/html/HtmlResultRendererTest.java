@@ -1,7 +1,7 @@
 package com.googlecode.yatspec.rendering.html;
 
 import com.googlecode.totallylazy.Strings;
-import com.googlecode.yatspec.rendering.Content;
+import com.googlecode.yatspec.rendering.ContentAtUrl;
 import com.googlecode.yatspec.rendering.Renderer;
 import com.googlecode.yatspec.state.Scenario;
 import com.googlecode.yatspec.state.TestResult;
@@ -52,7 +52,7 @@ public class HtmlResultRendererTest {
         TestResult result = new TestResult(getClass());
 
         String html = new HtmlResultRenderer().
-                withCustomHeaderContent(new Content(getClass().getResource("CustomHeaderContent.html"))).
+                withCustomHeaderContent(new ContentAtUrl(getClass().getResource("CustomHeaderContent.html"))).
                 render(result);
 
         assertThat(html, containsString(Strings.toString(getClass().getResource("CustomHeaderContent.html").openStream())));
@@ -63,7 +63,7 @@ public class HtmlResultRendererTest {
         TestResult result = new TestResult(getClass());
 
         String html = new HtmlResultRenderer().
-                withCustomScripts(new Content(getClass().getResource("customJavaScript.js"))).
+                withCustomScripts(new ContentAtUrl(getClass().getResource("customJavaScript.js"))).
                 render(result);
 
         assertThat(html, containsString(Strings.toString(getClass().getResource("customJavaScript.js").openStream())));

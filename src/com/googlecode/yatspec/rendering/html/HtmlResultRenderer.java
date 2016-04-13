@@ -52,7 +52,7 @@ public class HtmlResultRenderer implements SpecResultListener {
         group.registerRenderer(instanceOf(JavaSource.class), callable(new JavaSourceRenderer()));
         group.registerRenderer(instanceOf(Notes.class), callable(new NotesRenderer()));
         group.registerRenderer(instanceOf(LinkingNote.class), callable(new LinkingNoteRenderer(result.getTestClass())));
-        group.registerRenderer(instanceOf(Content.class), asString());
+        group.registerRenderer(instanceOf(ContentAtUrl.class), asString());
         sequence(customRenderers).fold(group, registerRenderer());
         for (Class document : Creator.optionalClass("org.jdom.Document")) {
             group.registerRenderer(instanceOf(document), callable(Creator.<Renderer>create(Class.forName("com.googlecode.yatspec.plugin.jdom.DocumentRenderer"))));
@@ -94,7 +94,7 @@ public class HtmlResultRenderer implements SpecResultListener {
     }
 
     public static Content loadContent(final String resource) throws IOException {
-        return new Content(HtmlResultRenderer.class.getResource(resource));
+        return new ContentAtUrl(HtmlResultRenderer.class.getResource(resource));
     }
 
     public static Map<Status, String> getCssMap() {

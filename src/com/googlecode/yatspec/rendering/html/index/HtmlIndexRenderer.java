@@ -3,6 +3,7 @@ package com.googlecode.yatspec.rendering.html.index;
 import com.googlecode.funclate.stringtemplate.EnhancedStringTemplateGroup;
 import com.googlecode.yatspec.junit.SpecResultListener;
 import com.googlecode.yatspec.rendering.Content;
+import com.googlecode.yatspec.rendering.ContentAtUrl;
 import com.googlecode.yatspec.rendering.Index;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.state.Result;
@@ -39,6 +40,6 @@ public class HtmlIndexRenderer implements SpecResultListener {
     }
 
     private Content loadContent(String name) {
-        return new Content(getClass().getResource(name));
+        return new ContentAtUrl(getClass().getResource(name));
     }
 }
