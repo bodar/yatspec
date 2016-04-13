@@ -38,7 +38,7 @@ public class HtmlResultRenderer implements SpecResultListener {
     private final List<Pair<Predicate, Renderer>> customRenderers = new ArrayList<Pair<Predicate, Renderer>>();
 
     private List<Content> customScripts = Collections.emptyList();
-    private Content customHeaderContent;
+    private List<Content> customHeaderContents = Collections.emptyList();
 
     @Override
     public void complete(File yatspecOutputDir, Result result) throws Exception {
@@ -64,7 +64,9 @@ public class HtmlResultRenderer implements SpecResultListener {
         for (Content customScript : customScripts) {
             template.setAttribute("script", customScript);
         }
-        template.setAttribute("customHeaderContent", customHeaderContent);
+        for (Content customHeaderContent : customHeaderContents) {
+            template.setAttribute("customHeaderContent", customHeaderContent);
+        }
         template.setAttribute("stylesheet", loadContent("yatspec.css"));
         template.setAttribute("cssClass", getCssMap());
         template.setAttribute("testResult", result);
@@ -117,8 +119,8 @@ public class HtmlResultRenderer implements SpecResultListener {
                 testMethod.getName());
     }
 
-    public HtmlResultRenderer withCustomHeaderContent(Content content) {
-        this.customHeaderContent = content;
+    public HtmlResultRenderer withCustomHeaderContent(Content... content) {
+        this.customHeaderContents = Arrays.asList(content);
         return this;
     }
 

@@ -4,7 +4,9 @@
         <title>$testSuite$</title>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js" type="text/javascript"></script>
 
-        $customHeaderContent$
+        $customHeaderContent:{
+        $it$
+        }$
 
         $stylesheet:{
             <style type="text/css">
