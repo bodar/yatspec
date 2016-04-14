@@ -1,7 +1,7 @@
 package com.googlecode.yatspec.plugin.sequencediagram;
 
-import com.googlecode.totallylazy.Sequence;
 import com.googlecode.yatspec.rendering.Content;
+import com.googlecode.yatspec.rendering.ContentAtUrl;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 import org.jdom.Document;
@@ -68,6 +68,6 @@ public class SequenceDiagramGenerator {
     }
 
     public static Content getHeaderContentForModalWindows() {
-        return new Content(SequenceDiagramGenerator.class.getResource("dialogScriptHeaderContent.html"));
+        return new ContentAtUrl(SequenceDiagramGenerator.class.getResource("dialogScriptHeaderContent.html"));
     }
 }

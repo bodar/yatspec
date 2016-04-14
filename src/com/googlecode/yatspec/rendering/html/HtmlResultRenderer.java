@@ -22,10 +22,7 @@ import org.antlr.stringtemplate.StringTemplate;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.googlecode.totallylazy.Callables.asString;
 import static com.googlecode.totallylazy.Predicates.always;
@@ -39,7 +36,9 @@ import static java.lang.String.format;
 
 public class HtmlResultRenderer implements SpecResultListener {
     private final List<Pair<Predicate, Renderer>> customRenderers = new ArrayList<Pair<Predicate, Renderer>>();
-    private Content customHeaderContent;
+
+    private List<Content> customScripts = Collections.emptyList();
+    private List<Content> customHeaderContents = Collections.emptyList();
 
     @Override
     public void complete(File yatspecOutputDir, Result result) throws Exception {
@@ -53,7 +52,7 @@ public class HtmlResultRenderer implements SpecResultListener {
         group.registerRenderer(instanceOf(JavaSource.class), callable(new JavaSourceRenderer()));
         group.registerRenderer(instanceOf(Notes.class), callable(new NotesRenderer()));
         group.registerRenderer(instanceOf(LinkingNote.class), callable(new LinkingNoteRenderer(result.getTestClass())));
-        group.registerRenderer(instanceOf(Content.class), asString());
+        group.registerRenderer(instanceOf(ContentAtUrl.class), asString());
         sequence(customRenderers).fold(group, registerRenderer());
         for (Class document : Creator.optionalClass("org.jdom.Document")) {
             group.registerRenderer(instanceOf(document), callable(Creator.<Renderer>create(Class.forName("com.googlecode.yatspec.plugin.jdom.DocumentRenderer"))));
@@ -62,7 +61,12 @@ public class HtmlResultRenderer implements SpecResultListener {
         final StringTemplate template = group.getInstanceOf("yatspec");
         template.setAttribute("script", loadContent("xregexp.js"));
         template.setAttribute("script", loadContent("yatspec.js"));
-        template.setAttribute("customHeaderContent", customHeaderContent);
+        for (Content customScript : customScripts) {
+            template.setAttribute("script", customScript);
+        }
+        for (Content customHeaderContent : customHeaderContents) {
+            template.setAttribute("customHeaderContent", customHeaderContent);
+        }
         template.setAttribute("stylesheet", loadContent("yatspec.css"));
         template.setAttribute("cssClass", getCssMap());
         template.setAttribute("testResult", result);
@@ -90,7 +94,7 @@ public class HtmlResultRenderer implements SpecResultListener {
     }
 
     public static Content loadContent(final String resource) throws IOException {
-        return new Content(HtmlResultRenderer.class.getResource(resource));
+        return new ContentAtUrl(HtmlResultRenderer.class.getResource(resource));
     }
 
     public static Map<Status, String> getCssMap() {
@@ -115,8 +119,13 @@ public class HtmlResultRenderer implements SpecResultListener {
                 testMethod.getName());
     }
 
-    public HtmlResultRenderer withCustomHeaderContent(Content content) {
-        this.customHeaderContent = content;
+    public HtmlResultRenderer withCustomHeaderContent(Content... content) {
+        this.customHeaderContents = Arrays.asList(content);
+        return this;
+    }
+
+    public HtmlResultRenderer withCustomScripts(Content... scripts) {
+        this.customScripts = Arrays.asList(scripts);
         return this;
     }
 }

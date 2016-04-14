@@ -69,16 +69,22 @@ yatspec.highlight = function(element, pairs) {
 }
 
 $(document).ready(function () {
+    var specificationHighlights = [
+        {pattern: '"[^"]*"',     cssClass: "quote" },
+        {pattern: "Given",       cssClass: "keyword" },
+        {pattern: "And",         cssClass: "keyword" },
+        {pattern: "When",        cssClass: "keyword" },
+        {pattern: "Then",        cssClass: "keyword" },
+        {pattern: "[A-Z_]{2,}" , cssClass: "constant" },
+        {pattern: "[\\d]+" ,     cssClass: "literal" }
+    ];
+
+    if (yatspec.additionalSpecificationHighlights) {
+        $.merge(specificationHighlights, yatspec.additionalSpecificationHighlights);
+    }
+
     $('.highlight.specification').each(function() {
-        yatspec.highlight(this, [
-            {pattern: '"[^"]*"',     cssClass: "quote" },
-            {pattern: "Given",       cssClass: "keyword" },
-            {pattern: "And",         cssClass: "keyword" },
-            {pattern: "When",        cssClass: "keyword" },
-            {pattern: "Then",        cssClass: "keyword" },
-            {pattern: "[A-Z_]{2,}" , cssClass: "constant" },
-            {pattern: "[\\d]+" ,     cssClass: "literal" }
-        ]);
+        yatspec.highlight(this, specificationHighlights);
     })
 
     $('.highlight.results').each(function() {
