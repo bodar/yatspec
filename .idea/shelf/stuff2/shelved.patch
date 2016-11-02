@@ -1,0 +1,2438 @@
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/misc.xml	(revision d490742761fe301885a37f69989fe291d3ccdf5b)
++++ .idea/misc.xml	(revision )
+@@ -65,7 +65,7 @@
+   <component name="ProjectResources">
+     <default-html-doctype>http://www.w3.org/1999/xhtml</default-html-doctype>
+   </component>
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="1.7" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/out" />
+   </component>
+   <component name="RegexUtilComponent" text="1900-01-01 2007/08/13 1900.01.01 1900 01 01 1900-01.01 1900 13 01 1900 02 31" flags="0" regex="(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])" mode="0" />
+\ No newline at end of file
+Index: src/com/googlecode/yatspec/state/Scenario.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/com/googlecode/yatspec/state/Scenario.java	(revision d490742761fe301885a37f69989fe291d3ccdf5b)
++++ src/com/googlecode/yatspec/state/Scenario.java	(revision )
+@@ -1,8 +1,6 @@
+ package com.googlecode.yatspec.state;
+ 
+ import com.googlecode.yatspec.parsing.JavaSource;
+-import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
+-import com.googlecode.yatspec.state.givenwhenthen.InterestingGivens;
+ import com.googlecode.yatspec.state.givenwhenthen.TestState;
+ 
+ import java.util.LinkedHashMap;
+@@ -13,14 +11,13 @@
+ public class Scenario {
+     private TestState testState = new TestState();
+     private final String name;
+-    private final JavaSource specification;
+     private Throwable exception;
+     private boolean wasRun = false;
++    private final List<Section> sections;
+ 
+-
+-    public Scenario(String name, JavaSource specification) {
++    public Scenario(String name, List<Section> sections) {
+         this.name = name;
+-        this.specification = specification;
++        this.sections = sections;
+     }
+ 
+     public String getName() {
+@@ -59,10 +56,6 @@
+         return exception != null;
+     }
+ 
+-    public JavaSource getSpecification() {
+-        return specification;
+-    }
+-
+     public boolean wasRun() {
+         return wasRun;
+     }
+@@ -94,5 +87,9 @@
+ 
+     public String getUid() {
+         return Integer.toString(hashCode());
++    }
++
++    public List<Section> getSections() {
++        return sections;
+     }
+ }
+Index: build.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- build.xml	(revision d490742761fe301885a37f69989fe291d3ccdf5b)
++++ build.xml	(revision )
+@@ -100,4 +100,4 @@
+ 
+     <target name="build" depends="update, clean, compile, test, package" description="build all"/>
+ 
+-</project>
++</project>
+\ No newline at end of file
+Index: test/com/googlecode/yatspec/junit/SpecificationExampleTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- test/com/googlecode/yatspec/junit/SpecificationExampleTest.java	(revision d490742761fe301885a37f69989fe291d3ccdf5b)
++++ test/com/googlecode/yatspec/junit/SpecificationExampleTest.java	(revision )
+@@ -18,6 +18,8 @@
+ import static com.googlecode.totallylazy.Sequences.sequence;
+ import static com.googlecode.yatspec.plugin.jdom.StateExtractors.getValue;
+ import static java.lang.Double.valueOf;
++import static java.lang.Math.ceil;
++import static java.lang.Math.floor;
+ import static java.lang.Math.sqrt;
+ import static org.hamcrest.MatcherAssert.assertThat;
+ import static org.hamcrest.core.Is.is;
+@@ -28,6 +30,7 @@
+ public class SpecificationExampleTest extends TestState implements WithCustomResultListeners {
+     private static final String RADICAND = "Radicand";
+     private static final String RESULT = "Result";
++    private int aNumber;
+ 
+     @Test
+     @Notes("#tag-one")
+@@ -63,6 +66,22 @@
+             @Row({"anotherParam"})})
+     public void callMethodsWithTrailingVarargs(String firstParam, String... otherParams) throws Exception {
+         assertThat(firstParam, Matchers.not(Matchers.isIn(otherParams)));
++    }
++
++    @Test
++    public void collapsed() throws Exception {
++        mathFloorRoundsDown();
++        andMathCeilRoundsUp();
++    }
++
++    @Collapsible
++    private void andMathCeilRoundsUp() {
++        assertThat(ceil(1.2), is(2.0));
++    }
++
++    @Collapsible
++    private void mathFloorRoundsDown() {
++        assertThat(floor(1.2), is(1.0));
+     }
+ 
+     private GivensBuilder theRadicand(final String number) {
+Index: src/com/googlecode/yatspec/junit/Collapsible.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/com/googlecode/yatspec/junit/Collapsible.java	(revision )
++++ src/com/googlecode/yatspec/junit/Collapsible.java	(revision )
+@@ -0,0 +1,13 @@
++package com.googlecode.yatspec.junit;
++
++import java.lang.annotation.ElementType;
++import java.lang.annotation.Retention;
++import java.lang.annotation.RetentionPolicy;
++import java.lang.annotation.Target;
++
++@Retention(RetentionPolicy.RUNTIME)
++@Target({ElementType.METHOD, ElementType.TYPE})
++@YatspecAnnotation
++public @interface Collapsible {
++
++}
+Index: src/com/googlecode/yatspec/state/TestMethod.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/com/googlecode/yatspec/state/TestMethod.java	(revision d490742761fe301885a37f69989fe291d3ccdf5b)
++++ src/com/googlecode/yatspec/state/TestMethod.java	(revision )
+@@ -24,28 +24,29 @@
+     private final Method method;
+     private final String methodName;
+     private final ScenarioTable scenarioTable;
+-    private final JavaSource specification;
+     private final Map<String, Scenario> scenarioResults = new LinkedHashMap<String, Scenario>();
++    private final List<Section> sections;
+ 
+-    public TestMethod(Class testClass, Method method, String methodName, JavaSource methodBody, ScenarioTable scenarioTable) {
++    public TestMethod(Class testClass, Method method, String methodName, ScenarioTable scenarioTable, List<Section> sections) {
+         this.testClass = testClass;
+         this.method = method;
+         this.methodName = methodName;
+         this.scenarioTable = scenarioTable;
+-        this.specification = methodBody;
++        this.sections = sections;
+         buildUpScenarios();
+     }
+ 
+     private void buildUpScenarios() {
+         if (scenarioTable.isEmpty()) {
+-            scenarioResults.put(methodName, new Scenario("", specification));
++            scenarioResults.put(methodName, new Scenario("", sections));
+         } else {
+             for (List<String> row : scenarioTable.getRows()) {
+                 ScenarioName scenarioName = new ScenarioName(methodName, row);
+                 String name = ScenarioNameRendererFactory.renderer().render(scenarioName);
+                 final List<String> oldValues = sequence(scenarioTable.getHeaders()).map(value(String.class)).toList();
+-                scenarioResults.put(name, new Scenario(name,
+-                        specification.replace(oldValues, createPossiblyVarargValueFrom(row, oldValues))));
++                // TODO what did this use to do?
++//                JavaSource javaSource = specification.replace(oldValues, createPossiblyVarargValueFrom(row, oldValues));
++                scenarioResults.put(name, new Scenario(name, sections));
+             }
+         }
+     }
+@@ -99,13 +100,9 @@
+         return Status.Passed;
+     }
+ 
+-    public JavaSource getSpecification() {
+-        return specification;
+-    }
+-
+     @Override
+     public String toString() {
+-        return getName() + lineSeparator() + getSpecification();
++        return getName() + lineSeparator() + sections;
+     }
+ 
+     public ScenarioTable getScenarioTable() {
+Index: .idea/ant.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/ant.xml	(revision d490742761fe301885a37f69989fe291d3ccdf5b)
++++ .idea/ant.xml	(revision )
+@@ -3,5 +3,4 @@
+   <component name="AntConfiguration">
+     <buildFile url="file://$PROJECT_DIR$/build.xml" />
+   </component>
+-</project>
++</project>
+\ No newline at end of file
+-
+\ No newline at end of file
+Index: src/com/googlecode/yatspec/rendering/html/yatspec.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/com/googlecode/yatspec/rendering/html/yatspec.css	(revision d490742761fe301885a37f69989fe291d3ccdf5b)
++++ src/com/googlecode/yatspec/rendering/html/yatspec.css	(revision )
+@@ -229,3 +229,10 @@
+     display: block;
+     padding : 5px;
+ }
++
++.collapsible span {
++    cursor: help;
++}
++.collapsible pre {
++    display: none;
++}
+\ No newline at end of file
+Index: test/com/googlecode/yatspec/rendering/wiki/WikiResultRendererTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- test/com/googlecode/yatspec/rendering/wiki/WikiResultRendererTest.java	(revision d490742761fe301885a37f69989fe291d3ccdf5b)
++++ test/com/googlecode/yatspec/rendering/wiki/WikiResultRendererTest.java	(revision )
+@@ -11,6 +11,7 @@
+     public void preservesJavaFormatting() throws Exception {
+         String result = new WikiResultRenderer().render(new TestResult(getClass()));
+             // Supports indents and comments
++        System.out.println("result = " + result);
+         assertThat(result, containsString("    // Supports indents and comments"));
+     }
+ }
+\ No newline at end of file
+Index: build/build.dependencies
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- build/build.dependencies	(revision d490742761fe301885a37f69989fe291d3ccdf5b)
++++ build/build.dependencies	(revision )
+@@ -5,6 +5,9 @@
+ mvn:antlr:antlr:jar:2.7.7
+ mvn:org.antlr:stringtemplate:jar:3.2.1
+ mvn:com.thoughtworks.qdox:qdox:jar:1.12.1
++mvn:org.javassist:javassist:jar:3.21.0-GA
++mvn:com.github.javaparser:javaparser-core:jar:2.5.1
++
+ http://central.maven.org/maven2/com/googlecode/jarjar/jarjar/1.1/jarjar-1.1.jar
+ 
+ mvn://repo.bodar.com/com.googlecode.totallylazy:totallylazy:pack|sources:1130
+Index: src/com/googlecode/yatspec/rendering/html/HtmlRendering.java
+===================================================================
+--- src/com/googlecode/yatspec/rendering/html/HtmlRendering.java	(revision d490742761fe301885a37f69989fe291d3ccdf5b)
++++ src/com/googlecode/yatspec/rendering/html/HtmlRendering.java	(revision d490742761fe301885a37f69989fe291d3ccdf5b)
+@@ -1,4 +0,0 @@
+-package com.googlecode.yatspec.rendering.html;
+-
+-public class HtmlRendering {
+-}
+Index: src/com/googlecode/yatspec/rendering/wiki/wiki.st
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/com/googlecode/yatspec/rendering/wiki/wiki.st	(revision d490742761fe301885a37f69989fe291d3ccdf5b)
++++ src/com/googlecode/yatspec/rendering/wiki/wiki.st	(revision )
+@@ -17,7 +17,7 @@
+ $testMethod.scenarios: { scenario |
+ 
+ {{{
+-$scenario.specification$
++$scenario.sections:{ section | $section.specification$ }$
+ }}}
+ 
+ $scenario.logs.keys:{ key |
+Index: src/com/googlecode/yatspec/parsing/TestMethodExtractor.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/com/googlecode/yatspec/parsing/TestMethodExtractor.java	(revision d490742761fe301885a37f69989fe291d3ccdf5b)
++++ src/com/googlecode/yatspec/parsing/TestMethodExtractor.java	(revision )
+@@ -1,17 +1,28 @@
+ package com.googlecode.yatspec.parsing;
+ 
++import com.github.javaparser.JavaParser;
++import com.github.javaparser.ParseException;
++import com.github.javaparser.ast.Node;
++import com.github.javaparser.ast.expr.MethodCallExpr;
++import com.github.javaparser.ast.stmt.Statement;
+ import com.googlecode.totallylazy.Callable1;
++import com.googlecode.totallylazy.Predicate;
+ import com.googlecode.totallylazy.Sequence;
+ import com.googlecode.totallylazy.Strings;
++import com.googlecode.yatspec.junit.Collapsible;
+ import com.googlecode.yatspec.junit.Table;
+ import com.googlecode.yatspec.state.ScenarioTable;
++import com.googlecode.yatspec.state.Section;
+ import com.googlecode.yatspec.state.TestMethod;
+ import com.thoughtworks.qdox.model.*;
++import com.thoughtworks.qdox.model.Annotation;
+ import com.thoughtworks.qdox.model.annotation.AnnotationValue;
+ import com.thoughtworks.qdox.model.annotation.AnnotationValueList;
+ import com.thoughtworks.qdox.model.annotation.EvaluatingVisitor;
+ 
++import java.io.IOException;
+ import java.lang.reflect.Method;
++import java.util.ArrayList;
+ import java.util.Arrays;
+ import java.util.List;
+ 
+@@ -19,6 +30,7 @@
+ import static com.googlecode.totallylazy.Predicates.where;
+ import static com.googlecode.totallylazy.Sequences.sequence;
+ import static com.googlecode.yatspec.parsing.TestParser.name;
++import static java.util.Collections.singletonList;
+ 
+ public class TestMethodExtractor {
+     public TestMethod toTestMethod(Class aClass, JavaMethod javaMethod, Method method) {
+@@ -26,7 +38,60 @@
+ 
+         final JavaSource source = new JavaSource(javaMethod.getSourceCode());
+         final ScenarioTable scenarioTable = getScenarioTable(javaMethod);
+-        return new TestMethod(aClass, method, name, source, scenarioTable);
++
++        try {
++            List<Statement> stmts = JavaParser.parseBlock("{" + javaMethod.getSourceCode() + "}").getStmts();
++            List<Section> sections = new ArrayList<Section>();
++            for (Statement stmt : stmts) {
++                List<Node> childrenNodes = stmt.getChildrenNodes();
++                for (Node childrenNode : childrenNodes) {
++                    if (childrenNode instanceof MethodCallExpr) {
++                        MethodCallExpr methodCall = (MethodCallExpr) childrenNode;
++                        String methodName = methodCall.getName();
++                        List<Method> methods = sequence(aClass.getDeclaredMethods()).filter(methodName(methodName)).toList();
++                        if (methods.size() == 0) {
++                            // TODO skip???
++                            continue;
++                        } else if (methods.size() > 1) {
++                            // TODO use javaMethod.getParameters() to find the right method here
++                            throw new UnsupportedOperationException("not yet implemented: " + methods.size() + " " + methodName);
++                        }
++                        Method method1 = methods.get(0);
++                        if (sequence(method1.getAnnotations()).map(annotationType()).contains(Collapsible.class)) {
++                            JavaSource specification = new JavaSource(TestParser.getJavaClass(aClass).get().getMethod(methodName, null, false).getSourceCode());
++                            sections.add(new Section(methodName, specification, true));
++                        }
++                    }
++                }
++            }
++            if (!sections.isEmpty()) {
++                return new TestMethod(aClass, method, name, scenarioTable, sections);
++            }
++        } catch (ParseException e) {
++            throw new UnsupportedOperationException(e);
++        } catch (IOException e) {
++            e.printStackTrace();
++        }
++
++        return new TestMethod(aClass, method, name, scenarioTable, singletonList(new Section(source, false)));
++    }
++
++    private Callable1<java.lang.annotation.Annotation, Class<? extends java.lang.annotation.Annotation>> annotationType() {
++        return new Callable1<java.lang.annotation.Annotation, Class<? extends java.lang.annotation.Annotation>>() {
++            @Override
++            public Class<? extends java.lang.annotation.Annotation> call(java.lang.annotation.Annotation annotation) throws Exception {
++                return annotation.annotationType();
++            }
++        };
++    }
++
++    private Predicate<Method> methodName(final String methodName) {
++        return new Predicate<Method>() {
++            @Override
++            public boolean matches(Method other) {
++                return other.getName().equals(methodName);
++            }
++        };
+     }
+ 
+     @SuppressWarnings({"unchecked"})
+Index: src/com/googlecode/yatspec/rendering/html/yatspec.st
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/com/googlecode/yatspec/rendering/html/yatspec.st	(revision d490742761fe301885a37f69989fe291d3ccdf5b)
++++ src/com/googlecode/yatspec/rendering/html/yatspec.st	(revision )
+@@ -73,8 +73,17 @@
+                         <div class="scenario" id="$testMethod.uid$_$scenario.uid$">
+                             <a id="$scenario.name$"></a>
+                             <h2>Specification</h2>
+-                            <pre class="highlight specification">
+-                                $scenario.specification$</pre>
++                                $scenario.sections:{ section |
++                                    $if(section.collapsible)$
++                                        <div class="collapsible">
++                                            <span>&raquo; $section.header$</span>
++                                            <pre class="highlight specification">$section.specification$</pre>
++                                        </div>
++                                    $else$
++                                        <pre class="highlight specification">$section.specification$</pre>
++                                    $endif$
++                                }$
++
+                             <h3 class="logKey">Test results:</h3>
+                                     <pre class='highlight results $cssClass.(scenario.status)$'>
+                                         $scenario.message$</pre>
+Index: src/com/googlecode/yatspec/rendering/html/yatspec.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/com/googlecode/yatspec/rendering/html/yatspec.js	(revision d490742761fe301885a37f69989fe291d3ccdf5b)
++++ src/com/googlecode/yatspec/rendering/html/yatspec.js	(revision )
+@@ -128,6 +128,10 @@
+         $('.logKey', this).next(".logValue").toggleClass("hide");
+     })
+ 
++    $('.collapsible span').click(function() {
++        $(this).parent().find("pre").toggle()
++    });
++
+ }, false);
+ 
+ $(".section-header").click(function () {
+Index: .idea/libraries/build.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/libraries/build.xml	(revision d490742761fe301885a37f69989fe291d3ccdf5b)
++++ .idea/libraries/build.xml	(revision )
+@@ -6,6 +6,7 @@
+     <JAVADOC />
+     <SOURCES>
+       <root url="file://$PROJECT_DIR$/lib/build" />
++      <root url="jar://$USER_HOME$/.ideaLibSources/qdox-1.12.1-sources.jar!/" />
+     </SOURCES>
+     <jarDirectory url="file://$PROJECT_DIR$/lib/build" recursive="false" />
+     <jarDirectory url="file://$PROJECT_DIR$/lib/build" recursive="false" type="SOURCES" />
+\ No newline at end of file
+Index: PortInActivationHappyPathTest.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- PortInActivationHappyPathTest.html	(revision )
++++ PortInActivationHappyPathTest.html	(revision )
+@@ -0,0 +1,1839 @@
++<!DOCTYPE>
++<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
++    <head>
++        <title></title>
++        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js" type="text/javascript"></script>
++
++
++<style type="text/css">
++    .highlight .term {
++        background-color: rgba(127,63,191,.1);
++    }
++    .term:hover .definition {
++        display: block;
++    }
++    .definition {
++        border: 1px solid black;
++        display: none;
++        background: #C8C8C8;
++        margin-left: 28px;
++        padding: 10px;
++        position: absolute;
++        z-index: 1000;
++    }
++</style>
++
++        
++<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css" type="text/css" media="all"/>
++<link rel="stylesheet" href="http://static.jquery.com/ui/css/demo-docs-theme/ui.theme.css" type="text/css" media="all"/>
++<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
++
++<style type="text/css">
++    .ui-dialog {
++        pointer-events: none;
++    }
++    .ui-dialog-titlebar-close {
++        pointer-events: all;
++    }
++</style>
++
++<script type="text/javascript">
++
++    var createDialogsForSequenceDiagramMessages = function() {
++        var messagePayloadDialogs = {};
++        $(".sequence_diagram_clickable").each(function() {
++            var sequenceDiagramMessage = $(this);
++            var myScenario = sequenceDiagramMessage.parents(".scenario");
++            var scenarioUid = myScenario.attr("id");
++            var sequenceDiagramMessageId = sequenceDiagramMessage.attr("sequence_diagram_message_id");
++
++            var dialogContent = myScenario.find('H3[logKey="' + sequenceDiagramMessageId + '"]').next("div").clone();
++
++            var capturedInputAndOutputsName = sequenceDiagramMessage.text();
++            sequenceDiagramMessageId = "" + sequenceDiagramMessageId + "_" + scenarioUid;
++            messagePayloadDialogs[sequenceDiagramMessageId] = dialogContent.dialog({title:capturedInputAndOutputsName,minWidth: 800,stack:false,closeOnEscape:true, autoOpen:false });
++        });
++        return messagePayloadDialogs;
++    };
++
++    var dialogsCreated = false;
++    var messagePayloadDialogs = {};
++    $(document).ready(function () {
++
++        $(".SvgWrapper").toggleClass("hide");
++
++        $(".sequence_diagram_clickable").click(function() {
++            openDialog($(this), "click");
++        });
++
++        $(".sequence_diagram_clickable").hover(function() {
++            openDialog($(this), "hover");
++        }, function(){
++            closeHoveredDialog($(this));
++        })
++    });
++
++    function dialogForSequenceDiagramMessage(sequenceDiagramMessage) {
++        var myScenario = sequenceDiagramMessage.parents(".scenario");
++        var scenarioUid = myScenario.attr("id");
++        var sequenceDiagramMessageId = "" + sequenceDiagramMessage.attr("sequence_diagram_message_id") + "_" + scenarioUid;
++        return messagePayloadDialogs[sequenceDiagramMessageId];
++    }
++
++    function closeHoveredDialog(sequenceDiagramMessage) {
++        var dialog = dialogForSequenceDiagramMessage(sequenceDiagramMessage);
++        if(dialog.openMethod == "hover" ) {
++            dialog.dialog("close")
++        }
++    }
++
++    function openDialog(sequenceDiagramMessage, openMethod) {
++        if (!dialogsCreated) {
++            messagePayloadDialogs = createDialogsForSequenceDiagramMessages();
++            dialogsCreated = true;
++        }
++
++        var dialog = dialogForSequenceDiagramMessage(sequenceDiagramMessage);
++        dialog.openMethod=openMethod;
++        dialog.dialog("open");
++    }
++
++</script>
++
++        
++
++
++            <style type="text/css">
++                /* <![CDATA[ */
++html, body {
++    margin: 1em 2ex 2em;
++    padding: 0;
++    background-color: #fff;
++    color: #000;
++    font-family: Arial, Helvetica, Verdana, sans-serif;
++    font-size: 10pt;
++}
++
++body {
++    position: absolute;
++}
++
++h1, h2, h3, h4, h5, h6, th {
++    text-transform: capitalize;
++}
++
++h1 {
++    font-size: 170%;
++}
++
++h2 {
++    font-size: 150%;
++}
++
++h3 {
++    font-size: 140%;
++}
++
++h4 {
++    font-size: 130%;
++}
++
++h5 {
++    font-size: 120%;
++}
++
++h6 {
++    font-size: 110%;
++}
++
++.highlight {
++    background-color: #E8EEF7;
++    border: 1px solid #C3D9FF;
++    padding: 5px;
++    font: 10pt Arial, sans-serif;
++}
++
++.highlight .literal {
++    color: #066;
++}
++
++.highlight .keyword {
++    color: #008;
++}
++
++.highlight .constant {
++    color: #606;
++}
++
++.highlight .quote {
++    color: #080;
++}
++
++.highlight.specification .literal,
++.highlight.specification .keyword,
++.highlight.specification .constant,
++.highlight.specification .quote {
++    font-weight: bold;
++}
++
++pre.test-not-run, .test-not-run, .interestingGiven {
++    background-color: #FFF4CC;
++    border: 2px solid #FFBB66;
++}
++
++.interestingGiven {
++    padding: 0 2px;
++}
++
++pre.test-failed, .test-failed {
++    background-color: #FFF6FF;
++    border: 2px solid #FDA8A8;
++}
++
++pre.test-passed, .test-passed {
++    background-color: #F2FFEE;
++    border: 2px solid #A5DDAD;
++}
++
++li.test-not-run, li.test-passed {
++    border: none;
++}
++
++ul.contents a {
++    text-transform: capitalize;
++}
++
++a, table a {
++    color: #660066;
++    text-decoration: none;
++}
++
++a:hover, table a:hover {
++    text-decoration: underline;
++}
++
++table {
++    background-color: #F5F9FD;
++    border: 1px solid #C3D9FF;
++    border-collapse: collapse;
++    empty-cells: show;
++}
++
++th {
++    background-color: #E8EEF7;
++    border: 1px solid #C3D9FF;
++}
++
++td {
++    border: 1px solid #C3D9FF;
++}
++
++div.contents, div.testmethod {
++    margin-bottom: 40px;
++}
++
++.scenarios td {
++    padding: 0 20px;
++    text-align: center;
++}
++
++.scenarios, .scenario {
++    margin-bottom: 20px;
++}
++
++.scenario {
++    background-color: #F5F9FD;
++    border: 1px solid #C3D9FF;
++    padding: 0 10px;
++}
++
++h2 {
++    margin-top: 10px;
++}
++
++pre {
++    margin-bottom: 32px;
++}
++
++div.example {
++    margin-bottom: 64px;
++}
++
++.hide {
++    display: none;
++}
++
++.logKey {
++    cursor: pointer;
++}
++
++.logKey:hover {
++    text-decoration: underline;
++}
++
++.interestingGivens th {
++    text-align: left;
++}
++
++.interestingGivens td {
++    text-align: right;
++    padding: 0 5px;
++    vertical-align: middle;
++}
++
++.logValue {
++    white-space: pre-wrap;
++    margin-bottom: 32px;
++}
++
++.package-name {
++    cursor: pointer;
++}
++
++.package-name:hover {
++    text-decoration: underline;
++}
++
++dt {
++    font-weight: bold;
++    margin: 0px;
++    padding: 2px;
++}
++
++dd {
++    font-weight: normal;
++    margin-top:  0px;
++    margin-bottom:  1px;
++    margin-left:  20px;
++    margin-right:  0px;
++    padding: 2px;
++    padding-right: 0px;
++}
++
++dl {
++    margin: 0px;
++}
++dl.index-result {
++    padding: 10px;
++}
++.index-result dt {
++    margin-bottom: 5px;
++}
++.index-result dd {
++    margin-left: 0px;
++    margin-right: 5px;
++}
++
++.section div {
++    width:100%;
++}
++.section .section-header {
++    padding: 2px;
++    cursor: pointer;
++}
++
++.section .section-body {
++    display: block;
++    padding : 5px;
++}
++
++                /* ]]> */
++            </style>
++        
++    </head>
++    <body>
++
++        <h1>Port in activation happy path</h1>
++
++
++        <div class="contents">
++            <h2>Contents</h2>
++
++            <ul class="contents">
++                    <li class='test-passed'><a href="#onThePortDateThePortingNumberIsActivatedWhenSkyIsOno">On the port date the porting number is activated when sky is ono</a></li>
++                                    <li class='test-not-run'><a href="#onThePortDateThePortingNumberIsActivatedWhenSkyIsNotTheOno">On the port date the porting number is activated when sky is not the ono</a></li>
++                                    <li class='test-not-run'><a href="#multiplePortingNumbersAreActivatedSuccessfully">Multiple porting numbers are activated successfully</a></li>
++                                    <li class='test-not-run'><a href="#theActivateTodaysPortInsOnTheSwitchSchedulerIsReportingAFutureTimeForTheNextTrigger">The activate todays port ins on the switch scheduler is reporting a future time for the next trigger</a></li>
++                
++            </ul>
++        </div>
++
++            <div class="testmethod section">
++                <a id="onThePortDateThePortingNumberIsActivatedWhenSkyIsOno"></a>
++                <h2 class="section-header">On the port date the porting number is activated when sky is ono</h2>
++                <div class="section-body">
++                        <pre class="notes"><a href='https://tasktracker.sns.sky.com/browse/MON-406'>MON-406</a>, <a href='https://tasktracker.sns.sky.com/browse/MON-301'>MON-301</a></pre>
++                    
++
++
++                        <div class="scenario" id="757779849_31906520">
++
++                            <h2>Specification</h2>
++                            <script>
++                                $(function () {
++                                    $('.collapsed span').click(function() {
++                                        console.log($(this).parent())
++                                        console.log($(this).parent().find("pre"))
++                                        console.log($(this).parent().find("pre").toggle())
++                                    });
++                                });
++                            </script>
++                            <style>
++                                .collapsed span {
++                                    cursor: help;
++                                }
++                                .collapsed pre {
++                                    display: none;
++                                }
++                            </style>
++                            <div>
++                                <div class="collapsed">
++                                    <span>&raquo; Given all dependency systems will respond sucessfully</span>
++                                    <pre class="specification highlight">Given system 1
++Given system 2</pre>
++                                </div>
++                                <div class="collapsed">
++                                    <span>&raquo; And the port in has already been secured in the past</span>
++                                    <pre class="specification highlight">And system 1
++And system 2
++And system 3</pre>
++                                </div>
++When the internal time trigger initiates todays port ins
++Then the switch is updated
++And service repository is updated
++And cbs is notified</div>
++                            <h3 class="logKey">Test results:</h3>
++                                    <pre class='highlight results test-passed'>
++Test passed</pre>
++
++                                         <h3 class="logKey">Interesting Givens</h3>
++
++                                        <table class="interestingGivens logValue">
++                                            <tr>
++                                                <th class="key">Media box Id</th>
++                                                <td class="interestingGiven">1234567890</td>
++                                            </tr>
++                                                                                    <tr>
++                                                <th class="key">1st Porting Msisdn</th>
++                                                <td class="interestingGiven">447985680896</td>
++                                            </tr>
++                                                                                    <tr>
++                                                <th class="key">2nd Porting Msisdn</th>
++                                                <td class="interestingGiven">447985680897</td>
++                                            </tr>
++                                                                                    <tr>
++                                                <th class="key">1st Sky Msisdn</th>
++                                                <td class="interestingGiven">447033221166</td>
++                                            </tr>
++                                                                                    <tr>
++                                                <th class="key">2nd Sky Msisdn</th>
++                                                <td class="interestingGiven">447033221167</td>
++                                            </tr>
++                                        
++                                        </table>
++
++                                        <h3 class="logKey" logkey="Request_from_InternalTimerTrigger_to_hydra">Request from InternalTimerTrigger to hydra</h3>
++                                        <div class="logValue highlight Request" >POST http://localhost:1235/activateTodaysPortIns
++Content-Length: 0
++
++</div>
++                                                                            <h3 class="logKey" logkey="Request_from_hydra_to_Nala">Request from hydra to Nala</h3>
++                                        <div class="logValue highlight String" >GET /numberrepository/api/msisdnDetails/search/findOneByMsisdn?msisdn=447985680896
++Authorization: Basic aHlkcmE6aHlkcmE=
++X-Source: Hydra
++Connection: keep-alive
++User-Agent: Apache-HttpClient/4.5.2 (Java/1.8.0_91)
++Host: localhost:1333
++Accept-Encoding: gzip,deflate
++Content-Length: 0
++TraceyId: c4dc1929-d4f8-45ee-9c5a-1369fdfeef4c
++
++</div>
++                                                                            <h3 class="logKey" logkey="Response_from_Nala_to_hydra">Response from Nala to hydra</h3>
++                                        <div class="logValue highlight String" >HTTP/1.1 200
++ETag: 7776cdb01f44354a--gzip
++Content-Length: 410
++TraceyId: c4dc1929-d4f8-45ee-9c5a-1369fdfeef4c
++
++{
++  &quot;id&quot; : 2,
++  &quot;msisdn&quot; : 447985680896,
++  &quot;state&quot; : &quot;EXPORTED&quot;,
++  &quot;type&quot; : &quot;STANDARD&quot;,
++  &quot;originalNetworkOperator&quot; : &quot;SK&quot;,
++  &quot;currentNetworkOperator&quot; : &quot;not primed&quot;,
++  &quot;lastModifiedDateTime&quot; : 1465296731501,
++  &quot;_links&quot; : {
++    &quot;self&quot; : {
++      &quot;href&quot; : &quot;http://192.168.99.100:30001/api/msisdnDetails/2&quot;
++    },
++    &quot;msisdnDetail&quot; : {
++      &quot;href&quot; : &quot;http://192.168.99.100:30001/api/msisdnDetails/2&quot;
++    }
++  }
++}</div>
++                                                                            <h3 class="logKey" logkey="Request_from_hydra_to_Zazu">Request from hydra to Zazu</h3>
++                                        <div class="logValue highlight String" >GET /servicerepository/api/services/888333
++Authorization: Basic aHlkcmE6aHlkcmE=
++X-Source: Hydra
++Connection: keep-alive
++User-Agent: Apache-HttpClient/4.5.2 (Java/1.8.0_91)
++Host: localhost:1333
++Accept-Encoding: gzip,deflate
++Content-Length: 0
++TraceyId: c4dc1929-d4f8-45ee-9c5a-1369fdfeef4c
++
++</div>
++                                                                            <h3 class="logKey" logkey="Response_from_Zazu_to_hydra">Response from Zazu to hydra</h3>
++                                        <div class="logValue highlight String" >HTTP/1.1 200
++ETag: 7776cdb01f44354--gzip
++Content-Length: 415
++TraceyId: c4dc1929-d4f8-45ee-9c5a-1369fdfeef4c
++Content-Type: application/json
++
++{
++  &quot;id&quot; : 888333,
++  &quot;imsi&quot; : 124456789999999,
++  &quot;msisdn&quot; : 447033221166,
++  &quot;mediaBoxId&quot; : 1234567890,
++  &quot;operatorId&quot; : 498253,
++  &quot;state&quot; : &quot;ACTIVE&quot;,
++  &quot;createdDateTime&quot; : 1322907300000,
++  &quot;lastModifiedDateTime&quot; : 1322907300000,
++  &quot;_links&quot; : {
++    &quot;self&quot; : {
++      &quot;href&quot; : &quot;http://localhost:30005/api/services/888333&quot;
++    },
++    &quot;service&quot; : {
++      &quot;href&quot; : &quot;http://localhost:30005/api/services/888333&quot;
++    }
++  }
++}</div>
++                                                                            <h3 class="logKey" logkey="Request_from_hydra_to_Rancor">Request from hydra to Rancor</h3>
++                                        <div class="logValue highlight String" >POST /rancor/port/number-import
++X-Source: Hydra
++Connection: keep-alive
++User-Agent: Apache-HttpClient/4.5.2 (Java/1.8.0_91)
++Host: localhost:1333
++Accept-Encoding: gzip,deflate
++Content-Length: 122
++TraceyId: c4dc1929-d4f8-45ee-9c5a-1369fdfeef4c
++Content-Type: application/json
++
++{
++  &quot;msisdn&quot; : &quot;447033221166&quot;,
++  &quot;portingMsisdn&quot; : &quot;447985680896&quot;,
++  &quot;portFlag&quot; : &quot;true&quot;,
++  &quot;mediaBoxId&quot; : &quot;1234567890&quot;
++}
++</div>
++                                                                            <h3 class="logKey" logkey="Response_from_Rancor_to_hydra">Response from Rancor to hydra</h3>
++                                        <div class="logValue highlight String" >HTTP/1.1 200
++Content-Length: 0
++TraceyId: c4dc1929-d4f8-45ee-9c5a-1369fdfeef4c
++
++</div>
++                                                                            <h3 class="logKey" logkey="Request_2_from_hydra_to_Zazu">Request 2 from hydra to Zazu</h3>
++                                        <div class="logValue highlight String" >PATCH /servicerepository/api/services/888333
++Authorization: Basic aHlkcmE6aHlkcmE=
++If-Match: 7776cdb01f44354--gzip
++Accept: application/json
++X-Source: Hydra
++Connection: keep-alive
++User-Agent: Apache-HttpClient/4.5.2 (Java/1.8.0_91)
++Host: localhost:1333
++Accept-Encoding: gzip,deflate
++Content-Length: 29
++TraceyId: c4dc1929-d4f8-45ee-9c5a-1369fdfeef4c
++Content-Type: application/json
++
++{
++  &quot;msisdn&quot; : 447985680896
++}</div>
++                                                                            <h3 class="logKey" logkey="Response_2_from_Zazu_to_hydra">Response 2 from Zazu to hydra</h3>
++                                        <div class="logValue highlight String" >HTTP/1.1 200
++Content-Length: 415
++TraceyId: c4dc1929-d4f8-45ee-9c5a-1369fdfeef4c
++Content-Type: application/json
++
++{
++  &quot;id&quot; : 888333,
++  &quot;imsi&quot; : 124456789999999,
++  &quot;msisdn&quot; : 447985680896,
++  &quot;mediaBoxId&quot; : 1234567890,
++  &quot;operatorId&quot; : 498253,
++  &quot;state&quot; : &quot;ACTIVE&quot;,
++  &quot;createdDateTime&quot; : 1322907300000,
++  &quot;lastModifiedDateTime&quot; : 1322907300000,
++  &quot;_links&quot; : {
++    &quot;self&quot; : {
++      &quot;href&quot; : &quot;http://localhost:30005/api/services/888333&quot;
++    },
++    &quot;service&quot; : {
++      &quot;href&quot; : &quot;http://localhost:30005/api/services/888333&quot;
++    }
++  }
++}</div>
++                                                                            <h3 class="logKey" logkey="Request_from_hydra_to_CBS">Request from hydra to CBS</h3>
++                                        <div class="logValue highlight String" >POST /cbs/notifications
++Connection: keep-alive
++User-Agent: Apache-HttpClient/4.5.2 (Java/1.8.0_91)
++Host: localhost:1333
++OperatorId: 498253
++Accept-Encoding: gzip,deflate
++Content-Length: 409
++Content-Type: application/xml
++
++&lt;?xml version=&quot;1.0&quot;?&gt;
++&lt;PortInRequestActivated&gt;
++    &lt;RequestId&gt;6543546r44544-243v412r23r-w3k3354yri2&lt;/RequestId&gt;  
++    &lt;OperatorId&gt;498253&lt;/OperatorId&gt;
++    &lt;OperatorOrderId&gt;65468435135-63545135435132-54684321354&lt;/OperatorOrderId&gt;
++    &lt;ServiceId&gt;888333&lt;/ServiceId&gt;
++    &lt;EffectivePortActivationDate&gt;2016-10-26&lt;/EffectivePortActivationDate&gt;
++    &lt;PortingMSISDN&gt;447985680896&lt;/PortingMSISDN&gt;
++&lt;/PortInRequestActivated&gt;</div>
++                                                                            <h3 class="logKey" logkey="Response_from_CBS_to_hydra">Response from CBS to hydra</h3>
++                                        <div class="logValue highlight String" >HTTP/1.1 200
++Content-Length: 0
++
++</div>
++                                                                            <h3 class="logKey" logkey="Response_from_hydra_to_InternalTimerTrigger">Response from hydra to InternalTimerTrigger</h3>
++                                        <div class="logValue highlight Response" >HTTP/1.1 201
++Transfer-Encoding: chunked
++Server: Jetty(9.2.13.v20150730)
++Content-Length: 0
++TraceyId: c4dc1929-d4f8-45ee-9c5a-1369fdfeef4c
++Date: Wed, 26 Oct 2016 14:49:02 GMT
++
++</div>
++                                                                            <h3 class="logKey" logkey="PortInSwitchUpdatedEvent_for_&#39;PORTING_MSISDN&#39;">PortInSwitchUpdatedEvent for &#39;PORTING_MSISDN&#39;</h3>
++                                        <div class="logValue highlight String" >sky.sns.hydra.domain.core.portin.events.PortInSwitchUpdatedEvent@6ab72419[
++  portInSwitchUpdatedEventId=11
++  portInAcceptedEventId=6
++  portInSecuredEventId=12
++  portingMSISDN=447985680896
++  skyMSISDN=447033221166
++  mediaBoxId=1234567890
++  portFlag=true
++  switchUpdatedAt=2016-10-26T15:49:03.083+01:00[Europe/London]
++]</div>
++                                                                            <h3 class="logKey" logkey="PortInActivatedEvent_for_&#39;PORTING_MSISDN&#39;">PortInActivatedEvent for &#39;PORTING_MSISDN&#39;</h3>
++                                        <div class="logValue highlight String" >sky.sns.hydra.domain.core.portin.events.PortInActivatedEvent@24b52d3e[
++  portInActivatedEventId=12
++  portInSecuredEvent=PortInSecuredEvent[portInSecuredEventId=12,portInMsisdnListRetrievedEventExternalId=11,pac=PAC123456,portingMSISDN=447985680896,dspSyniverseCode=EE,dnoSyniverseCode=EE,rspSyniverseCode=SK,rnoSyniverseCode=SK,portDate=2016-10-26,securedAt=2016-10-26T15:49:02.936+01:00[Europe/London],isAutolocked=true]
++  portInAcceptedEvent=PortInAcceptedEvent[portInAcceptedEventId=6,pac=PAC123456,portingMsisdn=447985680896,serviceId=888333,operatorId=498253,operatorOrderId=65468435135-63545135435132-54684321354,requestId=6543546r44544-243v412r23r-w3k3354yri2,skyMsisdn=447033221166,serviceState=ALLOCATED,expectedPortDate=2016-10-26,submittedAt=2016-10-26T15:49:02.902+01:00[Europe/London]]
++  portingMSISDN=447985680896
++  skyMSISDN=447033221166
++  mediaBoxId=1234567890
++  portFlag=true
++  originalNetworkOperator=SK
++  effectivePortActivationTime=2016-10-26T15:49:03.083+01:00[Europe/London]
++]</div>
++                                                                            <h3 class="logKey" logkey="Wiremock_Primings_from_/__admin/">Wiremock Primings from /__admin/</h3>
++                                        <div class="logValue highlight String" >{
++  &quot;mappings&quot; : [ {
++    &quot;id&quot; : &quot;6ffa5917-a8d6-4fa6-9554-48ec341e54ef&quot;,
++    &quot;uuid&quot; : &quot;6ffa5917-a8d6-4fa6-9554-48ec341e54ef&quot;,
++    &quot;request&quot; : {
++      &quot;urlPath&quot; : &quot;/cbs/notifications&quot;,
++      &quot;method&quot; : &quot;POST&quot;,
++      &quot;bodyPatterns&quot; : [ {
++        &quot;matchesXPath&quot; : &quot;/PortInRequestActivated&quot;
++      } ]
++    },
++    &quot;response&quot; : {
++      &quot;status&quot; : 200,
++      &quot;body&quot; : &quot;&quot;
++    }
++  }, {
++    &quot;id&quot; : &quot;f727aede-23a0-4d25-ac23-4372ef3e59ff&quot;,
++    &quot;uuid&quot; : &quot;f727aede-23a0-4d25-ac23-4372ef3e59ff&quot;,
++    &quot;request&quot; : {
++      &quot;urlPathPattern&quot; : &quot;/cbs/notifications.*&quot;,
++      &quot;method&quot; : &quot;OPTIONS&quot;
++    },
++    &quot;response&quot; : {
++      &quot;status&quot; : 200
++    }
++  }, {
++    &quot;id&quot; : &quot;0cba4152-b629-4140-bd7f-b884e7aeb892&quot;,
++    &quot;uuid&quot; : &quot;0cba4152-b629-4140-bd7f-b884e7aeb892&quot;,
++    &quot;request&quot; : {
++      &quot;urlPathPattern&quot; : &quot;/servicerepository/api/services/888333&quot;,
++      &quot;method&quot; : &quot;PATCH&quot;,
++      &quot;headers&quot; : {
++        &quot;Authorization&quot; : {
++          &quot;equalTo&quot; : &quot;Basic aHlkcmE6aHlkcmE=&quot;
++        }
++      },
++      &quot;bodyPatterns&quot; : [ {
++        &quot;equalToJson&quot; : &quot;{\n \&quot;msisdn\&quot; : 447985680896\n }&quot;,
++        &quot;ignoreArrayOrder&quot; : false,
++        &quot;ignoreExtraElements&quot; : false
++      } ]
++    },
++    &quot;response&quot; : {
++      &quot;status&quot; : 200,
++      &quot;body&quot; : &quot;{\n  \&quot;id\&quot; : 888333,\n  \&quot;imsi\&quot; : 124456789999999,\n  \&quot;msisdn\&quot; : 447985680896,\n  \&quot;mediaBoxId\&quot; : 1234567890,\n  \&quot;operatorId\&quot; : 498253,\n  \&quot;state\&quot; : \&quot;ACTIVE\&quot;,\n  \&quot;createdDateTime\&quot; : 1322907300000,\n  \&quot;lastModifiedDateTime\&quot; : 1322907300000,\n  \&quot;_links\&quot; : {\n    \&quot;self\&quot; : {\n      \&quot;href\&quot; : \&quot;http://localhost:30005/api/services/888333\&quot;\n    },\n    \&quot;service\&quot; : {\n      \&quot;href\&quot; : \&quot;http://localhost:30005/api/services/888333\&quot;\n    }\n  }\n}&quot;,
++      &quot;headers&quot; : {
++        &quot;Content-Type&quot; : &quot;application/json&quot;
++      }
++    }
++  }, {
++    &quot;id&quot; : &quot;539b94fd-6286-4d29-b1e7-4d24b4197a15&quot;,
++    &quot;uuid&quot; : &quot;539b94fd-6286-4d29-b1e7-4d24b4197a15&quot;,
++    &quot;request&quot; : {
++      &quot;urlPathPattern&quot; : &quot;/servicerepository.*&quot;,
++      &quot;method&quot; : &quot;OPTIONS&quot;
++    },
++    &quot;response&quot; : {
++      &quot;status&quot; : 200
++    }
++  }, {
++    &quot;id&quot; : &quot;90ae3950-ef20-46f0-9221-d149e6708c54&quot;,
++    &quot;uuid&quot; : &quot;90ae3950-ef20-46f0-9221-d149e6708c54&quot;,
++    &quot;request&quot; : {
++      &quot;urlPath&quot; : &quot;/rancor/port/number-import&quot;,
++      &quot;method&quot; : &quot;POST&quot;,
++      &quot;bodyPatterns&quot; : [ {
++        &quot;matches&quot; : &quot;.*portingMsisdn.*:.*447985680896.*&quot;
++      } ]
++    },
++    &quot;response&quot; : {
++      &quot;status&quot; : 200
++    }
++  }, {
++    &quot;id&quot; : &quot;4d3bdaa1-10a1-4ff9-a92a-3d2d3826b835&quot;,
++    &quot;uuid&quot; : &quot;4d3bdaa1-10a1-4ff9-a92a-3d2d3826b835&quot;,
++    &quot;request&quot; : {
++      &quot;urlPathPattern&quot; : &quot;/rancor.*&quot;,
++      &quot;method&quot; : &quot;OPTIONS&quot;
++    },
++    &quot;response&quot; : {
++      &quot;status&quot; : 200
++    }
++  }, {
++    &quot;id&quot; : &quot;891c2de5-5616-4e89-9f66-f48e8ff5eb88&quot;,
++    &quot;uuid&quot; : &quot;891c2de5-5616-4e89-9f66-f48e8ff5eb88&quot;,
++    &quot;request&quot; : {
++      &quot;urlPath&quot; : &quot;/servicerepository/api/services/888333&quot;,
++      &quot;method&quot; : &quot;GET&quot;,
++      &quot;headers&quot; : {
++        &quot;Authorization&quot; : {
++          &quot;equalTo&quot; : &quot;Basic aHlkcmE6aHlkcmE=&quot;
++        }
++      }
++    },
++    &quot;response&quot; : {
++      &quot;status&quot; : 200,
++      &quot;body&quot; : &quot;{\n  \&quot;id\&quot; : 888333,\n  \&quot;imsi\&quot; : 124456789999999,\n  \&quot;msisdn\&quot; : 447033221166,\n  \&quot;mediaBoxId\&quot; : 1234567890,\n  \&quot;operatorId\&quot; : 498253,\n  \&quot;state\&quot; : \&quot;ACTIVE\&quot;,\n  \&quot;createdDateTime\&quot; : 1322907300000,\n  \&quot;lastModifiedDateTime\&quot; : 1322907300000,\n  \&quot;_links\&quot; : {\n    \&quot;self\&quot; : {\n      \&quot;href\&quot; : \&quot;http://localhost:30005/api/services/888333\&quot;\n    },\n    \&quot;service\&quot; : {\n      \&quot;href\&quot; : \&quot;http://localhost:30005/api/services/888333\&quot;\n    }\n  }\n}&quot;,
++      &quot;headers&quot; : {
++        &quot;Content-Type&quot; : &quot;application/json&quot;,
++        &quot;ETag&quot; : &quot;7776cdb01f44354&quot;
++      }
++    }
++  }, {
++    &quot;id&quot; : &quot;0b6791a2-6cb3-4551-ad0e-d77491d59e98&quot;,
++    &quot;uuid&quot; : &quot;0b6791a2-6cb3-4551-ad0e-d77491d59e98&quot;,
++    &quot;request&quot; : {
++      &quot;urlPathPattern&quot; : &quot;/servicerepository.*&quot;,
++      &quot;method&quot; : &quot;OPTIONS&quot;
++    },
++    &quot;response&quot; : {
++      &quot;status&quot; : 200
++    }
++  }, {
++    &quot;id&quot; : &quot;1407dfe2-6904-4121-8b10-1cd914619fa7&quot;,
++    &quot;uuid&quot; : &quot;1407dfe2-6904-4121-8b10-1cd914619fa7&quot;,
++    &quot;request&quot; : {
++      &quot;urlPath&quot; : &quot;/numberrepository/api/msisdnDetails/search/findOneByMsisdn&quot;,
++      &quot;method&quot; : &quot;GET&quot;,
++      &quot;headers&quot; : {
++        &quot;Authorization&quot; : {
++          &quot;equalTo&quot; : &quot;Basic aHlkcmE6aHlkcmE=&quot;
++        }
++      },
++      &quot;queryParameters&quot; : {
++        &quot;msisdn&quot; : {
++          &quot;equalTo&quot; : &quot;447985680896&quot;
++        }
++      }
++    },
++    &quot;response&quot; : {
++      &quot;status&quot; : 200,
++      &quot;body&quot; : &quot;{\n  \&quot;id\&quot; : 2,\n  \&quot;msisdn\&quot; : 447985680896,\n  \&quot;state\&quot; : \&quot;EXPORTED\&quot;,\n  \&quot;type\&quot; : \&quot;STANDARD\&quot;,\n  \&quot;originalNetworkOperator\&quot; : \&quot;SK\&quot;,\n  \&quot;currentNetworkOperator\&quot; : \&quot;not primed\&quot;,\n  \&quot;lastModifiedDateTime\&quot; : 1465296731501,\n  \&quot;_links\&quot; : {\n    \&quot;self\&quot; : {\n      \&quot;href\&quot; : \&quot;http://192.168.99.100:30001/api/msisdnDetails/2\&quot;\n    },\n    \&quot;msisdnDetail\&quot; : {\n      \&quot;href\&quot; : \&quot;http://192.168.99.100:30001/api/msisdnDetails/2\&quot;\n    }\n  }\n}&quot;,
++      &quot;headers&quot; : {
++        &quot;ETag&quot; : &quot;7776cdb01f44354a&quot;
++      }
++    }
++  }, {
++    &quot;id&quot; : &quot;036b586b-2487-4d6c-82b3-0cb16599c3f1&quot;,
++    &quot;uuid&quot; : &quot;036b586b-2487-4d6c-82b3-0cb16599c3f1&quot;,
++    &quot;request&quot; : {
++      &quot;urlPathPattern&quot; : &quot;/numberrepository.*&quot;,
++      &quot;method&quot; : &quot;OPTIONS&quot;
++    },
++    &quot;response&quot; : {
++      &quot;status&quot; : 200
++    }
++  }, {
++    &quot;id&quot; : &quot;7f12819e-21ee-4223-8119-492ef7e1d1aa&quot;,
++    &quot;uuid&quot; : &quot;7f12819e-21ee-4223-8119-492ef7e1d1aa&quot;,
++    &quot;request&quot; : {
++      &quot;urlPattern&quot; : &quot;/.*&quot;,
++      &quot;method&quot; : &quot;ANY&quot;
++    },
++    &quot;response&quot; : {
++      &quot;status&quot; : 999,
++      &quot;body&quot; : &quot;No responses matched for the given request&quot;
++    }
++  } ],
++  &quot;meta&quot; : {
++    &quot;total&quot; : 11
++  }
++}</div>
++                                                                            <h3 class="logKey" logkey="Sequence_Diagram">Sequence Diagram</h3>
++                                        <div class="logValue highlight SvgWrapper" ><div class='nohighlight'><?xml version="1.0" encoding="UTF-8"?>
++<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="446px" style="width:1257px;height:446px;" version="1.1" viewBox="0 0 1257 446" width="1257px">
++  <defs>
++    <filter height="300%" id="f1" width="300%" x="-1" y="-1">
++      <feGaussianBlur result="blurOut" stdDeviation="2.0" />
++      <feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0" />
++      <feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3" />
++      <feBlend in="SourceGraphic" in2="blurOut3" mode="normal" />
++    </filter>
++  </defs>
++  <g>
++    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="86" x2="86" y1="38.2969" y2="407.8906" />
++    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="423.5" x2="423.5" y1="38.2969" y2="407.8906" />
++    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="1031" x2="1031" y1="38.2969" y2="407.8906" />
++    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="1091" x2="1091" y1="38.2969" y2="407.8906" />
++    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="1161" x2="1161" y1="38.2969" y2="407.8906" />
++    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="1228" x2="1228" y1="38.2969" y2="407.8906" />
++    <rect fill="#FEFECE" filter="url(#f1)" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="153" x="8" y="3" />
++    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="139" x="15" y="22.9951">InternalTimerTrigger</text>
++    <rect fill="#FEFECE" filter="url(#f1)" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="153" x="8" y="406.8906" />
++    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="139" x="15" y="426.8857">InternalTimerTrigger</text>
++    <rect fill="#FEFECE" filter="url(#f1)" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="52" x="395.5" y="3" />
++    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="38" x="402.5" y="22.9951">hydra</text>
++    <rect fill="#FEFECE" filter="url(#f1)" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="52" x="395.5" y="406.8906" />
++    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="38" x="402.5" y="426.8857">hydra</text>
++    <rect fill="#FEFECE" filter="url(#f1)" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="43" x="1008" y="3" />
++    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="29" x="1015" y="22.9951">Nala</text>
++    <rect fill="#FEFECE" filter="url(#f1)" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="43" x="1008" y="406.8906" />
++    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="29" x="1015" y="426.8857">Nala</text>
++    <rect fill="#FEFECE" filter="url(#f1)" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="49" x="1065" y="3" />
++    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="35" x="1072" y="22.9951">Zazu</text>
++    <rect fill="#FEFECE" filter="url(#f1)" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="49" x="1065" y="406.8906" />
++    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="35" x="1072" y="426.8857">Zazu</text>
++    <rect fill="#FEFECE" filter="url(#f1)" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="63" x="1128" y="3" />
++    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="49" x="1135" y="22.9951">Rancor</text>
++    <rect fill="#FEFECE" filter="url(#f1)" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="63" x="1128" y="406.8906" />
++    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="49" x="1135" y="426.8857">Rancor</text>
++    <rect fill="#FEFECE" filter="url(#f1)" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="43" x="1205" y="3" />
++    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="29" x="1212" y="22.9951">CBS</text>
++    <rect fill="#FEFECE" filter="url(#f1)" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="43" x="1205" y="406.8906" />
++    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="29" x="1212" y="426.8857">CBS</text>
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="421.5" x2="411.5" y1="69.2969" y2="65.2969" />
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="421.5" x2="411.5" y1="69.2969" y2="73.2969" />
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="86.5" x2="422.5" y1="69.2969" y2="69.2969" />
++    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Request_from_InternalTimerTrigger_to_hydra" textLength="313" x="93.5" y="64.3638">POST http://localhost:1235/activateTodaysPortIns</text>
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="1029.5" x2="1019.5" y1="98.4297" y2="94.4297" />
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="1029.5" x2="1019.5" y1="98.4297" y2="102.4297" />
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="423.5" x2="1030.5" y1="98.4297" y2="98.4297" />
++    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Request_from_hydra_to_Nala" textLength="584" x="430.5" y="93.4966">GET /numberrepository/api/msisdnDetails/search/findOneByMsisdn?msisdn=447985680896</text>
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="423.5" x2="433.5" y1="127.5625" y2="123.5625" />
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="423.5" x2="433.5" y1="127.5625" y2="131.5625" />
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="423.5" x2="1030.5" y1="127.5625" y2="127.5625" />
++    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Response_from_Nala_to_hydra" textLength="84" x="440.5" y="122.6294">HTTP/1.1 200</text>
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="1089.5" x2="1079.5" y1="156.6953" y2="152.6953" />
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="1089.5" x2="1079.5" y1="156.6953" y2="160.6953" />
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="423.5" x2="1090.5" y1="156.6953" y2="156.6953" />
++    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Request_from_hydra_to_Zazu" textLength="273" x="430.5" y="151.7622">GET /servicerepository/api/services/888333</text>
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="423.5" x2="433.5" y1="185.8281" y2="181.8281" />
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="423.5" x2="433.5" y1="185.8281" y2="189.8281" />
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="423.5" x2="1090.5" y1="185.8281" y2="185.8281" />
++    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Response_from_Zazu_to_hydra" textLength="84" x="440.5" y="180.895">HTTP/1.1 200</text>
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="1159.5" x2="1149.5" y1="214.9609" y2="210.9609" />
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="1159.5" x2="1149.5" y1="214.9609" y2="218.9609" />
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="423.5" x2="1160.5" y1="214.9609" y2="214.9609" />
++    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Request_from_hydra_to_Rancor" textLength="214" x="430.5" y="210.0278">POST /rancor/port/number-import</text>
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="423.5" x2="433.5" y1="244.0938" y2="240.0938" />
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="423.5" x2="433.5" y1="244.0938" y2="248.0938" />
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="423.5" x2="1160.5" y1="244.0938" y2="244.0938" />
++    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Response_from_Rancor_to_hydra" textLength="84" x="440.5" y="239.1606">HTTP/1.1 200</text>
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="1089.5" x2="1079.5" y1="273.2266" y2="269.2266" />
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="1089.5" x2="1079.5" y1="273.2266" y2="277.2266" />
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="423.5" x2="1090.5" y1="273.2266" y2="273.2266" />
++    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Request_2_from_hydra_to_Zazu" textLength="291" x="430.5" y="268.2935">PATCH /servicerepository/api/services/888333</text>
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="423.5" x2="433.5" y1="302.3594" y2="298.3594" />
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="423.5" x2="433.5" y1="302.3594" y2="306.3594" />
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="423.5" x2="1090.5" y1="302.3594" y2="302.3594" />
++    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Response_2_from_Zazu_to_hydra" textLength="84" x="440.5" y="297.4263">HTTP/1.1 200</text>
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="1226.5" x2="1216.5" y1="331.4922" y2="327.4922" />
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="1226.5" x2="1216.5" y1="331.4922" y2="335.4922" />
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="423.5" x2="1227.5" y1="331.4922" y2="331.4922" />
++    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Request_from_hydra_to_CBS" textLength="145" x="430.5" y="326.5591">POST /cbs/notifications</text>
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="423.5" x2="433.5" y1="360.625" y2="356.625" />
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="423.5" x2="433.5" y1="360.625" y2="364.625" />
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="423.5" x2="1227.5" y1="360.625" y2="360.625" />
++    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Response_from_CBS_to_hydra" textLength="84" x="440.5" y="355.6919">HTTP/1.1 200</text>
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="86.5" x2="96.5" y1="389.7578" y2="385.7578" />
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="86.5" x2="96.5" y1="389.7578" y2="393.7578" />
++    <line style="stroke: #A80036; stroke-width: 1.0;" x1="86.5" x2="422.5" y1="389.7578" y2="389.7578" />
++    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Response_from_hydra_to_InternalTimerTrigger" textLength="84" x="103.5" y="384.8247">HTTP/1.1 201</text>
++  </g>
++</svg>
++
++</div></div>
++                                    
++                    </div>
++                    
++                </div>
++            </div>
++                    <div class="testmethod section">
++                <a id="onThePortDateThePortingNumberIsActivatedWhenSkyIsNotTheOno"></a>
++                <h2 class="section-header">On the port date the porting number is activated when sky is not the ono</h2>
++                <div class="section-body">
++                        <pre class="notes"><a href='https://tasktracker.sns.sky.com/browse/MON-406'>MON-406</a>, <a href='https://tasktracker.sns.sky.com/browse/MON-301'>MON-301</a></pre>
++                    
++
++
++                        <div class="scenario" id="624637962_700631078">
++                            <a id=""></a>
++                            <h2>Specification</h2>
++                            <pre class="highlight specification">
++Given the number repository will return not found for for msisdn PORTING_ MSISDN
++And rancor number import will return a success for porting msisdn PORTING_ MSISDN
++And the service repository will return an active service for service id A_SERVICE_ ID with msisdn A_SKY_ MSISDN with media box id MEDIA_BOX_ ID
++And the service repository is updated successfully for service id A_SERVICE_ ID with msisdn PORTING_ MSISDN with media box id MEDIA_BOX_ ID
++And cbs port in request activated will return a response with status code 200
++And the port in accepted event was successfully secured A_SKY_ MSISDN with service id A_SERVICE_ ID and porting msisdn PORTING_ MSISDN and pac PAC and dno EE and rno SKY
++When the internal time trigger initiates todays port ins
++Then the service repository is called to return the up to date sky msisdn for service id A_SERVICE_ ID
++And hydra sends a number port import request to rancor with port flag set to &quot;false&quot; with media box id MEDIA_BOX_ ID and porting msisdn PORTING_ MSISDN
++And the database has recorded port in switch updated event for msisdn PORTING_ MSISDN with msisdn A_SKY_ MSISDN with media box id MEDIA_BOX_ ID
++And hydra updates the service repository with the porting msisdn
++And a port in request activated notification is sent to cbs
++And the port in activated event is stored in the database with a timestamp from today and port flag false and owning network operator code &quot;??&quot;
++And the response to the internal time trigger is successful</pre>
++                            <h3 class="logKey">Test results:</h3>
++                                    <pre class='highlight results test-not-run'>
++Test not run</pre>
++
++
++                    </div>
++                    
++                </div>
++            </div>
++                    <div class="testmethod section">
++                <a id="multiplePortingNumbersAreActivatedSuccessfully"></a>
++                <h2 class="section-header">Multiple porting numbers are activated successfully</h2>
++                <div class="section-body">
++                        <pre class="notes"><a href='https://tasktracker.sns.sky.com/browse/MON-406'>MON-406</a>, <a href='https://tasktracker.sns.sky.com/browse/MON-301'>MON-301</a></pre>
++                    
++
++
++                        <div class="scenario" id="860941277_1746458880">
++                            <a id=""></a>
++                            <h2>Specification</h2>
++                            <pre class="highlight specification">
++Given the number repository will return not found for for msisdn PORTING_ MSISDN
++And the number repository will return not found for another msisdn ANOTHER_PORTING_ MSISDN
++And rancor will return number port in successful for porting msisdns PORTING_ MSISDN and msisdn ANOTHER_PORTING_ MSISDN
++And service repository will return an active service with service id A_SERVICE_ ID with msisdn A_SKY_ MSISDN with media box id MEDIA_BOX_ ID
++And service repository will return an active service with service id ANOTHER_SERVICE_ ID with msisdn ANOTHER_SKY_ MSISDN with media box id ANOTHER_MEDIA_BOX_ ID
++And the service repository is updated successfully for A_SERVICE_ ID with msisdn PORTING_ MSISDN with media box id MEDIA_BOX_ ID
++And the service repository is updated successfully for ANOTHER_SERVICE_ ID with msisdn ANOTHER_PORTING_ MSISDN with media box id ANOTHER_MEDIA_BOX_ ID
++And cbs port in request activated will return a response with status code 200
++And a port in has been accepted imported and secured with operator id OPERATOR_ ID with operator order id OPERATOR_ORDER_ ID with request id REQUEST_ ID and sky msisdn A_SKY_ MSISDN with service id A_SERVICE_ ID and porting msisdn PORTING_ MSISDN and pac PAC and dno EE and rno SKY
++And a port in has been accepted imported and secured with operator id OPERATOR_ ID with operator order id ANOTHER_OPERATOR_ORDER_ ID with request id ANOTHER_REQUEST_ ID and sky msisdn ANOTHER_SKY_ MSISDN with service id ANOTHER_SERVICE_ ID and porting msisdn ANOTHER_PORTING_ MSISDN and pac ANOTHER_ PAC and dno VF and rno SKY
++When the internal time trigger initiates todays port ins
++Then the response to the internal time trigger is successful
++And the database has recorded port in switch updated event for msisdn PORTING_ MSISDN
++And the database has recorded a port in activated event for msisdn PORTING_ MSISDN
++And the database has recorded port in switch updated event for msisdn ANOTHER_PORTING_ MSISDN
++And the database has recorded a port in activated event for msisdn ANOTHER_PORTING_ MSISDN</pre>
++                            <h3 class="logKey">Test results:</h3>
++                                    <pre class='highlight results test-not-run'>
++Test not run</pre>
++
++
++                    </div>
++                    
++                </div>
++            </div>
++                    <div class="testmethod section">
++                <a id="theActivateTodaysPortInsOnTheSwitchSchedulerIsReportingAFutureTimeForTheNextTrigger"></a>
++                <h2 class="section-header">The activate todays port ins on the switch scheduler is reporting a future time for the next trigger</h2>
++                <div class="section-body">
++                        <pre class="notes"><a href='https://tasktracker.sns.sky.com/browse/MON-406'>MON-406</a></pre>
++                    
++
++
++                        <div class="scenario" id="345986913_732118572">
++                            <a id=""></a>
++                            <h2>Specification</h2>
++                            <pre class="highlight specification">
++Given the app is running in uk timezone
++When you go to the status page
++Then the activate todays port ins trigger is configured to run every day at &quot;8h&quot;
++And the next scheduled time is tomorrow after &quot;8h&quot;</pre>
++                            <h3 class="logKey">Test results:</h3>
++                                    <pre class='highlight results test-not-run'>
++Test not run</pre>
++
++
++                    </div>
++                    
++                </div>
++            </div>
++        
++
++    <div class="footer">
++
++        <script type="text/javascript">
++            // <![CDATA[
++// XRegExp 1.5.0
++// (c) 2007-2010 Steven Levithan
++// MIT License
++// <http://xregexp.com>
++// Provides an augmented, extensible, cross-browser implementation of regular expressions,
++// including support for additional syntax, flags, and methods
++
++var XRegExp;
++
++if (XRegExp) {
++    // Avoid running twice, since that would break references to native globals
++    throw Error("can't load XRegExp twice in the same frame");
++}
++
++// Run within an anonymous function to protect variables and avoid new globals
++(function () {
++
++    //---------------------------------
++    //  Constructor
++    //---------------------------------
++
++    // Accepts a pattern and flags; returns a new, extended `RegExp` object. Differs from a native
++    // regular expression in that additional syntax and flags are supported and cross-browser
++    // syntax inconsistencies are ameliorated. `XRegExp(/regex/)` clones an existing regex and
++    // converts to type XRegExp
++    XRegExp = function (pattern, flags) {
++        var output = [],
++            currScope = XRegExp.OUTSIDE_CLASS,
++            pos = 0,
++            context, tokenResult, match, chr, regex;
++
++        if (XRegExp.isRegExp(pattern)) {
++            if (flags !== undefined)
++                throw TypeError("can't supply flags when constructing one RegExp from another");
++            return clone(pattern);
++        }
++        // Tokens become part of the regex construction process, so protect against infinite
++        // recursion when an XRegExp is constructed within a token handler or trigger
++        if (isInsideConstructor)
++            throw Error("can't call the XRegExp constructor within token definition functions");
++
++        flags = flags || "";
++        context = { // `this` object for custom tokens
++            hasNamedCapture: false,
++            captureNames: [],
++            hasFlag: function (flag) {return flags.indexOf(flag) > -1;},
++            setFlag: function (flag) {flags += flag;}
++        };
++
++        while (pos < pattern.length) {
++            // Check for custom tokens at the current position
++            tokenResult = runTokens(pattern, pos, currScope, context);
++
++            if (tokenResult) {
++                output.push(tokenResult.output);
++                pos += (tokenResult.match[0].length || 1);
++            } else {
++                // Check for native multicharacter metasequences (excluding character classes) at
++                // the current position
++                if (match = real.exec.call(nativeTokens[currScope], pattern.slice(pos))) {
++                    output.push(match[0]);
++                    pos += match[0].length;
++                } else {
++                    chr = pattern.charAt(pos);
++                    if (chr === "[")
++                        currScope = XRegExp.INSIDE_CLASS;
++                    else if (chr === "]")
++                        currScope = XRegExp.OUTSIDE_CLASS;
++                    // Advance position one character
++                    output.push(chr);
++                    pos++;
++                }
++            }
++        }
++
++        regex = RegExp(output.join(""), real.replace.call(flags, flagClip, ""));
++        regex._xregexp = {
++            source: pattern,
++            captureNames: context.hasNamedCapture ? context.captureNames : null
++        };
++        return regex;
++    };
++
++
++    //---------------------------------
++    //  Public properties
++    //---------------------------------
++
++    XRegExp.version = "1.5.0";
++
++    // Token scope bitflags
++    XRegExp.INSIDE_CLASS = 1;
++    XRegExp.OUTSIDE_CLASS = 2;
++
++
++    //---------------------------------
++    //  Private variables
++    //---------------------------------
++
++    var replacementToken = /\$(?:(\d\d?|[$&`'])|{([$\w]+)})/g,
++        flagClip = /[^gimy]+|([\s\S])(?=[\s\S]*\1)/g, // Nonnative and duplicate flags
++        quantifier = /^(?:[?*+]|{\d+(?:,\d*)?})\??/,
++        isInsideConstructor = false,
++        tokens = [],
++        // Copy native globals for reference ("native" is an ES3 reserved keyword)
++        real = {
++            exec: RegExp.prototype.exec,
++            test: RegExp.prototype.test,
++            match: String.prototype.match,
++            replace: String.prototype.replace,
++            split: String.prototype.split
++        },
++        compliantExecNpcg = real.exec.call(/()??/, "")[1] === undefined, // check `exec` handling of nonparticipating capturing groups
++        compliantLastIndexIncrement = function () {
++            var x = /^/g;
++            real.test.call(x, "");
++            return !x.lastIndex;
++        }(),
++        compliantLastIndexReset = function () {
++            var x = /x/g;
++            real.replace.call("x", x, "");
++            return !x.lastIndex;
++        }(),
++        hasNativeY = RegExp.prototype.sticky !== undefined,
++        nativeTokens = {};
++
++    // `nativeTokens` match native multicharacter metasequences only (including deprecated octals,
++    // excluding character classes)
++    nativeTokens[XRegExp.INSIDE_CLASS] = /^(?:\\(?:[0-3][0-7]{0,2}|[4-7][0-7]?|x[\dA-Fa-f]{2}|u[\dA-Fa-f]{4}|c[A-Za-z]|[\s\S]))/;
++    nativeTokens[XRegExp.OUTSIDE_CLASS] = /^(?:\\(?:0(?:[0-3][0-7]{0,2}|[4-7][0-7]?)?|[1-9]\d*|x[\dA-Fa-f]{2}|u[\dA-Fa-f]{4}|c[A-Za-z]|[\s\S])|\(\?[:=!]|[?*+]\?|{\d+(?:,\d*)?}\??)/;
++
++
++    //---------------------------------
++    //  Public methods
++    //---------------------------------
++
++    // Lets you extend or change XRegExp syntax and create custom flags. This is used internally by
++    // the XRegExp library and can be used to create XRegExp plugins. This function is intended for
++    // users with advanced knowledge of JavaScript's regular expression syntax and behavior. It can
++    // be disabled by `XRegExp.freezeTokens`
++    XRegExp.addToken = function (regex, handler, scope, trigger) {
++        tokens.push({
++            pattern: clone(regex, "g" + (hasNativeY ? "y" : "")),
++            handler: handler,
++            scope: scope || XRegExp.OUTSIDE_CLASS,
++            trigger: trigger || null
++        });
++    };
++
++    // Accepts a pattern and flags; returns an extended `RegExp` object. If the pattern and flag
++    // combination has previously been cached, the cached copy is returned; otherwise the newly
++    // created regex is cached
++    XRegExp.cache = function (pattern, flags) {
++        var key = pattern + "/" + (flags || "");
++        return XRegExp.cache[key] || (XRegExp.cache[key] = XRegExp(pattern, flags));
++    };
++
++    // Accepts a `RegExp` instance; returns a copy with the `/g` flag set. The copy has a fresh
++    // `lastIndex` (set to zero). If you want to copy a regex without forcing the `global`
++    // property, use `XRegExp(regex)`. Do not use `RegExp(regex)` because it will not preserve
++    // special properties required for named capture
++    XRegExp.copyAsGlobal = function (regex) {
++        return clone(regex, "g");
++    };
++
++    // Accepts a string; returns the string with regex metacharacters escaped. The returned string
++    // can safely be used at any point within a regex to match the provided literal string. Escaped
++    // characters are [ ] { } ( ) * + ? - . , \ ^ $ | # and whitespace
++    XRegExp.escape = function (str) {
++        return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
++    };
++
++    // Accepts a string to search, regex to search with, position to start the search within the
++    // string (default: 0), and an optional Boolean indicating whether matches must start at-or-
++    // after the position or at the specified position only. This function ignores the `lastIndex`
++    // property of the provided regex
++    XRegExp.execAt = function (str, regex, pos, anchored) {
++        regex = clone(regex, "g" + ((anchored && hasNativeY) ? "y" : ""));
++        regex.lastIndex = pos = pos || 0;
++        var match = regex.exec(str);
++        if (anchored)
++            return (match && match.index === pos) ? match : null;
++        else
++            return match;
++    };
++
++    // Breaks the unrestorable link to XRegExp's private list of tokens, thereby preventing
++    // syntax and flag changes. Should be run after XRegExp and any plugins are loaded
++    XRegExp.freezeTokens = function () {
++        XRegExp.addToken = function () {
++            throw Error("can't run addToken after freezeTokens");
++        };
++    };
++
++    // Accepts any value; returns a Boolean indicating whether the argument is a `RegExp` object.
++    // Note that this is also `true` for regex literals and regexes created by the `XRegExp`
++    // constructor. This works correctly for variables created in another frame, when `instanceof`
++    // and `constructor` checks would fail to work as intended
++    XRegExp.isRegExp = function (o) {
++        return Object.prototype.toString.call(o) === "[object RegExp]";
++    };
++
++    // Executes `callback` once per match within `str`. Provides a simpler and cleaner way to
++    // iterate over regex matches compared to the traditional approaches of subverting
++    // `String.prototype.replace` or repeatedly calling `exec` within a `while` loop
++    XRegExp.iterate = function (str, origRegex, callback, context) {
++        var regex = clone(origRegex, "g"),
++            i = -1, match;
++        while (match = regex.exec(str)) {
++            callback.call(context, match, ++i, str, regex);
++            if (regex.lastIndex === match.index)
++                regex.lastIndex++;
++        }
++        if (origRegex.global)
++            origRegex.lastIndex = 0;
++    };
++
++    // Accepts a string and an array of regexes; returns the result of using each successive regex
++    // to search within the matches of the previous regex. The array of regexes can also contain
++    // objects with `regex` and `backref` properties, in which case the named or numbered back-
++    // references specified are passed forward to the next regex or returned. E.g.:
++    // var xregexpImgFileNames = XRegExp.matchChain(html, [
++    //     {regex: /<img\b([^>]+)>/i, backref: 1}, // <img> tag attributes
++    //     {regex: XRegExp('(?ix) \\s src=" (?<src> [^"]+ )'), backref: "src"}, // src attribute values
++    //     {regex: XRegExp("^http://xregexp\\.com(/[^#?]+)", "i"), backref: 1}, // xregexp.com paths
++    //     /[^\/]+$/ // filenames (strip directory paths)
++    // ]);
++    XRegExp.matchChain = function (str, chain) {
++        return function recurseChain (values, level) {
++            var item = chain[level].regex ? chain[level] : {regex: chain[level]},
++                regex = clone(item.regex, "g"),
++                matches = [], i;
++            for (i = 0; i < values.length; i++) {
++                XRegExp.iterate(values[i], regex, function (match) {
++                    matches.push(item.backref ? (match[item.backref] || "") : match[0]);
++                });
++            }
++            return ((level === chain.length - 1) || !matches.length) ?
++                matches : recurseChain(matches, level + 1);
++        }([str], 0);
++    };
++
++
++    //---------------------------------
++    //  New RegExp prototype methods
++    //---------------------------------
++
++    // Accepts a context object and arguments array; returns the result of calling `exec` with the
++    // first value in the arguments array. the context is ignored but is accepted for congruity
++    // with `Function.prototype.apply`
++    RegExp.prototype.apply = function (context, args) {
++        return this.exec(args[0]);
++    };
++
++    // Accepts a context object and string; returns the result of calling `exec` with the provided
++    // string. the context is ignored but is accepted for congruity with `Function.prototype.call`
++    RegExp.prototype.call = function (context, str) {
++        return this.exec(str);
++    };
++
++
++    //---------------------------------
++    //  Overriden native methods
++    //---------------------------------
++
++    // Adds named capture support (with backreferences returned as `result.name`), and fixes two
++    // cross-browser issues per ES3:
++    // - Captured values for nonparticipating capturing groups should be returned as `undefined`,
++    //   rather than the empty string.
++    // - `lastIndex` should not be incremented after zero-length matches.
++    RegExp.prototype.exec = function (str) {
++        var match = real.exec.apply(this, arguments),
++            name, r2;
++        if (match) {
++            // Fix browsers whose `exec` methods don't consistently return `undefined` for
++            // nonparticipating capturing groups
++            if (!compliantExecNpcg && match.length > 1 && indexOf(match, "") > -1) {
++                r2 = RegExp(this.source, real.replace.call(getNativeFlags(this), "g", ""));
++                // Using `str.slice(match.index)` rather than `match[0]` in case lookahead allowed
++                // matching due to characters outside the match
++                real.replace.call(str.slice(match.index), r2, function () {
++                    for (var i = 1; i < arguments.length - 2; i++) {
++                        if (arguments[i] === undefined)
++                            match[i] = undefined;
++                    }
++                });
++            }
++            // Attach named capture properties
++            if (this._xregexp && this._xregexp.captureNames) {
++                for (var i = 1; i < match.length; i++) {
++                    name = this._xregexp.captureNames[i - 1];
++                    if (name)
++                       match[name] = match[i];
++                }
++            }
++            // Fix browsers that increment `lastIndex` after zero-length matches
++            if (!compliantLastIndexIncrement && this.global && !match[0].length && (this.lastIndex > match.index))
++                this.lastIndex--;
++        }
++        return match;
++    };
++
++    // Don't override `test` if it won't change anything
++    if (!compliantLastIndexIncrement) {
++        // Fix browser bug in native method
++        RegExp.prototype.test = function (str) {
++            // Use the native `exec` to skip some processing overhead, even though the overriden
++            // `exec` would take care of the `lastIndex` fix
++            var match = real.exec.call(this, str);
++            // Fix browsers that increment `lastIndex` after zero-length matches
++            if (match && this.global && !match[0].length && (this.lastIndex > match.index))
++                this.lastIndex--;
++            return !!match;
++        };
++    }
++
++    // Adds named capture support and fixes browser bugs in native method
++    String.prototype.match = function (regex) {
++        if (!XRegExp.isRegExp(regex))
++            regex = RegExp(regex); // Native `RegExp`
++        if (regex.global) {
++            var result = real.match.apply(this, arguments);
++            regex.lastIndex = 0; // Fix IE bug
++            return result;
++        }
++        return regex.exec(this); // Run the altered `exec`
++    };
++
++    // Adds support for `${n}` tokens for named and numbered backreferences in replacement text,
++    // and provides named backreferences to replacement functions as `arguments[0].name`. Also
++    // fixes cross-browser differences in replacement text syntax when performing a replacement
++    // using a nonregex search value, and the value of replacement regexes' `lastIndex` property
++    // during replacement iterations. Note that this doesn't support SpiderMonkey's proprietary
++    // third (`flags`) parameter
++    String.prototype.replace = function (search, replacement) {
++        var isRegex = XRegExp.isRegExp(search),
++            captureNames, result, str;
++
++        // There are many combinations of search/replacement types/values and browser bugs that
++        // preclude passing to native `replace`, so just keep this check relatively simple
++        if (isRegex && typeof replacement.valueOf() === "string" && replacement.indexOf("${") === -1 && compliantLastIndexReset)
++            return real.replace.apply(this, arguments);
++
++        if (!isRegex)
++            search = search + ""; // Type conversion
++        else if (search._xregexp)
++            captureNames = search._xregexp.captureNames; // Array or `null`
++
++        if (typeof replacement === "function") {
++            result = real.replace.call(this, search, function () {
++                if (captureNames) {
++                    // Change the `arguments[0]` string primitive to a String object which can store properties
++                    arguments[0] = new String(arguments[0]);
++                    // Store named backreferences on `arguments[0]`
++                    for (var i = 0; i < captureNames.length; i++) {
++                        if (captureNames[i])
++                            arguments[0][captureNames[i]] = arguments[i + 1];
++                    }
++                }
++                // Update `lastIndex` before calling `replacement`
++                if (isRegex && search.global)
++                    search.lastIndex = arguments[arguments.length - 2] + arguments[0].length;
++                return replacement.apply(null, arguments);
++            });
++        } else {
++            str = this + ""; // Type conversion, so `args[args.length - 1]` will be a string (given nonstring `this`)
++            result = real.replace.call(str, search, function () {
++                var args = arguments; // Keep this function's `arguments` available through closure
++                return real.replace.call(replacement, replacementToken, function ($0, $1, $2) {
++                    // Numbered backreference (without delimiters) or special variable
++                    if ($1) {
++                        switch ($1) {
++                            case "$": return "$";
++                            case "&": return args[0];
++                            case "`": return args[args.length - 1].slice(0, args[args.length - 2]);
++                            case "'": return args[args.length - 1].slice(args[args.length - 2] + args[0].length);
++                            // Numbered backreference
++                            default:
++                                // What does "$10" mean?
++                                // - Backreference 10, if 10 or more capturing groups exist
++                                // - Backreference 1 followed by "0", if 1-9 capturing groups exist
++                                // - Otherwise, it's the string "$10"
++                                // Also note:
++                                // - Backreferences cannot be more than two digits (enforced by `replacementToken`)
++                                // - "$01" is equivalent to "$1" if a capturing group exists, otherwise it's the string "$01"
++                                // - There is no "$0" token ("$&" is the entire match)
++                                var literalNumbers = "";
++                                $1 = +$1; // Type conversion; drop leading zero
++                                if (!$1) // `$1` was "0" or "00"
++                                    return $0;
++                                while ($1 > args.length - 3) {
++                                    literalNumbers = String.prototype.slice.call($1, -1) + literalNumbers;
++                                    $1 = Math.floor($1 / 10); // Drop the last digit
++                                }
++                                return ($1 ? args[$1] || "" : "$") + literalNumbers;
++                        }
++                    // Named backreference or delimited numbered backreference
++                    } else {
++                        // What does "${n}" mean?
++                        // - Backreference to numbered capture n. Two differences from "$n":
++                        //   - n can be more than two digits
++                        //   - Backreference 0 is allowed, and is the entire match
++                        // - Backreference to named capture n, if it exists and is not a number overridden by numbered capture
++                        // - Otherwise, it's the string "${n}"
++                        var n = +$2; // Type conversion; drop leading zeros
++                        if (n <= args.length - 3)
++                            return args[n];
++                        n = captureNames ? indexOf(captureNames, $2) : -1;
++                        return n > -1 ? args[n + 1] : $0;
++                    }
++                });
++            });
++        }
++
++        if (isRegex && search.global)
++            search.lastIndex = 0; // Fix IE bug
++
++        return result;
++    };
++
++    // A consistent cross-browser, ES3 compliant `split`
++    String.prototype.split = function (s /* separator */, limit) {
++        // If separator `s` is not a regex, use the native `split`
++        if (!XRegExp.isRegExp(s))
++            return real.split.apply(this, arguments);
++
++        var str = this + "", // Type conversion
++            output = [],
++            lastLastIndex = 0,
++            match, lastLength;
++
++        // Behavior for `limit`: if it's...
++        // - `undefined`: No limit
++        // - `NaN` or zero: Return an empty array
++        // - A positive number: Use `Math.floor(limit)`
++        // - A negative number: No limit
++        // - Other: Type-convert, then use the above rules
++        if (limit === undefined || +limit < 0) {
++            limit = Infinity;
++        } else {
++            limit = Math.floor(+limit);
++            if (!limit)
++                return [];
++        }
++
++        // This is required if not `s.global`, and it avoids needing to set `s.lastIndex` to zero
++        // and restore it to its original value when we're done using the regex
++        s = XRegExp.copyAsGlobal(s);
++
++        while (match = s.exec(str)) { // Run the altered `exec` (required for `lastIndex` fix, etc.)
++            if (s.lastIndex > lastLastIndex) {
++                output.push(str.slice(lastLastIndex, match.index));
++
++                if (match.length > 1 && match.index < str.length)
++                    Array.prototype.push.apply(output, match.slice(1));
++
++                lastLength = match[0].length;
++                lastLastIndex = s.lastIndex;
++
++                if (output.length >= limit)
++                    break;
++            }
++
++            if (s.lastIndex === match.index)
++                s.lastIndex++;
++        }
++
++        if (lastLastIndex === str.length) {
++            if (!real.test.call(s, "") || lastLength)
++                output.push("");
++        } else {
++            output.push(str.slice(lastLastIndex));
++        }
++
++        return output.length > limit ? output.slice(0, limit) : output;
++    };
++
++
++    //---------------------------------
++    //  Private helper functions
++    //---------------------------------
++
++    // Supporting function for `XRegExp`, `XRegExp.copyAsGlobal`, etc. Returns a copy of a `RegExp`
++    // instance with a fresh `lastIndex` (set to zero), preserving properties required for named
++    // capture. Also allows adding new flags in the process of copying the regex
++    function clone (regex, additionalFlags) {
++        if (!XRegExp.isRegExp(regex))
++            throw TypeError("type RegExp expected");
++        var x = regex._xregexp;
++        regex = XRegExp(regex.source, getNativeFlags(regex) + (additionalFlags || ""));
++        if (x) {
++            regex._xregexp = {
++                source: x.source,
++                captureNames: x.captureNames ? x.captureNames.slice(0) : null
++            };
++        }
++        return regex;
++    };
++
++    function getNativeFlags (regex) {
++        return (regex.global     ? "g" : "") +
++               (regex.ignoreCase ? "i" : "") +
++               (regex.multiline  ? "m" : "") +
++               (regex.extended   ? "x" : "") + // Proposed for ES4; included in AS3
++               (regex.sticky     ? "y" : "");
++    };
++
++    function runTokens (pattern, index, scope, context) {
++        var i = tokens.length,
++            result, match, t;
++        // Protect against constructing XRegExps within token handler and trigger functions
++        isInsideConstructor = true;
++        // Must reset `isInsideConstructor`, even if a `trigger` or `handler` throws
++        try {
++            while (i--) { // Run in reverse order
++                t = tokens[i];
++                if ((scope & t.scope) && (!t.trigger || t.trigger.call(context))) {
++                    t.pattern.lastIndex = index;
++                    match = t.pattern.exec(pattern); // Running the altered `exec` here allows use of named backreferences, etc.
++                    if (match && match.index === index) {
++                        result = {
++                            output: t.handler.call(context, match, scope),
++                            match: match
++                        };
++                        break;
++                    }
++                }
++            }
++        } catch (err) {
++            throw err;
++        } finally {
++            isInsideConstructor = false;
++        }
++        return result;
++    };
++
++    function indexOf (array, item, from) {
++        if (Array.prototype.indexOf) // Use the native array method if available
++            return array.indexOf(item, from);
++        for (var i = from || 0; i < array.length; i++) {
++            if (array[i] === item)
++                return i;
++        }
++        return -1;
++    };
++
++
++    //---------------------------------
++    //  Built-in tokens
++    //---------------------------------
++
++    // Augment XRegExp's regular expression syntax and flags. Note that when adding tokens, the
++    // third (`scope`) argument defaults to `XRegExp.OUTSIDE_CLASS`
++
++    // Comment pattern: (?# )
++    XRegExp.addToken(
++        /\(\?#[^)]*\)/,
++        function (match) {
++            // Keep tokens separated unless the following token is a quantifier
++            return real.test.call(quantifier, match.input.slice(match.index + match[0].length)) ? "" : "(?:)";
++        }
++    );
++
++    // Capturing group (match the opening parenthesis only).
++    // Required for support of named capturing groups
++    XRegExp.addToken(
++        /\((?!\?)/,
++        function () {
++            this.captureNames.push(null);
++            return "(";
++        }
++    );
++
++    // Named capturing group (match the opening delimiter only): (?<name>
++    XRegExp.addToken(
++        /\(\?<([$\w]+)>/,
++        function (match) {
++            this.captureNames.push(match[1]);
++            this.hasNamedCapture = true;
++            return "(";
++        }
++    );
++
++    // Named backreference: \k<name>
++    XRegExp.addToken(
++        /\\k<([\w$]+)>/,
++        function (match) {
++            var index = indexOf(this.captureNames, match[1]);
++            // Keep backreferences separate from subsequent literal numbers. Preserve back-
++            // references to named groups that are undefined at this point as literal strings
++            return index > -1 ?
++                "\\" + (index + 1) + (isNaN(match.input.charAt(match.index + match[0].length)) ? "" : "(?:)") :
++                match[0];
++        }
++    );
++
++    // Empty character class: [] or [^]
++    XRegExp.addToken(
++        /\[\^?]/,
++        function (match) {
++            // For cross-browser compatibility with ES3, convert [] to \b\B and [^] to [\s\S].
++            // (?!) should work like \b\B, but is unreliable in Firefox
++            return match[0] === "[]" ? "\\b\\B" : "[\\s\\S]";
++        }
++    );
++
++    // Mode modifier at the start of the pattern only, with any combination of flags imsx: (?imsx)
++    // Does not support x(?i), (?-i), (?i-m), (?i: ), (?i)(?m), etc.
++    XRegExp.addToken(
++        /^\(\?([imsx]+)\)/,
++        function (match) {
++            this.setFlag(match[1]);
++            return "";
++        }
++    );
++
++    // Whitespace and comments, in free-spacing (aka extended) mode only
++    XRegExp.addToken(
++        /(?:\s+|#.*)+/,
++        function (match) {
++            // Keep tokens separated unless the following token is a quantifier
++            return real.test.call(quantifier, match.input.slice(match.index + match[0].length)) ? "" : "(?:)";
++        },
++        XRegExp.OUTSIDE_CLASS,
++        function () {return this.hasFlag("x");}
++    );
++
++    // Dot, in dotall (aka singleline) mode only
++    XRegExp.addToken(
++        /\./,
++        function () {return "[\\s\\S]";},
++        XRegExp.OUTSIDE_CLASS,
++        function () {return this.hasFlag("s");}
++    );
++
++
++    //---------------------------------
++    //  Backward compatibility
++    //---------------------------------
++
++    // Uncomment the following block for compatibility with XRegExp 1.0-1.2:
++    /*
++    XRegExp.matchWithinChain = XRegExp.matchChain;
++    RegExp.prototype.addFlags = function (s) {return clone(this, s);};
++    RegExp.prototype.execAll = function (s) {var r = []; XRegExp.iterate(s, this, function (m) {r.push(m);}); return r;};
++    RegExp.prototype.forEachExec = function (s, f, c) {return XRegExp.iterate(s, this, f, c);};
++    RegExp.prototype.validate = function (s) {var r = RegExp("^(?:" + this.source + ")$(?!\\s)", getNativeFlags(this)); if (this.global) this.lastIndex = 0; return s.search(r) === 0;};
++    */
++
++})();
++
++            // ]]>
++        </script>
++        
++        <script type="text/javascript">
++            // <![CDATA[
++// Add support for escape sequences: \Q⋯\E and \Q⋯
++XRegExp.addToken(
++    /\\Q([\s\S]*?)(?:\\E|$)/,
++    function (match) {return XRegExp.escape(match[1])},
++    XRegExp.INSIDE_CLASS | XRegExp.OUTSIDE_CLASS
++);
++
++RegExp.prototype.replace = function(str, replacer, nonMatchedReplacer) {
++    nonMatchedReplacer = nonMatchedReplacer || function(value) {
++        return value;
++    };
++    var result = [];
++
++    var position = 0;
++    var match;
++    while (( match = this.exec(str)) != null) {
++        result.push(nonMatchedReplacer(str.substring(position, match.index)));
++        result.push(replacer(match));
++        position = this.lastIndex;
++    }
++    result.push(nonMatchedReplacer(str.substring(position)));
++
++    return result.join("");
++}
++
++function yatspec() {
++}
++
++yatspec.regex = function(expression, flags) {
++    var result =  new XRegExp(expression, flags);
++    result.replace = RegExp.prototype.replace;
++    return result;
++}
++
++yatspec.processed = 'highlighted';
++
++yatspec.highlight = function(element, pairs) {
++    if (pairs.length == 0) {
++        return;
++    }
++
++    if ($(element).children(".nohighlight").length > 0) {
++        return;
++    }
++
++    if ($(element).hasClass(yatspec.processed)) {
++        return;
++    }
++
++    var classes = [];
++    var matchGroups = [];
++    $.each(pairs, function() {
++        matchGroups.push("(", this.pattern, ")", "|");
++        classes.push(this.cssClass);
++    });
++    matchGroups.pop();
++    var regex = yatspec.regex(matchGroups.join(""), "g");
++
++    $(element).html(regex.replace($(element).html(), function(match) {
++        var matches = match.slice(1);
++        for (var i = 0; i < matches.length; i++) {
++            if (matches[i]) {
++                return '<span class="' + classes[i] + '">' + matches[i] + '</span>'
++            }
++        }
++    }));
++
++    $(element).addClass(yatspec.processed);
++}
++
++$(document).ready(function () {
++    var specificationHighlights = [
++        {pattern: '"[^"]*"',     cssClass: "quote" },
++        {pattern: "Given",       cssClass: "keyword" },
++        {pattern: "And",         cssClass: "keyword" },
++        {pattern: "When",        cssClass: "keyword" },
++        {pattern: "Then",        cssClass: "keyword" },
++        {pattern: "[A-Z_]{2,}" , cssClass: "constant" },
++        {pattern: "[\\d]+" ,     cssClass: "literal" }
++    ];
++
++    if (yatspec.additionalSpecificationHighlights) {
++        $.merge(specificationHighlights, yatspec.additionalSpecificationHighlights);
++    }
++
++    $('.highlight.specification').each(function() {
++        yatspec.highlight(this, specificationHighlights);
++    })
++
++    $('.highlight.results').each(function() {
++        yatspec.highlight(this, [
++            {pattern: '"[^"]*"',     cssClass: "quote" },
++            {pattern: "Expected",    cssClass: "keyword" },
++            {pattern: "got",         cssClass: "keyword" },
++            {pattern: "[A-Z_]{2,}" , cssClass: "constant" },
++            {pattern: "[\\d]+" ,     cssClass: "literal" }
++        ]);
++    })
++
++    $('.scenario').each(function() {
++        var escapeRegExp = function(str) {
++            return str.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
++        };
++
++        var interestingGivens = $('.interestingGiven', this).filter(':not(:empty)').map(
++            function() {
++                return [
++                    {pattern: '\\Q"' + $(this).text() + '"\\E',     cssClass: "interestingGiven" },
++                    {pattern: '\\Q' + $(this).text() + "\\E", cssClass: "interestingGiven" },
++                ];
++            }).get();
++
++        $('.logKey', this).click(function() {
++            $(this).next(".logValue").toggleClass("hide");
++        });
++
++        $('.logKey', this).each(function() {
++            $(this).next('.logValue.highlight').each(function() {
++                yatspec.highlight(this, interestingGivens.concat([
++                    {pattern: '"[^"]*"',      cssClass: "quote" },
++                    {pattern: "&lt;[^\\s&]+", cssClass: "keyword" },
++                    {pattern: "\\??&gt;",     cssClass: "keyword" },
++                    {pattern: "\\s[\\w:-]+=", cssClass: "constant" }
++                ]));
++            })
++        });
++
++        $('.logKey', this).next(".logValue").toggleClass("hide");
++    })
++
++}, false);
++
++$(".section-header").click(function () {
++    $sheader = $(this);
++    $sbody = $sheader.siblings(".section-body");
++    $sbody.slideToggle(150);
++});
++
++$('ul.contents > li > a').click(function () {
++    $link = $(this);
++    $('div.testmethod > ' + $link.attr('href')).siblings('.section-body').slideDown(150);
++});
++
++
++            // ]]>
++        </script>
++        
++        <script type="text/javascript">
++            // <![CDATA[
++var dictionary = {
++    "service repository": "The service repository is called Zazu on the floor, owned by the Hermes team",
++    "paddington": "Mobile Number Porting GUI used by the number porting team (support)",
++    "number repository": "The number repository is called Nala on the floor, owned by the Hermes team",
++    "syniverse": "Syniverse is a third party we talk to for mobile number porting",
++    "pac": "A PAC is a Porting Authorization Code that is required to port a mobile number",
++    "cbs": "CBS is the Sky department who own the customer service systems",
++    "hydra": "Hydra is the mobile number porting system, you are looking at its acceptance tests now!",
++    "rancor": "Rancor is an abstraction over the Huawei provisioning gateway. It is owned by the Lando team",
++    "recipient network operator": "Recipient Network Operator, the mobile operator that is gaining the MSISDN",
++    "rno": "Recipient Network Operator, the mobile operator that is gaining the MSISDN",
++    "rsp record": "This is a line from the RSP file that Pandora has parsed and sent to Hydra",
++    "rsp": "Recipient Service Provider",
++    "donor network operator": "Donor Network Operator, the mobile operator that is losing the MSISDN",
++    "dno": "Donor Network Operator, the mobile operator that is losing the MSISDN",
++    "original network operator": "Original Network Operator, the number range holder",
++    "ono": "Original Network Operator, the number range holder"
++};
++
++yatspec.additionalSpecificationHighlights = $.map(dictionary, function (definition, term) {
++    return { pattern: term, cssClass: "term" };
++});
++
++$(document).ready(function() {
++    $(".term").each(function() {
++        var term = $(this).text();
++        var definition = dictionary[term];
++        $(this).append($("<span class='definition'>" + definition + "</span>"));
++    });
++});
++            // ]]>
++        </script>
++        
++    </div>
++
++    </body>
++</html>
+\ No newline at end of file
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/modules.xml	(revision d490742761fe301885a37f69989fe291d3ccdf5b)
++++ .idea/modules.xml	(revision )
+@@ -5,5 +5,4 @@
+       <module fileurl="file://$PROJECT_DIR$/yatspec.iml" filepath="$PROJECT_DIR$/yatspec.iml" />
+     </modules>
+   </component>
+-</project>
++</project>
+\ No newline at end of file
+-
+\ No newline at end of file
+Index: src/com/googlecode/yatspec/state/Section.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/com/googlecode/yatspec/state/Section.java	(revision )
++++ src/com/googlecode/yatspec/state/Section.java	(revision )
+@@ -0,0 +1,33 @@
++package com.googlecode.yatspec.state;
++
++import com.googlecode.yatspec.parsing.JavaSource;
++import com.sun.istack.internal.Nullable;
++
++@SuppressWarnings("unused")
++public class Section {
++    private final String header;
++    private final boolean collapsible;
++    private final JavaSource specification;
++
++    public Section(@Nullable String header, JavaSource specification, boolean collapsible) {
++        this.header = header;
++        this.specification = specification;
++        this.collapsible = collapsible;
++    }
++
++    public Section(JavaSource specification, boolean collapsible) {
++        this(null, specification, collapsible);
++    }
++
++    public String getHeader() {
++        return header;
++    }
++
++    public boolean isCollapsible() {
++        return collapsible;
++    }
++
++    public JavaSource getSpecification() {
++        return specification;
++    }
++}
+Index: src/com/googlecode/yatspec/parsing/TestParser.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/com/googlecode/yatspec/parsing/TestParser.java	(revision d490742761fe301885a37f69989fe291d3ccdf5b)
++++ src/com/googlecode/yatspec/parsing/TestParser.java	(revision )
+@@ -39,7 +39,7 @@
+     private static final Option<URL> NO_URL = none(URL.class);
+ 
+     public static List<TestMethod> parseTestMethods(Class aClass) throws Exception {
+-        final Sequence<Method> methods = getMethods(aClass);
++        final Sequence<Method> methods = getTestMethods(aClass);
+         return collectTestMethods(aClass, methods).toList();
+     }
+ 
+@@ -49,7 +49,7 @@
+             return empty();
+         }
+ 
+-        Map<String, List<JavaMethod>> sourceMethodsByName = getMethods(javaClass.get()).toMap(sourceMethodName());
++        Map<String, List<JavaMethod>> sourceMethodsByName = getTestMethods(javaClass.get()).toMap(sourceMethodName());
+         Map<String, List<Method>> reflectionMethodsByName = methods.toMap(reflectionMethodName());
+ 
+         List<TestMethod> testMethods = new ArrayList<TestMethod>();
+@@ -85,13 +85,13 @@
+         };
+     }
+ 
+-    private static Option<JavaClass> getJavaClass(final Class aClass) throws IOException {
++    public static Option<JavaClass> getJavaClass(final Class aClass) throws IOException {
+         Option<URL> option = getJavaSourceFromClassPath(aClass);
+         option = !option.isEmpty() ? option : getJavaSourceFromFileSystem(aClass);
+         return option.map(asAJavaClass(aClass));
+     }
+ 
+-    private static Callable1<URL, JavaClass> asAJavaClass(final Class aClass) {
++    public static Callable1<URL, JavaClass> asAJavaClass(final Class aClass) {
+         return new Callable1<URL, JavaClass>() {
+             @Override
+             public JavaClass call(URL url) throws Exception {
+@@ -102,16 +102,16 @@
+         };
+     }
+ 
+-    private static Sequence<Method> getMethods(Class aClass) {
++    private static Sequence<Method> getTestMethods(Class aClass) {
+         return sequence(aClass.getMethods()).filter(where(annotation(Test.class), notNullValue()));
+     }
+ 
+     @SuppressWarnings("unchecked")
+-    private static Sequence<JavaMethod> getMethods(JavaClass javaClass) {
++    private static Sequence<JavaMethod> getTestMethods(JavaClass javaClass) {
+         return sequence(javaClass.getMethods()).filter(where(annotations(), contains(Test.class)));
+     }
+ 
+-    private static Option<URL> getJavaSourceFromClassPath(Class aClass) {
++    public static Option<URL> getJavaSourceFromClassPath(Class aClass) {
+         return isObject(aClass) ? NO_URL : option(aClass.getClassLoader().getResource(toJavaResourcePath(aClass)));
+     }
+ 

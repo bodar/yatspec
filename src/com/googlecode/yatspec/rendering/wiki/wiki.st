@@ -17,7 +17,7 @@ $testResult.annotations$
 $testMethod.scenarios: { scenario |
 
 {{{
-$scenario.specification$
+$scenario.sections:{ section | $section.specification$ }$
 }}}
 
 $scenario.logs.keys:{ key |
