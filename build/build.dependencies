@@ -5,7 +5,10 @@ mvn:junit:junit-dep:jar|sources:4.8.2
 mvn:antlr:antlr:jar:2.7.7
 mvn:org.antlr:stringtemplate:jar:3.2.1
 mvn:com.thoughtworks.qdox:qdox:jar:1.12.1
-http://jarjar.googlecode.com/files/jarjar-1.1.jar
+mvn:org.javassist:javassist:jar:3.21.0-GA
+mvn:com.github.javaparser:javaparser-core:jar:2.5.1
+
+http://central.maven.org/maven2/com/googlecode/jarjar/jarjar/1.1/jarjar-1.1.jar
 
 mvn://repo.bodar.com/com.googlecode.totallylazy:totallylazy:pack|sources:1130
 mvn://repo.bodar.com/com.googlecode.funclate:funclate:pack|sources:110

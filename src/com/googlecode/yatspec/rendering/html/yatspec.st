@@ -73,8 +73,17 @@
                         <div class="scenario" id="$testMethod.uid$_$scenario.uid$">
                             <a id="$scenario.name$"></a>
                             <h2>Specification</h2>
-                            <pre class="highlight specification">
-                                $scenario.specification$</pre>
+                                $scenario.sections:{ section |
+                                    $if(section.collapsible)$
+                                        <div class="collapsible">
+                                            <span>&raquo; $section.header$</span>
+                                            <pre class="highlight specification">$section.specification$</pre>
+                                        </div>
+                                    $else$
+                                        <pre class="highlight specification">$section.specification$</pre>
+                                    $endif$
+                                }$
+
                             <h3 class="logKey">Test results:</h3>
                                     <pre class='highlight results $cssClass.(scenario.status)$'>
                                         $scenario.message$</pre>

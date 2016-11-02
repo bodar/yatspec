@@ -229,3 +229,10 @@ dl.index-result {
     display: block;
     padding : 5px;
 }
+
+.collapsible span {
+    cursor: help;
+}
+.collapsible pre {
+    display: none;
+}

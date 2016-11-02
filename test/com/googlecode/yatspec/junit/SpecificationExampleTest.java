@@ -18,6 +18,8 @@ import org.junit.runner.RunWith;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.plugin.jdom.StateExtractors.getValue;
 import static java.lang.Double.valueOf;
+import static java.lang.Math.ceil;
+import static java.lang.Math.floor;
 import static java.lang.Math.sqrt;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -28,6 +30,7 @@ import static org.hamcrest.core.Is.is;
 public class SpecificationExampleTest extends TestState implements WithCustomResultListeners {
     private static final String RADICAND = "Radicand";
     private static final String RESULT = "Result";
+    private int aNumber;
 
     @Test
     @Notes("#tag-one")
@@ -63,6 +66,22 @@ public class SpecificationExampleTest extends TestState implements WithCustomRes
             @Row({"anotherParam"})})
     public void callMethodsWithTrailingVarargs(String firstParam, String... otherParams) throws Exception {
         assertThat(firstParam, Matchers.not(Matchers.isIn(otherParams)));
+    }
+
+    @Test
+    public void collapsed() throws Exception {
+        mathFloorRoundsDown();
+        andMathCeilRoundsUp();
+    }
+
+    @Collapsible
+    private void andMathCeilRoundsUp() {
+        assertThat(ceil(1.2), is(2.0));
+    }
+
+    @Collapsible
+    private void mathFloorRoundsDown() {
+        assertThat(floor(1.2), is(1.0));
     }
 
     private GivensBuilder theRadicand(final String number) {
