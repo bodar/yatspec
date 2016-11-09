@@ -9,6 +9,8 @@ html, body {
 
 body {
     position: absolute;
+    left: 0;
+    right: 0;
 }
 
 h1, h2, h3, h4, h5, h6, th {
@@ -217,9 +219,6 @@ dl.index-result {
     margin-right: 5px;
 }
 
-.section div {
-    width:100%;
-}
 .section .section-header {
     padding: 2px;
     cursor: pointer;
