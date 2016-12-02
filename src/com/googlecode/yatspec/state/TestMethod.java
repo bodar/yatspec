@@ -24,28 +24,29 @@ public class TestMethod {
     private final Method method;
     private final String methodName;
     private final ScenarioTable scenarioTable;
-    private final JavaSource specification;
     private final Map<String, Scenario> scenarioResults = new LinkedHashMap<String, Scenario>();
+    private final List<Section> sections;
 
-    public TestMethod(Class testClass, Method method, String methodName, JavaSource methodBody, ScenarioTable scenarioTable) {
+    public TestMethod(Class testClass, Method method, String methodName, ScenarioTable scenarioTable, List<Section> sections) {
         this.testClass = testClass;
         this.method = method;
         this.methodName = methodName;
         this.scenarioTable = scenarioTable;
-        this.specification = methodBody;
+        this.sections = sections;
         buildUpScenarios();
     }
 
     private void buildUpScenarios() {
         if (scenarioTable.isEmpty()) {
-            scenarioResults.put(methodName, new Scenario("", specification));
+            scenarioResults.put(methodName, new Scenario("", sections));
         } else {
             for (List<String> row : scenarioTable.getRows()) {
                 ScenarioName scenarioName = new ScenarioName(methodName, row);
                 String name = ScenarioNameRendererFactory.renderer().render(scenarioName);
                 final List<String> oldValues = sequence(scenarioTable.getHeaders()).map(value(String.class)).toList();
-                scenarioResults.put(name, new Scenario(name,
-                        specification.replace(oldValues, createPossiblyVarargValueFrom(row, oldValues))));
+                // TODO what did this use to do?
+//                JavaSource javaSource = specification.replace(oldValues, createPossiblyVarargValueFrom(row, oldValues));
+                scenarioResults.put(name, new Scenario(name, sections));
             }
         }
     }
@@ -99,13 +100,9 @@ public class TestMethod {
         return Status.Passed;
     }
 
-    public JavaSource getSpecification() {
-        return specification;
-    }
-
     @Override
     public String toString() {
-        return getName() + lineSeparator() + getSpecification();
+        return getName() + lineSeparator() + sections;
     }
 
     public ScenarioTable getScenarioTable() {

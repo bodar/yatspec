@@ -1,17 +1,27 @@
 package com.googlecode.yatspec.parsing;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseException;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.stmt.Statement;
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Strings;
+import com.googlecode.yatspec.junit.Collapsible;
 import com.googlecode.yatspec.junit.Table;
 import com.googlecode.yatspec.state.ScenarioTable;
+import com.googlecode.yatspec.state.Section;
 import com.googlecode.yatspec.state.TestMethod;
 import com.thoughtworks.qdox.model.*;
 import com.thoughtworks.qdox.model.annotation.AnnotationValue;
 import com.thoughtworks.qdox.model.annotation.AnnotationValueList;
 import com.thoughtworks.qdox.model.annotation.EvaluatingVisitor;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,14 +29,140 @@ import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.parsing.TestParser.name;
+import static java.util.Collections.singletonList;
 
 public class TestMethodExtractor {
-    public TestMethod toTestMethod(Class aClass, JavaMethod javaMethod, Method method) {
-        final String name = javaMethod.getName();
+    public TestMethod toTestMethod(Class testClass, JavaMethod javaTestMethod, Method reflectionTestMethod) {
+        try {
+            List<Statement> statementsInTestMethod = JavaParser.parseBlock("{" + javaTestMethod.getSourceCode() + "}").getStmts();
+            List<Section> sectionsInTestMethod = findCollapsibleSections(testClass, reflectionTestMethod, statementsInTestMethod);
+            if (!sectionsInTestMethod.isEmpty()) {
+                return new TestMethod(testClass, reflectionTestMethod, javaTestMethod.getName(), getScenarioTable(javaTestMethod), sectionsInTestMethod);
+            } else {
+                return new TestMethod(testClass, reflectionTestMethod, javaTestMethod.getName(), getScenarioTable(javaTestMethod), singletonList(new Section(new JavaSource(javaTestMethod.getSourceCode()), false)));
+            }
+        } catch (ParseException e) {
+            throw new UnsupportedOperationException(e);
+        } catch (IOException e) {
+            throw new UnsupportedOperationException(e);
+        }
+    }
 
-        final JavaSource source = new JavaSource(javaMethod.getSourceCode());
-        final ScenarioTable scenarioTable = getScenarioTable(javaMethod);
-        return new TestMethod(aClass, method, name, source, scenarioTable);
+    private List<Section> findCollapsibleSections(Class testClass, Method reflectionTestMethod, List<Statement> statementsInTestMethod) throws IOException {
+        List<Section> sectionsInTestMethod = new ArrayList<Section>();
+        for (Statement statement : statementsInTestMethod) {
+            for (Node statementNode : statement.getChildrenNodes()) {
+                if (statementNode instanceof MethodCallExpr) {
+                    MethodCallExpr methodCall = (MethodCallExpr) statementNode;
+                    String methodName = methodCall.getName();
+                    // TODO: look for methods also in static imports and superclass
+                    List<Method> methods = sequence(testClass.getDeclaredMethods())
+                            .filter(methodName(methodName))
+                            .filter(numberOfArguments(methodCall.getArgs().size()))
+                            .filter(argumentTypes(methodCall.getArgs()))
+                            .toList();
+                    if (methods.size() > 0) {
+                        if (methods.size() > 1) {
+                            throw new IllegalArgumentException("Found more than one (" + methods.size() + ") methods with name '" + methodName + "' and number of arguments " + methodCall.getArgs().size() + ". Found " + methods);
+                        }
+                        Method methodToCollapse = methods.get(0);
+                        if (sequence(methodToCollapse.getAnnotations()).map(annotationType()).contains(Collapsible.class)) {
+                            JavaMethod method = sequence(TestParser.getJavaClass(testClass).get().getMethods())
+                                    .filter(methodName2(methodCall.getName()))
+                                    .filter(argumentTypes2(methodCall.getArgs()))
+                                    .first();
+                            JavaSource specification = new JavaSource(method.getSourceCode());
+                            sectionsInTestMethod.add(new Section(new JavaSource(methodCall.toString()), specification, true));
+                        } else {
+                            sectionsInTestMethod.add(new Section(new JavaSource("Non collapsible method found, please annotate with collapsible annotation"), false));
+                        }
+                    }
+                }
+            }
+        }
+        return sectionsInTestMethod;
+    }
+
+    private Predicate<? super JavaMethod> methodName2(final String name) {
+        return new Predicate<JavaMethod>() {
+            @Override
+            public boolean matches(JavaMethod other) {
+                return other.getName().equals(name);
+            }
+        };
+    }
+
+    private Predicate<? super JavaMethod> argumentTypes2(final List<Expression> args) {
+        return new Predicate<JavaMethod>() {
+            @Override
+            public boolean matches(JavaMethod other) {
+                if (args.size() != other.getParameters().length) {
+                    return false;
+                }
+                for (int i = 0; i < other.getParameters().length; i++) {
+                    JavaParameter parameter = other.getParameters()[i];
+                    Expression expectedParameter = args.get(i);
+                    if (expectedParameter.getClass().equals(IntegerLiteralExpr.class) && !(parameter.getType().getFullyQualifiedName().equals(Integer.class.getName()) || parameter.getType().getFullyQualifiedName().equals(int.class.getName()))) {
+                        return false;
+                    }
+                    if (expectedParameter.getClass().equals(StringLiteralExpr.class) && !parameter.getType().getFullyQualifiedName().equals(String.class.getName())) {
+                        return false;
+                    }
+                }
+                // TODO implement all other possible types of Expression
+                return true;
+            }
+        };
+    }
+
+    private Predicate<? super Method> argumentTypes(final List<Expression> expectedParameterTypes) {
+        return new Predicate<Method>() {
+            @Override
+            public boolean matches(Method other) {
+                Class<?>[] parameterTypes = other.getParameterTypes();
+                for (int i = 0; i < expectedParameterTypes.size(); i++) {
+                    Expression expression = expectedParameterTypes.get(i);
+                    if (expression.getClass().equals(IntegerLiteralExpr.class) && !(parameterTypes[i].equals(Integer.class) || parameterTypes[i].equals(int.class))) {
+                        return false;
+                    }
+                    if (expression.getClass().equals(StringLiteralExpr.class) && !parameterTypes[i].equals(String.class)) {
+                        return false;
+                    }
+                    if (expression.getClass().equals(NameExpr.class) && !parameterTypes[i].equals(String.class)) {
+                        return false;
+                    }
+                    // TODO implement all other possible types of Expression
+                }
+                return true;
+            }
+        };
+    }
+
+    private Predicate<? super Method> numberOfArguments(final int requiredNumberOfArguments) {
+        return new Predicate<Method>() {
+            @Override
+            public boolean matches(Method other) {
+                return other.getParameterTypes().length == requiredNumberOfArguments;
+            }
+        };
+    }
+
+    private Callable1<java.lang.annotation.Annotation, Class<? extends java.lang.annotation.Annotation>> annotationType() {
+        return new Callable1<java.lang.annotation.Annotation, Class<? extends java.lang.annotation.Annotation>>() {
+            @Override
+            public Class<? extends java.lang.annotation.Annotation> call(java.lang.annotation.Annotation annotation) throws Exception {
+                return annotation.annotationType();
+            }
+        };
+    }
+
+    private Predicate<Method> methodName(final String methodName) {
+        return new Predicate<Method>() {
+            @Override
+            public boolean matches(Method other) {
+                return other.getName().equals(methodName);
+            }
+        };
     }
 
     @SuppressWarnings({"unchecked"})

@@ -1,8 +1,6 @@
 package com.googlecode.yatspec.state;
 
 import com.googlecode.yatspec.parsing.JavaSource;
-import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
-import com.googlecode.yatspec.state.givenwhenthen.InterestingGivens;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 
 import java.util.LinkedHashMap;
@@ -13,14 +11,13 @@ import java.util.Map;
 public class Scenario {
     private TestState testState = new TestState();
     private final String name;
-    private final JavaSource specification;
     private Throwable exception;
     private boolean wasRun = false;
+    private final List<Section> sections;
 
-
-    public Scenario(String name, JavaSource specification) {
+    public Scenario(String name, List<Section> sections) {
         this.name = name;
-        this.specification = specification;
+        this.sections = sections;
     }
 
     public String getName() {
@@ -59,10 +56,6 @@ public class Scenario {
         return exception != null;
     }
 
-    public JavaSource getSpecification() {
-        return specification;
-    }
-
     public boolean wasRun() {
         return wasRun;
     }
@@ -94,5 +87,9 @@ public class Scenario {
 
     public String getUid() {
         return Integer.toString(hashCode());
+    }
+
+    public List<Section> getSections() {
+        return sections;
     }
 }

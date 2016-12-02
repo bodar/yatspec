@@ -128,6 +128,10 @@ $(document).ready(function () {
         $('.logKey', this).next(".logValue").toggleClass("hide");
     })
 
+    $('.collapsible span').click(function() {
+        $(this).parent().find("pre").toggle()
+    });
+
 }, false);
 
 $(".section-header").click(function () {

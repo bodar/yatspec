@@ -11,6 +11,7 @@ public class WikiResultRendererTest {
     public void preservesJavaFormatting() throws Exception {
         String result = new WikiResultRenderer().render(new TestResult(getClass()));
             // Supports indents and comments
+        System.out.println("result = " + result);
         assertThat(result, containsString("    // Supports indents and comments"));
     }
 }
