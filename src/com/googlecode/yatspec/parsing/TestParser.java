@@ -39,7 +39,7 @@ public class TestParser {
     private static final Option<URL> NO_URL = none(URL.class);
 
     public static List<TestMethod> parseTestMethods(Class aClass) throws Exception {
-        final Sequence<Method> methods = getMethods(aClass);
+        final Sequence<Method> methods = getTestMethods(aClass);
         return collectTestMethods(aClass, methods).toList();
     }
 
@@ -49,7 +49,7 @@ public class TestParser {
             return empty();
         }
 
-        Map<String, List<JavaMethod>> sourceMethodsByName = getMethods(javaClass.get()).toMap(sourceMethodName());
+        Map<String, List<JavaMethod>> sourceMethodsByName = getTestMethods(javaClass.get()).toMap(sourceMethodName());
         Map<String, List<Method>> reflectionMethodsByName = methods.toMap(reflectionMethodName());
 
         List<TestMethod> testMethods = new ArrayList<TestMethod>();
@@ -85,13 +85,13 @@ public class TestParser {
         };
     }
 
-    private static Option<JavaClass> getJavaClass(final Class aClass) throws IOException {
+    public static Option<JavaClass> getJavaClass(final Class aClass) throws IOException {
         Option<URL> option = getJavaSourceFromClassPath(aClass);
         option = !option.isEmpty() ? option : getJavaSourceFromFileSystem(aClass);
         return option.map(asAJavaClass(aClass));
     }
 
-    private static Callable1<URL, JavaClass> asAJavaClass(final Class aClass) {
+    public static Callable1<URL, JavaClass> asAJavaClass(final Class aClass) {
         return new Callable1<URL, JavaClass>() {
             @Override
             public JavaClass call(URL url) throws Exception {
@@ -102,16 +102,16 @@ public class TestParser {
         };
     }
 
-    private static Sequence<Method> getMethods(Class aClass) {
+    private static Sequence<Method> getTestMethods(Class aClass) {
         return sequence(aClass.getMethods()).filter(where(annotation(Test.class), notNullValue()));
     }
 
     @SuppressWarnings("unchecked")
-    private static Sequence<JavaMethod> getMethods(JavaClass javaClass) {
+    private static Sequence<JavaMethod> getTestMethods(JavaClass javaClass) {
         return sequence(javaClass.getMethods()).filter(where(annotations(), contains(Test.class)));
     }
 
-    private static Option<URL> getJavaSourceFromClassPath(Class aClass) {
+    public static Option<URL> getJavaSourceFromClassPath(Class aClass) {
         return isObject(aClass) ? NO_URL : option(aClass.getClassLoader().getResource(toJavaResourcePath(aClass)));
     }
 

@@ -46,26 +46,31 @@ h6 {
     font: 10pt Arial, sans-serif;
 }
 
-.highlight .literal {
+.highlight .literal, .highlight-section .literal {
     color: #066;
 }
 
-.highlight .keyword {
+.highlight .keyword, .highlight-section .keyword {
     color: #008;
 }
 
-.highlight .constant {
+.highlight .constant, .highlight-section .constant {
     color: #606;
 }
 
-.highlight .quote {
+.highlight .quote, .highlight-section .quote {
     color: #080;
 }
 
 .highlight.specification .literal,
 .highlight.specification .keyword,
 .highlight.specification .constant,
-.highlight.specification .quote {
+.highlight.specification .quote,
+.highlight-section .literal,
+.highlight-section .keyword,
+.highlight-section .constant,
+.highlight-section .quote
+{
     font-weight: bold;
 }
 
@@ -229,3 +234,18 @@ dl.index-result {
     display: block;
     padding : 5px;
 }
+
+.collapsible {
+    margin: 5px 0;
+}
+
+.collapsible span {
+    cursor: help;
+    font-size: 14px;
+}
+
+.collapsible pre {
+    display: none;
+    margin: 10px;
+}
+

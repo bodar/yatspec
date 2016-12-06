@@ -85,7 +85,11 @@ $(document).ready(function () {
 
     $('.highlight.specification').each(function() {
         yatspec.highlight(this, specificationHighlights);
-    })
+    });
+
+    $('.collapsible span').each(function() {
+        yatspec.highlight(this, specificationHighlights);
+    });
 
     $('.highlight.results').each(function() {
         yatspec.highlight(this, [
@@ -95,7 +99,7 @@ $(document).ready(function () {
             {pattern: "[A-Z_]{2,}" , cssClass: "constant" },
             {pattern: "[\\d]+" ,     cssClass: "literal" }
         ]);
-    })
+    });
 
     $('.scenario').each(function() {
         var escapeRegExp = function(str) {
@@ -127,6 +131,10 @@ $(document).ready(function () {
 
         $('.logKey', this).next(".logValue").toggleClass("hide");
     })
+
+    $('.collapsible span').click(function() {
+        $(this).parent().find("pre").toggle()
+    });
 
 }, false);
 

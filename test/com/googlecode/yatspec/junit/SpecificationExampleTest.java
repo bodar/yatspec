@@ -97,4 +97,8 @@ public class SpecificationExampleTest extends TestState implements WithCustomRes
                 new HtmlIndexRenderer(),
                 new HtmlTagIndexRenderer());
     }
+
+    public int getOne() {
+        return 1;
+    }
 }
