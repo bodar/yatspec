@@ -28,6 +28,7 @@ import java.util.List;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.yatspec.parsing.TestParser.getJavaClass;
 import static com.googlecode.yatspec.parsing.TestParser.name;
 import static java.util.Collections.singletonList;
 
@@ -35,27 +36,27 @@ public class TestMethodExtractor {
     public TestMethod toTestMethod(Class testClass, JavaMethod javaTestMethod, Method reflectionTestMethod) {
         try {
             List<Statement> statementsInTestMethod = JavaParser.parseBlock("{" + javaTestMethod.getSourceCode() + "}").getStmts();
-            List<Section> sectionsInTestMethod = findCollapsibleSections(testClass, reflectionTestMethod, statementsInTestMethod);
+            List<Section> sectionsInTestMethod = findCollapsibleSections(testClass, statementsInTestMethod);
             if (!sectionsInTestMethod.isEmpty()) {
                 return new TestMethod(testClass, reflectionTestMethod, javaTestMethod.getName(), getScenarioTable(javaTestMethod), sectionsInTestMethod);
             } else {
                 return new TestMethod(testClass, reflectionTestMethod, javaTestMethod.getName(), getScenarioTable(javaTestMethod), singletonList(new Section(new JavaSource(javaTestMethod.getSourceCode()), false)));
             }
         } catch (ParseException e) {
-            throw new UnsupportedOperationException(e);
+            throw new IllegalArgumentException(e);
         } catch (IOException e) {
-            throw new UnsupportedOperationException(e);
+            throw new IllegalArgumentException(e);
         }
     }
 
-    private List<Section> findCollapsibleSections(Class testClass, Method reflectionTestMethod, List<Statement> statementsInTestMethod) throws IOException {
+    private List<Section> findCollapsibleSections(Class testClass, List<Statement> statementsInTestMethod) throws IOException {
         List<Section> sectionsInTestMethod = new ArrayList<Section>();
         for (Statement statement : statementsInTestMethod) {
             for (Node statementNode : statement.getChildrenNodes()) {
                 if (statementNode instanceof MethodCallExpr) {
                     MethodCallExpr methodCall = (MethodCallExpr) statementNode;
                     String methodName = methodCall.getName();
-                    // TODO: look for methods also in static imports and superclass
+                    // TODO improve @Collapsible: look for methods also in static imports and superclass as well as current class
                     List<Method> methods = sequence(testClass.getDeclaredMethods())
                             .filter(methodName(methodName))
                             .filter(numberOfArguments(methodCall.getArgs().size()))
@@ -63,24 +64,30 @@ public class TestMethodExtractor {
                             .toList();
                     if (methods.size() > 0) {
                         if (methods.size() > 1) {
-                            throw new IllegalArgumentException("Found more than one (" + methods.size() + ") methods with name '" + methodName + "' and number of arguments " + methodCall.getArgs().size() + ". Found " + methods);
+                            throw new IllegalArgumentException("Collapsible methods have restrictions on how they can be used. Could not determine which method is to be collapsed. Found " + methods.size() + " methods with name '" + methodName + "' and number of arguments " + methodCall.getArgs().size() + ". Please rename one of the following collapsible methods: " + methods);
                         }
                         Method methodToCollapse = methods.get(0);
                         if (sequence(methodToCollapse.getAnnotations()).map(annotationType()).contains(Collapsible.class)) {
-                            JavaMethod method = sequence(TestParser.getJavaClass(testClass).get().getMethods())
+                            JavaMethod method = sequence(getJavaClass(testClass).get().getMethods())
                                     .filter(methodName2(methodCall.getName()))
                                     .filter(argumentTypes2(methodCall.getArgs()))
                                     .first();
                             JavaSource specification = new JavaSource(method.getSourceCode());
                             sectionsInTestMethod.add(new Section(new JavaSource(methodCall.toString()), specification, true));
                         } else {
-                            sectionsInTestMethod.add(new Section(new JavaSource("Non collapsible method found, please annotate with collapsible annotation"), false));
+                            if (inATestWithCollapsibleMethods(sectionsInTestMethod)) {
+                                sectionsInTestMethod.add(new Section(new JavaSource("Non collapsible method found, please annotate with collapsible annotation"), false));
+                            }
                         }
                     }
                 }
             }
         }
         return sectionsInTestMethod;
+    }
+
+    private boolean inATestWithCollapsibleMethods(List<Section> sectionsInTestMethod) {
+        return !sectionsInTestMethod.isEmpty();
     }
 
     private Predicate<? super JavaMethod> methodName2(final String name) {
@@ -109,7 +116,7 @@ public class TestMethodExtractor {
                         return false;
                     }
                 }
-                // TODO implement all other possible types of Expression
+                // TODO improve @Collapsible: other possible types of Expression
                 return true;
             }
         };
@@ -131,7 +138,7 @@ public class TestMethodExtractor {
                     if (expression.getClass().equals(NameExpr.class) && !parameterTypes[i].equals(String.class)) {
                         return false;
                     }
-                    // TODO implement all other possible types of Expression
+                    // TODO improve @Collapsible: implement other possible types of Expression
                 }
                 return true;
             }

@@ -76,7 +76,7 @@
                                 $scenario.sections:{ section |
                                     $if(section.collapsible)$
                                         <div class="collapsible">
-                                            <span>&raquo; $section.header$</span>
+                                            <span class="highlight-section">&raquo; $section.header$</span>
                                             <pre class="highlight specification">$section.specification$</pre>
                                         </div>
                                     $else$
