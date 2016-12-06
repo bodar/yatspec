@@ -69,8 +69,8 @@ public class TestMethodExtractor {
                         Method methodToCollapse = methods.get(0);
                         if (sequence(methodToCollapse.getAnnotations()).map(annotationType()).contains(Collapsible.class)) {
                             JavaMethod method = sequence(getJavaClass(testClass).get().getMethods())
-                                    .filter(methodName2(methodCall.getName()))
-                                    .filter(argumentTypes2(methodCall.getArgs()))
+                                    .filter(javaMethodName(methodCall.getName()))
+                                    .filter(javaMethodArgumentTypes(methodCall.getArgs()))
                                     .first();
                             JavaSource specification = new JavaSource(method.getSourceCode());
                             sectionsInTestMethod.add(new Section(new JavaSource(methodCall.toString()), specification, true));
@@ -90,7 +90,7 @@ public class TestMethodExtractor {
         return !sectionsInTestMethod.isEmpty();
     }
 
-    private Predicate<? super JavaMethod> methodName2(final String name) {
+    private Predicate<? super JavaMethod> javaMethodName(final String name) {
         return new Predicate<JavaMethod>() {
             @Override
             public boolean matches(JavaMethod other) {
@@ -99,7 +99,7 @@ public class TestMethodExtractor {
         };
     }
 
-    private Predicate<? super JavaMethod> argumentTypes2(final List<Expression> args) {
+    private Predicate<? super JavaMethod> javaMethodArgumentTypes(final List<Expression> args) {
         return new Predicate<JavaMethod>() {
             @Override
             public boolean matches(JavaMethod other) {
