@@ -7,10 +7,6 @@ html, body {
     font-size: 10pt;
 }
 
-body {
-    position: absolute;
-}
-
 h1, h2, h3, h4, h5, h6, th {
     text-transform: capitalize;
 }
