@@ -46,7 +46,9 @@ So lets quickly explain what has happened:
     * Red == Failed
     * Orange == Not Run
 
-[Sequence diagrams[(https://codeforfunandmoney.wordpress.com/2016/11/30/proper-interactions-logging-and-sequence-diagrams/)
+***Sequence Diagrams***
+Here is a mini guide
+https://codeforfunandmoney.wordpress.com/2016/11/30/proper-interactions-logging-and-sequence-diagrams/
 
 ---
 
