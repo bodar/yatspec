@@ -11,8 +11,16 @@ import static com.googlecode.totallylazy.regex.Regex.regex;
 
 public class Text {
     private static final Regex wordDelimiter = Regex.regex(Strings.toString(Text.class.getResourceAsStream("wordDelimiter.regex")));
+    private static final Regex wordNumberDelimiter = Regex.regex("([a-z])([0-9])"); // detect boundaries where letters meet numbers
     private static final Pattern spaceRemover = Pattern.compile("(?<!^)[\\t\\x0B\\f ]+"); // don't replace new lines
     private static final Regex quotedStrings = regex("\"[^\"]+\"");
+
+    private static final Callable1<MatchResult, CharSequence> wordNumberDelimiterReplacer = new Callable1<MatchResult, CharSequence>() {
+        public String call(MatchResult matchResult) {
+            // for example "d4" -> "d 4"
+            return matchResult.group(1) + " " + matchResult.group(2);
+        }
+    };
 
     private static final Callable1<MatchResult, CharSequence> wordDelimiterReplacer = new Callable1<MatchResult, CharSequence>() {
         public String call(MatchResult matchResult) {
@@ -27,7 +35,8 @@ public class Text {
 
     private static final Callable1<CharSequence, CharSequence> wordifier = new Callable1<CharSequence, CharSequence>() {
         public CharSequence call(CharSequence text) {
-            return wordDelimiter.findMatches(text).replace(wordDelimiterReplacer);
+            String wordified = wordDelimiter.findMatches(text).replace(wordDelimiterReplacer);
+            return wordNumberDelimiter.findMatches(wordified).replace(wordNumberDelimiterReplacer);
         }
     };
 

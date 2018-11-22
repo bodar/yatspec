@@ -6,6 +6,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 public class TextTest {
+
+    @Test
+    public void numberAfterWordHasASpace() {
+        assertThat(Text.wordify("word404NewWord"), is("Word 404 new word"));
+    }
+
     @Test
     public void insertsASingleSpacesBetweenCapitalsAndTrims() {
          assertThat(Text.wordify("replaceAWithB;"), is("Replace a with b"));
