@@ -60,7 +60,7 @@
     </target>
 
     <target name="test">
-        <test jar="${test.jar.path}" classpathref="all.jars" reports="${reports}"/>
+        <test jar="${test.jar.path}" classpathref="all.jars" reports="${reports}" package="com.googlecode.yatspec"/>
     </target>
 
     <target name="package">

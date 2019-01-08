@@ -68,29 +68,30 @@
         <attribute name="jar"/>
         <attribute name="reports"/>
         <attribute name="classpathref"/>
+        <attribute name="package"/>
 
         <sequential>
             <mkdir dir="@{reports}"/>
             <property name="unzipped.jar" value="@{reports}.unzipped.jar"/>
             <mkdir dir="${unzipped.jar}"/>
             <unzip dest="${unzipped.jar}" src="@{jar}"/>
-            <junit printsummary="no" fork="on" failureproperty="failed" forkmode="once">
+            <!-- https://junit.org/junit5/docs/current/user-guide/#running-tests-console-launcher -->
+            <java classpathref="@{classpathref}" classname="org.junit.platform.console.ConsoleLauncher" fork="true" failonerror="true">
+                <arg value="--select-package=@{package}"/>
+                <arg value="--fail-if-no-tests"/>
+                <arg line="--reports-dir @{reports}"/>
                 <sysproperty key="yatspec.output.dir" value="@{reports}"/>
                 <sysproperty key="yatspec.index.enable" value="true"/>
                 <!--<jvmarg value="-Xdebug"/>-->
                 <!--<jvmarg value="-Xrunjdwp:transport=dt_socket,server=n,address=nurofen:5005,suspend=y"/>-->
-                <classpath refid="@{classpathref}"/>
-                <formatter type="xml"/>
-                <batchtest todir="@{reports}">
-                    <fileset dir="${unzipped.jar}">
-                        <include name="**/*Test.class"/>
-                        <exclude name="**/*$*"/>
-                    </fileset>
-                </batchtest>
-            </junit>
-
+            </java>
+            <junitreport todir="@{reports}">
+                <fileset dir="@{reports}">
+                    <include name="TEST-*.xml"/>
+                </fileset>
+                <report format="frames" todir="@{reports}/html"/>
+            </junitreport>
             <delete dir="${unzipped.jar}"/>
-            <fail message="Tests failed" if="failed"/>
         </sequential>
     </macrodef>
 
