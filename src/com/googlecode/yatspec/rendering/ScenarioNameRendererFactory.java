@@ -1,8 +1,6 @@
 package com.googlecode.yatspec.rendering;
 
-import com.googlecode.yatspec.junit.SpecRunner;
 import com.googlecode.yatspec.rendering.junit.HumanReadableScenarioNameRenderer;
-import com.googlecode.yatspec.state.ScenarioName;
 
 import static com.googlecode.yatspec.Creator.create;
 import static java.lang.Class.forName;

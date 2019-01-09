@@ -6,10 +6,12 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.yatspec.state.TestMethod;
 import com.thoughtworks.qdox.JavaDocBuilder;
+import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
 import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import org.junit.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -24,15 +26,14 @@ import static com.googlecode.totallylazy.Files.workingDirectory;
 import static com.googlecode.totallylazy.Methods.annotation;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.option;
-import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.Predicates.notNullValue;
-import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.endsWith;
 import static com.googlecode.totallylazy.URLs.toURL;
 import static com.googlecode.yatspec.parsing.Files.toJavaPath;
 import static com.googlecode.yatspec.parsing.Files.toJavaResourcePath;
+import static java.util.Arrays.asList;
 
 public class TestParser {
 
@@ -49,10 +50,10 @@ public class TestParser {
             return empty();
         }
 
-        Map<String, List<JavaMethod>> sourceMethodsByName = getMethods(javaClass.get()).toMap(sourceMethodName());
-        Map<String, List<Method>> reflectionMethodsByName = methods.toMap(reflectionMethodName());
+        Map<String, List<JavaMethod>> sourceMethodsByName = getMethods(javaClass.get()).toMap(AbstractBaseJavaEntity::getName);
+        Map<String, List<Method>> reflectionMethodsByName = methods.toMap((Callable1<? super Method,String>) (Callable1<Method, String>) Method::getName);
 
-        List<TestMethod> testMethods = new ArrayList<TestMethod>();
+        List<TestMethod> testMethods = new ArrayList<>();
         TestMethodExtractor extractor = new TestMethodExtractor();
         for (String name : sourceMethodsByName.keySet()) {
             List<JavaMethod> javaMethods = sourceMethodsByName.get(name);
@@ -67,24 +68,6 @@ public class TestParser {
         return myTestMethods.join(parentTestMethods);
     }
 
-    private static Callable1<? super Method, String> reflectionMethodName() {
-        return new Callable1<Method, String>() {
-            @Override
-            public String call(Method method) throws Exception {
-                return method.getName();
-            }
-        };
-    }
-
-    private static Callable1<JavaMethod, String> sourceMethodName() {
-        return new Callable1<JavaMethod, String>() {
-            @Override
-            public String call(JavaMethod javaMethod) throws Exception {
-                return javaMethod.getName();
-            }
-        };
-    }
-
     private static Option<JavaClass> getJavaClass(final Class aClass) throws IOException {
         Option<URL> option = getJavaSourceFromClassPath(aClass);
         option = !option.isEmpty() ? option : getJavaSourceFromFileSystem(aClass);
@@ -92,23 +75,28 @@ public class TestParser {
     }
 
     private static Callable1<URL, JavaClass> asAJavaClass(final Class aClass) {
-        return new Callable1<URL, JavaClass>() {
-            @Override
-            public JavaClass call(URL url) throws Exception {
-                JavaDocBuilder builder = new JavaDocBuilder();
-                builder.addSource(url);
-                return builder.getClassByName(aClass.getName());
-            }
+        return url -> {
+            JavaDocBuilder builder = new JavaDocBuilder();
+            builder.addSource(url);
+            return builder.getClassByName(aClass.getName());
         };
     }
 
     private static Sequence<Method> getMethods(Class aClass) {
-        return sequence(aClass.getMethods()).filter(where(annotation(Test.class), notNullValue()));
+        return sequence(aClass.getDeclaredMethods()).join(asList(aClass.getMethods()))
+                .filter(or(
+                        where(annotation(Test.class), notNullValue()),
+                        where(annotation(org.junit.jupiter.api.Test.class), notNullValue()),
+                        where(annotation(ParameterizedTest.class), notNullValue())));
     }
 
     @SuppressWarnings("unchecked")
     private static Sequence<JavaMethod> getMethods(JavaClass javaClass) {
-        return sequence(javaClass.getMethods()).filter(where(annotations(), contains(Test.class)));
+        return sequence(javaClass.getMethods())
+                .filter(where(annotations(), or(
+                        contains(Test.class),
+                        contains(org.junit.jupiter.api.Test.class),
+                        contains(ParameterizedTest.class))));
     }
 
     private static Option<URL> getJavaSourceFromClassPath(Class aClass) {
@@ -124,31 +112,14 @@ public class TestParser {
     }
 
     private static Predicate<? super Sequence<Annotation>> contains(final Class aClass) {
-        return new Predicate<Sequence<Annotation>>() {
-            @Override
-            public boolean matches(Sequence<Annotation> annotations) {
-                return annotations.exists(where(name(), is(aClass.getName())));
-            }
-        };
+        return annotations -> annotations.exists(where(name(), is(aClass.getName())));
     }
 
     public static Callable1<? super Annotation, String> name() {
-        return new Callable1<Annotation, String>() {
-            @Override
-            public String call(Annotation annotation) throws Exception {
-                return annotation.getType().getFullyQualifiedName();
-            }
-        };
+        return annotation -> annotation.getType().getFullyQualifiedName();
     }
 
     public static Callable1<? super JavaMethod, Sequence<Annotation>> annotations() {
-        return new Callable1<JavaMethod, Sequence<Annotation>>() {
-            @Override
-            public Sequence<Annotation> call(JavaMethod javaMethod) throws Exception {
-                return sequence(javaMethod.getAnnotations());
-            }
-        };
+        return javaMethod -> sequence(javaMethod.getAnnotations());
     }
-
-
 }
