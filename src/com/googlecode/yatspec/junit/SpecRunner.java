@@ -23,7 +23,7 @@ import static java.lang.System.getProperty;
 public class SpecRunner extends TableRunner {
     public static final String OUTPUT_DIR = "yatspec.output.dir";
     private final Result testResult;
-    private Map<String, Scenario> currentScenario = new HashMap<String, Scenario>();
+    private Map<String, Scenario> currentScenario = new HashMap<>();
 
     public SpecRunner(Class<?> klass) throws org.junit.runners.model.InitializationError {
         super(klass);
@@ -36,11 +36,7 @@ public class SpecRunner extends TableRunner {
     }
 
     private static Predicate<FrameworkMethod> isNotEvaluateMethod() {
-        return new Predicate<FrameworkMethod>() {
-            public boolean matches(FrameworkMethod method) {
-                return !method.getName().equals("evaluate");
-            }
-        };
+        return method -> !method.getName().equals("evaluate");
     }
 
     private WithCustomResultListeners listeners = new DefaultResultListeners();
@@ -62,14 +58,7 @@ public class SpecRunner extends TableRunner {
         notifier.addListener(listener);
         super.run(notifier);
         notifier.removeListener(listener);
-        try {
-            for (SpecResultListener resultListener : listeners.getResultListeners()) {
-                resultListener.complete(outputDirectory(), testResult);
-            }
-        } catch (Exception e) {
-            System.out.println("Error while writing yatspec output");
-            e.printStackTrace(System.out);
-        }
+        listeners.complete(testResult);
     }
 
     public static File outputDirectory() {

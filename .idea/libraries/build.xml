@@ -6,6 +6,7 @@
     <JAVADOC />
     <SOURCES>
       <root url="file://$PROJECT_DIR$/lib/build" />
+      <root url="jar://$USER_HOME$/.ideaLibSources/junit-platform-console-standalone-1.3.2-sources.jar!/" />
     </SOURCES>
     <jarDirectory url="file://$PROJECT_DIR$/lib/build" recursive="false" />
     <jarDirectory url="file://$PROJECT_DIR$/lib/build" recursive="false" type="SOURCES" />
