@@ -54,6 +54,22 @@ public class TestResult implements Result {
         return getTestClass().getPackage().getName();
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<TestMethodMetadata> getTestMethodMetadata() {
+        try {
+            //noinspection rawtypes
+            return (List) getTestMethods();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public String getTestClassName() {
+        return getTestClass().getName();
+    }
+
     private static String removeTestFrom(String className) {
         final int index = className.lastIndexOf("Test");
         return className.substring(0, index);

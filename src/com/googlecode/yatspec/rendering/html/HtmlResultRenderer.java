@@ -15,7 +15,7 @@ import com.googlecode.yatspec.rendering.*;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.ScenarioTableHeader;
 import com.googlecode.yatspec.state.Status;
-import com.googlecode.yatspec.state.TestMethod;
+import com.googlecode.yatspec.state.TestMethodMetadata;
 import org.antlr.stringtemplate.NoIndentWriter;
 import org.antlr.stringtemplate.StringTemplate;
 
@@ -25,11 +25,10 @@ import java.io.StringWriter;
 import java.util.*;
 
 import static com.googlecode.totallylazy.Callables.asString;
-import static com.googlecode.totallylazy.Predicates.always;
-import static com.googlecode.totallylazy.Predicates.instanceOf;
-import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.parsing.Files.overwrite;
+import static com.googlecode.yatspec.parsing.Files.replaceDotsWithSlashes;
 import static com.googlecode.yatspec.rendering.Renderers.registerRenderer;
 import static java.lang.String.format;
 
@@ -109,13 +108,17 @@ public class HtmlResultRenderer implements SpecResultListener {
         return Files.toPath(resultClass) + ".html";
     }
 
+    public static String htmlResultRelativePathForClassName(String className) {
+        return replaceDotsWithSlashes(className) + ".html";
+    }
+
     public static File htmlResultFile(File outputDirectory, Class resultClass) {
         return new File(outputDirectory, htmlResultRelativePath(resultClass));
     }
 
-    public static String testMethodRelativePath(TestMethod testMethod) {
+    public static String testMethodRelativePath(TestMethodMetadata testMethod) {
         return format("%s#%s",
-                htmlResultRelativePath(testMethod.getTestClass()),
+                htmlResultRelativePathForClassName(testMethod.getTestClassName()),
                 testMethod.getName());
     }
 

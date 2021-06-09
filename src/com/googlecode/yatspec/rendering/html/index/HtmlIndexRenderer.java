@@ -1,26 +1,27 @@
 package com.googlecode.yatspec.rendering.html.index;
 
 import com.googlecode.funclate.stringtemplate.EnhancedStringTemplateGroup;
-import com.googlecode.yatspec.junit.SpecResultListener;
+import com.googlecode.yatspec.junit.SpecResultMetadataListener;
 import com.googlecode.yatspec.rendering.Content;
 import com.googlecode.yatspec.rendering.ContentAtUrl;
 import com.googlecode.yatspec.rendering.Index;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
-import com.googlecode.yatspec.state.Result;
+import com.googlecode.yatspec.state.ResultMetadata;
 import org.antlr.stringtemplate.StringTemplate;
 
 import java.io.File;
+import java.util.Collection;
 
 import static com.googlecode.funclate.Model.mutable.model;
 import static com.googlecode.yatspec.parsing.Files.overwrite;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.getCssMap;
 
-public class HtmlIndexRenderer implements SpecResultListener {
+public class HtmlIndexRenderer implements SpecResultMetadataListener {
     private final static Index index = new Index();
 
     @Override
-    public void complete(File yatspecOutputDir, Result result) throws Exception {
-        index.add(result);
+    public void completeMetadata(File yatspecOutputDir, Collection<ResultMetadata> results) throws Exception {
+        index.addAll(results);
         overwrite(outputFile(yatspecOutputDir), render(yatspecOutputDir, index));
     }
 

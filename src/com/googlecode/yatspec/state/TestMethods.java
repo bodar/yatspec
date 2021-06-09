@@ -3,10 +3,10 @@ package com.googlecode.yatspec.state;
 import com.googlecode.totallylazy.Callable1;
 
 public class TestMethods {
-    public static Callable1<? super TestMethod, Status> status() {
-        return new Callable1<TestMethod, Status>() {
+    public static Callable1<? super TestMethodMetadata, Status> status() {
+        return new Callable1<TestMethodMetadata, Status>() {
             @Override
-            public Status call(TestMethod testMethod) throws Exception {
+            public Status call(TestMethodMetadata testMethod) throws Exception {
                 return testMethod.getStatus();
             }
         };

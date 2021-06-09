@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.regex.Regex;
 import com.googlecode.yatspec.junit.Notes;
-import com.googlecode.yatspec.state.TestMethod;
+import com.googlecode.yatspec.state.TestMethodMetadata;
 
 import java.util.regex.MatchResult;
 
@@ -22,7 +22,7 @@ public class NotesTagFinder implements TagFinder {
         this.regex = regex(regex);
     }
 
-    public Iterable<String> tags(TestMethod testMethod) {
+    public Iterable<String> tags(TestMethodMetadata testMethod) {
         return notes(testMethod.getAnnotations())
                 .map(notesToTags())
                 .getOrElse(Sequences.<String>empty());

@@ -4,9 +4,9 @@ import com.googlecode.funclate.Model;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.yatspec.rendering.Index;
-import com.googlecode.yatspec.state.Result;
+import com.googlecode.yatspec.state.ResultMetadata;
 import com.googlecode.yatspec.state.Status;
-import com.googlecode.yatspec.state.TestMethod;
+import com.googlecode.yatspec.state.TestMethodMetadata;
 
 import java.io.File;
 
@@ -19,14 +19,14 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.startsWith;
 import static com.googlecode.yatspec.parsing.Text.wordify;
 import static com.googlecode.yatspec.rendering.PackageNames.*;
-import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.htmlResultRelativePath;
+import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.htmlResultRelativePathForClassName;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.testMethodRelativePath;
 import static com.googlecode.yatspec.state.Results.packageName;
 import static com.googlecode.yatspec.state.Results.resultStatus;
 import static com.googlecode.yatspec.state.StatusPriority.statusPriority;
 
 public class IndexModel {
-    private final Sequence<Result> entries;
+    private final Sequence<ResultMetadata> entries;
     private final Sequence<String> packageNames;
     private final File yatspecOutputDir;
 
@@ -59,15 +59,15 @@ public class IndexModel {
                         toList());
     }
 
-    private Callable1<? super Result, Model> modelOfResult() {
-        return new Callable1<Result, Model>() {
+    private Callable1<? super ResultMetadata, Model> modelOfResult() {
+        return new Callable1<ResultMetadata, Model>() {
             @Override
-            public Model call(Result result) throws Exception {
+            public Model call(ResultMetadata result) throws Exception {
                 return model().
                         add("name", result.getName()).
-                        add("url", htmlResultRelativePath(result.getTestClass())).
+                        add("url", htmlResultRelativePathForClassName(result.getTestClassName())).
                         add("status", some(result).map(resultStatus()).get()).
-                        add("methods", sequence(result.getTestMethods()).
+                        add("methods", sequence(result.getTestMethodMetadata()).
                                 map(testMethodModel()).
                                 toList());
             }
@@ -83,10 +83,10 @@ public class IndexModel {
                 getOrElse(Status.Passed);
     }
 
-    private Callable1<? super TestMethod, Model> testMethodModel() {
-        return new Callable1<TestMethod, Model>() {
+    private Callable1<? super TestMethodMetadata, Model> testMethodModel() {
+        return new Callable1<TestMethodMetadata, Model>() {
             @Override
-            public Model call(TestMethod testMethod) throws Exception {
+            public Model call(TestMethodMetadata testMethod) throws Exception {
                 return model().
                         add("name", testMethod.getDisplayName()).
                         add("url", testMethodRelativePath(testMethod)).
