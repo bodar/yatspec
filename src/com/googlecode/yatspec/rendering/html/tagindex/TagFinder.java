@@ -1,7 +1,7 @@
 package com.googlecode.yatspec.rendering.html.tagindex;
 
-import com.googlecode.yatspec.state.TestMethod;
+import com.googlecode.yatspec.state.TestMethodMetadata;
 
 public interface TagFinder {
-    Iterable<String> tags(TestMethod testMethod);
+    Iterable<String> tags(TestMethodMetadata testMethod);
 }

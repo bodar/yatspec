@@ -19,7 +19,7 @@ import static com.googlecode.yatspec.junit.YatspecAnnotation.methods.yatspecAnno
 import static java.lang.System.lineSeparator;
 
 @SuppressWarnings({"unused"})
-public class TestMethod {
+public class TestMethod implements TestMethodMetadata {
     private final Class testClass;
     private final Method method;
     private final String methodName;
@@ -69,18 +69,22 @@ public class TestMethod {
         };
     }
 
+    @Override
     public String getName() {
         return methodName;
     }
 
+    @Override
     public String getDisplayName() {
         return Text.wordify(methodName);
     }
 
+    @Override
     public String getDisplayLinkName() {
         return getDisplayName().replace(' ', '_');
     }
 
+    @Override
     public Status getStatus() {
         return calculateStatus(sequence(getScenarios()).map(new Callable1<Scenario, Status>() {
             public Status call(Scenario scenario) {
@@ -124,19 +128,27 @@ public class TestMethod {
         return scenarioResults.get(name) != null;
     }
 
+    @Override
     public List<Annotation> getAnnotations() {
         return yatspecAnnotations(sequence(method.getAnnotations()));
     }
 
+    @Override
     public String getUid() {
         return Integer.toString(hashCode());
     }
 
+    @Override
     public String getPackageName() {
         return testClass.getPackage().getName();
     }
 
     public Class getTestClass() {
         return testClass;
+    }
+
+    @Override
+    public String getTestClassName() {
+        return testClass.getName();
     }
 }
